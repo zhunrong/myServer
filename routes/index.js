@@ -58,4 +58,6 @@ router.get('/files', (req, res) => {
 })
 
 
-module.exports = router;
+module.exports = app => {
+    app.use(router);
+}

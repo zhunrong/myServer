@@ -12,7 +12,7 @@ const bodyParser = require('body-parser');
 //静态资源
 app.use('/public', express.static('public'));
 app.use('/html', express.static('html'));
-app.use('/file',express.static('file'));
+app.use('/file', express.static('file'));
 
 
 //使用中间件
@@ -23,7 +23,8 @@ app.use(bodyParser.urlencoded({
 
 
 //使用模块化路由
-app.use(router);
+router(app);
+
 // console.log(app);
 app.get('/hello', (req, res) => {
     res.send('hello world');
