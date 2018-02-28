@@ -24,3 +24,12 @@
 - 使用中间件--multer实现文件的上传；
 - 设置静态资源目录时，如果没有设置访问路由，则访问时应该省略资源目录，否则访问失败404；
 - 使用a标签的download属性实现文件下载功能，href指向文件地址，download用作文件名。
+- 使用formData上传多个文件时，需要遍历files然后依次append,使用同一个键名
+   ```javascript
+   var files = $('#file')[0].files;
+   var formData = new FormData();
+            
+   formData.append('emoji', files[0]);
+   formData.append('emoji', files[1]);
+   ```
+- 使用fs模块读取目录文件

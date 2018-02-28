@@ -10,14 +10,78 @@
 
 <body>
 
+    <header>
+        <a href="./index.html">首页</a>
+    </header>
+
     <h4>上传</h4>
     <form action="/upload" method="post" enctype="multipart/form-data">
-        <input type="file" name='emoji' multiple>
-        <button type="submit">上传</button>
+        <input id="file" type="file" name='emoji' multiple>
+        <button id="submit" type="submit">上传</button>
     </form>
 
     <h4>下载</h4>
-    <a href="../file/uploads/602.png" download="嘻嘻.png">下载</a>
+    <ol id="download">
+        <li>
+            <a href="../file/uploads/602.png" download="嘻嘻.png">下载</a>
+        </li>
+    </ol>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $('#submit').on('click', function (e) {
+            e.preventDefault();
+
+            var files = $('#file')[0].files;
+
+            if (files.length === 0) {
+                alert('请选择文件');
+                return;
+            }
+
+            var formData = new FormData();
+            Array.prototype.forEach.call(files, file => {
+                formData.append('emoji', file);
+            })
+
+            var start = +new Date();
+            $.ajax({
+                url: "/upload",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (res) {
+                    var done = +new Date();
+                    console.log('花费时间=' + (done - start) / 1000);
+                    // 根据返回结果指定界面操作
+                    console.log(res);
+                    getDownloadList();
+                }
+            })
+
+
+        })
+
+
+        function getDownloadList() {
+            $.ajax({
+                url: '/files',
+                success: function (res) {
+                    console.log(res);
+                    var html = [];
+                    for (let file in res) {
+                        html.push(`<li>
+                            <a href="${res[file]}" download="${file}">${file}</a>
+                        </li>`)
+                    }
+                    $('#download').html(html);
+                }
+            })
+        }
+
+        getDownloadList();
+    </script>
+
 </body>
 
 </html>
