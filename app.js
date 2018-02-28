@@ -8,18 +8,18 @@ const router = require('./routes/index');
 
 //中间件
 const bodyParser = require('body-parser');
-// const multer = require('multer');
 
 //静态资源
-app.use(express.static('public'));
+app.use('/public', express.static('public'));
 app.use('/html', express.static('html'));
-
+app.use('/file',express.static('file'));
 
 
 //使用中间件
 app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-// app.use(multer()); // for parsing multipart/form-data
+app.use(bodyParser.urlencoded({
+    extended: true
+})); // for parsing application/x-www-form-urlencoded
 
 
 //使用模块化路由
