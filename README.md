@@ -33,3 +33,16 @@
    formData.append('emoji', files[1]);
    ```
 - 使用fs模块读取目录文件
+
+6. 2018/03/01
+- 实现mysql分页查询;
+- 开启多条sql语句执行
+   ```javascript
+   mysql.createConnection({
+        host: this.host,
+        user: this.user,
+        password: this.password,
+        database: this.database,
+        multipleStatements: true//设置为true
+   })
+   ```

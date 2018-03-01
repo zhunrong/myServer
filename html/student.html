@@ -10,44 +10,47 @@
 </head>
 
 <body>
-    <header>
-        <a href="./index.html">首页</a>
-    </header>
-    <h1>students</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>序号</th>
-                <th>姓名</th>
-                <th>年龄</th>
-                <th>性别</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>小红</td>
-                <td>13</td>
-                <td>女</td>
-            </tr>
-        </tbody>
-    </table>
+    <div id="app">
+        <header>
+            <a href="./index.html">首页</a>
+        </header>
+        <h1>students</h1>
+        <table v-cloak>
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>姓名</th>
+                    <th>年龄</th>
+                    <th>性别</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(stu,index) in students">
+                    <td>{{index+1}}</td>
+                    <td>{{stu.name}}</td>
+                    <td>{{stu.age}}</td>
+                    <td>{{stu.gender}}</td>
+                    <td>操作</td>
+                </tr>
+                <tr></tr>
+            </tbody>
+        </table>
+    </div>
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
     <script>
-        $.get('/students', function (res) {
-            console.log(res);
-            var students = res;
-            var html = '';
-            students.forEach((stu, index) => {
-                html += `<tr>
-                            <td>${index+1}</td>
-                            <td>${stu.name}</td>
-                            <td>${stu.age}</td>
-                            <td>${stu.gender}</td>
-                        </tr>`;
-            })
-
-            document.querySelector('table tbody').innerHTML = html;
+        new Vue({
+            el: '#app',
+            data: {
+                students: []
+            },
+            created() {
+                $.get('/students', res => {
+                    console.log(res);
+                    this.students = res;
+                })
+            }
         })
     </script>
 </body>
