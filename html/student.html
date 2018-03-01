@@ -15,27 +15,29 @@
             <a href="./index.html">首页</a>
         </header>
         <h1>students</h1>
-        <table v-cloak>
-            <thead>
-                <tr>
-                    <th>序号</th>
-                    <th>姓名</th>
-                    <th>年龄</th>
-                    <th>性别</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(stu,index) in students">
-                    <td>{{index+1}}</td>
-                    <td>{{stu.name}}</td>
-                    <td>{{stu.age}}</td>
-                    <td>{{stu.gender}}</td>
-                    <td>操作</td>
-                </tr>
-                <tr></tr>
-            </tbody>
-        </table>
+        <div class="student-table" v-cloak>
+            <div class="row">
+                <div class="cell">序号</div>
+                <div class="cell">姓名</div>
+                <div class="cell">年龄</div>
+                <div class="cell">性别</div>
+                <div class="cell">操作</div>
+            </div>
+            <div class="row" v-for="(stu,index) in students">
+                <div class="cell">{{index+1}}</div>
+                <div class="cell">{{stu.name}}</div>
+                <div class="cell">{{stu.age}}</div>
+                <div class="cell">{{stu.gender}}</div>
+                <div class="cell">
+                    <button class="button" @click="operatePanel(index)">{{openIndex==index?'关闭':'操作'}}</button>
+                </div>
+                <div class="operate" :class="{'active':openIndex==index}">
+                    <button type="button">新增</button>
+                    <button type="button">编辑</button>
+                    <button type="button">删除</button>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
@@ -43,13 +45,23 @@
         new Vue({
             el: '#app',
             data: {
-                students: []
+                students: [],
+                openIndex: null
             },
             created() {
                 $.get('/students', res => {
                     console.log(res);
-                    this.students = res;
+                    this.students = res.data;
                 })
+            },
+            methods: {
+                operatePanel(index) {
+                    if (this.openIndex == index) {
+                        this.openIndex = null;
+                        return;
+                    }
+                    this.openIndex = index;
+                }
             }
         })
     </script>

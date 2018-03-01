@@ -6,8 +6,35 @@ h1 {
     display: none;
 }
 
+.student-table {
+    text-align: center;
+    border: darkcyan 1px dashed;
+}
 
-table{
+.student-table .row {
+    font-size: 0;
+}
+
+.student-table .cell {
+    width: 20%;
+    display: inline-block;
+    font-size: 15px;
+    height: 30px;
+    line-height: 30px;
+}
+
+.student-table .row .operate {
+    height: 0;
+    line-height: 30px;
+    transition: all 0.5s;
+    overflow: hidden;
+}
+
+.student-table .row .operate.active {
+    height: 30px;
+}
+
+table {
     width: 100%;
     text-align: center;
     border: mediumslateblue 1px dashed;
