@@ -1,5 +1,5 @@
 const express = require('express');
-
+const net = require('net');
 const app = express();
 
 /*route*/
@@ -37,3 +37,15 @@ const server = app.listen(80, function () {
     console.log(server.address());
     console.log('Example app listening at http://%s:%s', host, port);
 });
+
+
+//socket
+const server2 = net.createServer(socket => {
+    // socket.end('goodbye\n');
+}).on('error', err => {
+    throw err;
+})
+
+server2.listen(() => {
+    console.log('opened server on', server2.address());
+})
