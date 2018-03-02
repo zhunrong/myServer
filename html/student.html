@@ -27,16 +27,39 @@
                 <div class="cell">{{index+1}}</div>
                 <div class="cell">{{stu.name}}</div>
                 <div class="cell">{{stu.age}}</div>
-                <div class="cell">{{stu.gender}}</div>
+                <div class="cell">{{stu.gender==1?'男':'女'}}</div>
                 <div class="cell">
                     <button class="button" @click="operatePanel(index)">{{openIndex==index?'关闭':'操作'}}</button>
                 </div>
                 <div class="operate" :class="{'active':openIndex==index}">
-                    <button type="button">新增</button>
-                    <button type="button">编辑</button>
-                    <button type="button">删除</button>
+                    <button type="button" @click="openEdit('add')">新增</button>
+                    <button type="button" @click="openEdit(index)">编辑</button>
+                    <button type="button" @click="del(stu.id)">删除</button>
                 </div>
             </div>
+        </div>
+        <div>
+            <button type="button" :disabled="page==1" @click="prevPage">上一页</button>
+            <span>{{page}}/{{totalPage}}页</span>
+            <button type="button" :disabled="page==totalPage" @click="nextPage">下一页</button>
+        </div>
+        <div class="edit" :class="{'active':edit}">
+            <h4>编辑</h4>
+            <form action="#">
+                <label for="name">姓名</label>
+                <input v-model="formData.name" id="name" name='name' type="text">
+                <br>
+                <label for="age">年龄</label>
+                <input v-model="formData.age" id="age" name='age' type="text">
+                <br>
+                <label for="male">男</label>
+                <input v-model="formData.gender" id="male" name="gender" value="1" type="radio">
+                <label for="female">女</label>
+                <input v-model="formData.gender" id="female" name="gender" value="2" type="radio">
+                <br>
+                <button type="button" @click="submit">保存</button>
+                <button type="button" @click="edit=false">取消</button>
+            </form>
         </div>
     </div>
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
@@ -46,13 +69,19 @@
             el: '#app',
             data: {
                 students: [],
-                openIndex: null
+                openIndex: null,
+                formData: {
+                    name: '',
+                    age: '',
+                    gender: '1'
+                },
+                edit: false,
+                editStatus: 'add',
+                page: 1,
+                totalPage: 1
             },
             created() {
-                $.get('/students', res => {
-                    console.log(res);
-                    this.students = res.data;
-                })
+                this.fetchStudents();
             },
             methods: {
                 operatePanel(index) {
@@ -61,6 +90,89 @@
                         return;
                     }
                     this.openIndex = index;
+                },
+                openEdit(index) {
+                    this.edit = true;
+
+                    if (index == 'add') {
+                        this.editStatus = 'add';
+                        this.formData = {
+                            name: '',
+                            age: '',
+                            gender: 1
+                        }
+                        return;
+                    }
+                    this.editStatus = 'edit';
+                    this.formData = {
+                        name: this.students[index].name,
+                        age: this.students[index].age,
+                        gender: this.students[index].gender,
+                        id: this.students[index].id
+                    }
+                },
+                submit() {
+                    console.log(this.formData);
+                    if (this.editStatus == 'edit') {
+                        $.ajax({
+                            url: '/students',
+                            method: 'post',
+                            data: this.formData,
+                            success: res => {
+                                console.log(res);
+                                this.page = 1;
+                                this.fetchStudents();
+                                this.edit = false;
+                            }
+                        })
+                    } else if (this.editStatus == 'add') {
+                        $.ajax({
+                            url: '/students',
+                            method: 'put',
+                            data: this.formData,
+                            success: res => {
+                                console.log(res);
+                                this.page = 1;
+                                this.fetchStudents();
+                                this.edit = false;
+                            }
+                        })
+                    }
+
+                },
+                fetchStudents() {
+                    $.get(`/students?_page=${this.page}&_count=4`, res => {
+                        console.log(res);
+                        this.students = res.data;
+                        this.totalPage = Math.ceil(res.meta.totalCount / 4);
+                    })
+                },
+                del(id) {
+                    console.log(id);
+                    $.ajax({
+                        url: '/students',
+                        method: 'delete',
+                        data: {
+                            id: id
+                        },
+                        success: res => {
+                            console.log(res);
+                            this.openIndex = null;
+                            this.page = 1;
+                            this.fetchStudents();
+                        },
+                        fail: err => {
+                            console.log(err);
+                        }
+                    })
+                },
+                prevPage() {
+                    this.page--;
+                    this.fetchStudents();
+                },
+                nextPage() {
+                    this.page++;
+                    this.fetchStudents();
                 }
             }
         })
