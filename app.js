@@ -1,6 +1,8 @@
 const express = require('express');
-const net = require('net');
+
 const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
 /*route*/
 const router = require('./routes/index');
@@ -31,21 +33,22 @@ app.get('/hello', (req, res) => {
 })
 
 
+
 const server = app.listen(80, function () {
     const host = server.address().address;
     const port = server.address().port;
     console.log(server.address());
-    console.log('Example app listening at http://%s:%s', host, port);
+    console.log('express app listening at http://%s:%s', host, port);
 });
 
 
 //socket
-const server2 = net.createServer(socket => {
-    // socket.end('goodbye\n');
-}).on('error', err => {
-    throw err;
+http.listen(3000, function () {
+    console.log('a websocket server is running at 3000 port');
 })
+io.on('connection', function (socket) {
+    console.log('a user connected');
+});
 
-server2.listen(() => {
-    console.log('opened server on', server2.address());
-})
+
+

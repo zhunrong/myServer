@@ -9,16 +9,15 @@
 </head>
 
 <body>
+    <script src="./lib/socket.io.js"></script>
     <script>
-        var socket = new WebSocket('ws://localhost:56240');
+        var socket = io('http://localhost:3000');
+        socket.on('connect', function () {
+            console.log('connected');
+        });
+        socket.on('event', function (data) { });
+        socket.on('disconnect', function () { });
 
-        socket.addEventListener('open', function (e) {
-            console.log('open');
-        })
-
-        socket.addEventListener('message', function (e) {
-            console.log('message');
-        })
     </script>
 </body>
 
