@@ -1,8 +1,7 @@
 const express = require('express');
-
+const config = require('./config');
 const app = express();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const websocket = require('./websocket');
 
 /*route*/
 const router = require('./routes/index');
@@ -27,28 +26,13 @@ app.use(bodyParser.urlencoded({
 //使用模块化路由
 router(app);
 
-// console.log(app);
-app.get('/hello', (req, res) => {
-    res.send('hello world');
-})
 
-
-
-const server = app.listen(80, function () {
+const server = app.listen(config.httpPort, function () {
     const host = server.address().address;
     const port = server.address().port;
     console.log(server.address());
     console.log('express app listening at http://%s:%s', host, port);
 });
 
-
-//socket
-http.listen(3000, function () {
-    console.log('a websocket server is running at 3000 port');
-})
-io.on('connection', function (socket) {
-    console.log('a user connected');
-});
-
-
-
+//websocket
+websocket(app);
