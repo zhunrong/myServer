@@ -3,7 +3,20 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 
-const marked = require('marked');
+const hljs = require('highlight.js');
+const md = require('markdown-it')({
+    highlight: (str, lang) => {
+        if (lang && hljs.getLanguage(lang)) {
+            try {
+                return '<pre class="hljs"><code>' +
+                    hljs.highlight(lang, str, true).value +
+                    '</code></pre>';
+            } catch (__) {}
+        }
+
+        return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
+    }
+});
 
 
 router.get('/md', (req, res) => {
@@ -14,7 +27,7 @@ router.get('/md', (req, res) => {
         // console.log(data.toString());
 
 
-        const markedText = marked(data.toString());
+        const markedText = md.render(data.toString());
 
         res.send(markedText);
 
