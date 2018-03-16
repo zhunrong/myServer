@@ -11,7 +11,7 @@ const router = require('./routes/index');
 const bodyParser = require('body-parser');
 
 //静态资源
-app.use('/public', express.static('public'));
+app.use('/', express.static('public'));
 app.use('/html', express.static('html'));
 app.use('/file', express.static('file'));
 
