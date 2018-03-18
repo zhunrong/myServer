@@ -58,6 +58,11 @@
     <script>
         $.get('/md', function (res) {
 
+            if (res === 'not login') {
+                location.href = './login.html';
+                return;
+            }
+
             var html = '';
             res.forEach(function (file) {
                 html += '<li data-name="' + file + '">' + file + '</li>';

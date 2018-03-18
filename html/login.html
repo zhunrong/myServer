@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>login</title>
+</head>
+
+<body>
+    <form action="#">
+        <label for="nickname">姓名</label>
+        <input type="text" id="nickname">
+        <br>
+        <label for="password">密码</label>
+        <input type="password" id="password">
+        <br>
+        <button id="login" type="button">登陆</button>
+        <br>
+        <button id="register" type="button">注册</button>
+    </form>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $('#login').on('click', function () {
+            $.ajax({
+                url: '/login',
+                method: "post",
+                data: {
+                    nickname: $('#nickname').val(),
+                    password: $('#password').val()
+                },
+                success: function (res) {
+                    console.log(res);
+
+                    if (res === '登陆成功') {
+                        location.href = './markdown.html';
+                    }
+                }
+            })
+        })
+
+        $('#register').on('click', function () {
+            $.ajax({
+                url: '/register',
+                method: "post",
+                data: {
+                    nickname: $('#nickname').val(),
+                    password: $('#password').val()
+                },
+                success: function (res) {
+                    console.log(res);
+                }
+            })
+        })
+
+
+        $.get('/md', function (res) {
+            console.log(res);
+        })
+    </script>
+</body>
+
+</html>
