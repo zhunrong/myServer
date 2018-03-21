@@ -67,3 +67,7 @@
 12. 2018/03/18
 - 使用cookie-session中间件实现用户会话持久化；
 - 注册登陆基本逻辑实现。
+
+13. 2018/03/22
+- 配置CORS相关响应头，实现浏览器的跨域请求
+- 设置请求头`Access-Control-Allow-Credentials`为`true`，允许跨域名设置cookie

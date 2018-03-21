@@ -23,7 +23,8 @@ app.use('/file', express.static('file'));
 app.use(cookieSession({
     name: 'uid',
     keys: ['dangerous'],
-    maxAge: 60 * 1000
+    maxAge: 30 * 60 * 1000,
+    // domain: 'http://localhost:8080'
 }))
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({
@@ -37,6 +38,7 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'POST,GET,PUT,DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     res.setHeader('Access-Control-Max-Age', 604800);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');//允许跨域名设置cookie
 
     next();
 })
