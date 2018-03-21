@@ -31,9 +31,19 @@ app.use(bodyParser.urlencoded({
 })); // for parsing application/x-www-form-urlencoded
 
 
+//CORS
 app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+    res.setHeader('Access-Control-Allow-Methods', 'POST,GET,PUT,DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Max-Age', 604800);
+
+    next();
+})
 
 
+//session check
+app.use((req, res, next) => {
     switch (req.path) {
         case '/login':
         case '/register':
@@ -44,13 +54,9 @@ app.use((req, res, next) => {
                 res.send('not login');
                 return;
             }
-            console.log(req.session);
             req.session.uid = req.session.uid;
             next();
     }
-
-
-
 })
 
 //使用模块化路由
