@@ -34,11 +34,12 @@ app.use(bodyParser.urlencoded({
 
 //CORS
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+    const origin = req.headers.origin;
+    res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Methods', 'POST,GET,PUT,DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     res.setHeader('Access-Control-Max-Age', 604800);
-    res.setHeader('Access-Control-Allow-Credentials', 'true');//允许跨域名设置cookie
+    res.setHeader('Access-Control-Allow-Credentials', 'true'); //允许跨域名设置cookie
 
     next();
 })
