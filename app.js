@@ -35,11 +35,15 @@ app.use(bodyParser.urlencoded({
 //CORS
 app.use((req, res, next) => {
     const origin = req.headers.origin;
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Methods', 'POST,GET,PUT,DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    res.setHeader('Access-Control-Max-Age', 604800);
-    res.setHeader('Access-Control-Allow-Credentials', 'true'); //允许跨域名设置cookie
+    console.log(origin);
+    if (origin) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+        res.setHeader('Access-Control-Allow-Methods', 'POST,GET,PUT,DELETE');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+        res.setHeader('Access-Control-Max-Age', 604800);
+        res.setHeader('Access-Control-Allow-Credentials', 'true'); //允许跨域名设置cookie
+    }
+
 
     next();
 })
