@@ -71,3 +71,6 @@
 13. 2018/03/22
 - 配置CORS相关响应头，实现浏览器的跨域请求
 - 设置请求头`Access-Control-Allow-Credentials`为`true`，允许跨域名设置cookie
+
+14. 2018/03/24
+- 发现同源的请求中，头信息里面是没有origin字段的。

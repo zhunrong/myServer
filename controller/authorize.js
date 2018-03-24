@@ -22,9 +22,6 @@ class Authorize {
 
     login(req, res) {
 
-
-        console.log(req.body);
-
         const username = req.body.username;
         const password = req.body.password;
 
@@ -41,6 +38,7 @@ class Authorize {
 
             if (err) {
                 console.error(err);
+                res.send(err);
                 return;
             }
             if (result.length === 0) {
@@ -67,7 +65,6 @@ class Authorize {
 
     register(req, res) {
 
-        console.log(req.body);
 
         const username = req.body.username;
         const password = req.body.password;
@@ -85,6 +82,7 @@ class Authorize {
 
             if (err) {
                 console.error(err);
+                res.send(err);
                 return;
             }
             if (result.length === 0) {
@@ -93,10 +91,10 @@ class Authorize {
                     conn.end();
                     if (err) {
                         console.error(err);
+                        res.send(err);
                         return;
                     }
 
-                    console.log(result);
                     res.send('注册成功');
 
                 })

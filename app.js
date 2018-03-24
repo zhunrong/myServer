@@ -35,8 +35,8 @@ app.use(bodyParser.urlencoded({
 //CORS
 app.use((req, res, next) => {
     const origin = req.headers.origin;
-    console.log(origin);
     if (origin) {
+        //如果是同源的，则没有origin字段
         res.setHeader('Access-Control-Allow-Origin', origin);
         res.setHeader('Access-Control-Allow-Methods', 'POST,GET,PUT,DELETE');
         res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
