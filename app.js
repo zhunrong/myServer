@@ -46,9 +46,10 @@ app.use((req, res, next) => {
 
 //session check
 app.use((req, res, next) => {
-    switch (req.path) {
-        case '/login':
-        case '/register':
+    switch (true) {
+        case '/login' === req.path:
+        case '/register' === req.path:
+        case /^\/chat\/.*/.test(req.path):
             next();
             break;
         default:

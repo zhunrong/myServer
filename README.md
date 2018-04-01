@@ -71,3 +71,6 @@
 13. 2018/03/22
 - 配置CORS相关响应头，实现浏览器的跨域请求
 - 设置请求头`Access-Control-Allow-Credentials`为`true`，允许跨域名设置cookie
+
+14. 2018/04/01
+- 使用navicat的sql转储功能，可以快速的创建制定结构的表，主要用于数据库的部署
