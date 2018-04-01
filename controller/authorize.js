@@ -22,13 +22,10 @@ class Authorize {
 
     login(req, res) {
 
-
-        console.log(req.body);
-
-        const nickname = req.body.nickname;
+        const username = req.body.username;
         const password = req.body.password;
 
-        if (!nickname) {
+        if (!username) {
             res.send('用户名不能为空');
             return;
         } else if (!password) {
@@ -37,10 +34,11 @@ class Authorize {
         }
 
         const conn = this.mysqlConn();
-        conn.query(`select * from ${this.tableName} where nickname='${nickname}'`, (err, result) => {
+        conn.query(`select * from ${this.tableName} where username='${username}'`, (err, result) => {
 
             if (err) {
                 console.error(err);
+                res.send(err);
                 return;
             }
             if (result.length === 0) {
@@ -67,12 +65,11 @@ class Authorize {
 
     register(req, res) {
 
-        console.log(req.body);
 
-        const nickname = req.body.nickname;
+        const username = req.body.username;
         const password = req.body.password;
 
-        if (!nickname) {
+        if (!username) {
             res.send('用户名不能为空');
             return;
         } else if (!password) {
@@ -81,22 +78,23 @@ class Authorize {
         }
 
         const conn = this.mysqlConn();
-        conn.query(`select * from ${this.tableName} where nickname='${nickname}'`, (err, result) => {
+        conn.query(`select * from ${this.tableName} where username='${username}'`, (err, result) => {
 
             if (err) {
                 console.error(err);
+                res.send(err);
                 return;
             }
             if (result.length === 0) {
 
-                conn.query(`insert into ${this.tableName} (nickname,password) values ('${nickname}','${password}')`, (err, result) => {
+                conn.query(`insert into ${this.tableName} (username,password) values ('${username}','${password}')`, (err, result) => {
                     conn.end();
                     if (err) {
                         console.error(err);
+                        res.send(err);
                         return;
                     }
 
-                    console.log(result);
                     res.send('注册成功');
 
                 })

@@ -25,7 +25,11 @@ class Student {
         const connection = this.mysqlCon();
 
         connection.query(`INSERT INTO ${this.tableName} (name,gender,age) VALUES ('${stu.name}','${stu.gender}','${stu.age}')`, function (err, result) {
-            console.log(err, result);
+            if (err) {
+                console.error(err);
+                res.send(err);
+                return;
+            }
 
             res.send(result);
         })
@@ -53,9 +57,9 @@ class Student {
         const connection = this.mysqlCon();
 
         connection.query(sql, function (err, result) {
-            console.log(err, result);
             if (err) {
                 console.error(err);
+                res.send(result);
                 return;
             }
 
@@ -87,7 +91,7 @@ class Student {
                     count = query['_count'];
                     break;
                 default:
-                    console.log('忽略的query')
+                    console.log('忽略的query');
             }
         }
         if (condition.length > 0) {
@@ -106,9 +110,6 @@ class Student {
                 res.send(err);
                 return;
             }
-
-            // console.log('fields', fields);
-            console.log(result);
 
             res.send({
                 meta: {
@@ -134,10 +135,10 @@ class Student {
 
         let sql = `DELETE FROM ${this.tableName} WHERE id='${dataBody.id}'`;
         connection.query(sql, function (err, result) {
-            console.log(err, result);
             connection.end();
             if (err) {
                 console.error(err);
+                res.send(err);
                 return;
             }
 
