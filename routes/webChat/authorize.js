@@ -5,11 +5,10 @@ const router = express.Router();
 const authorize = require('../../controller/webChat/authorize');
 
 
-router.post('/login', authorize.login.bind(authorize));
+router.post('/login', authorize.login);
 
 
-router.post('/register', authorize.register.bind(authorize));
-
+router.post('/register', authorize.register);
 
 
 module.exports = router;
