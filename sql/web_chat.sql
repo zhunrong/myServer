@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50721
 File Encoding         : 65001
 
-Date: 2018-04-02 16:22:34
+Date: 2018-04-02 17:21:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -24,8 +24,8 @@ CREATE TABLE `user` (
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `nickname` varchar(255) NOT NULL DEFAULT '',
-  `gender` int(1) unsigned zerofill NOT NULL DEFAULT '0',
-  `age` int(3) unsigned zerofill NOT NULL DEFAULT '000',
+  `gender` int(1) unsigned DEFAULT NULL,
+  `age` int(3) unsigned DEFAULT NULL,
   `province` varchar(255) NOT NULL DEFAULT '',
   `city` varchar(255) NOT NULL DEFAULT '',
   `say` varchar(255) NOT NULL DEFAULT '',
@@ -35,3 +35,8 @@ CREATE TABLE `user` (
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of user
+-- ----------------------------
+INSERT INTO `user` VALUES ('7', 'zhunrongfd232', 'sdfsdfsdf', 'sdfsd', '1', '25', '', '', '茫茫长夜无心睡眠', '2018-04-02 13:14:36', '2018-04-02 17:18:19');
