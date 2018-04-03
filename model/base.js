@@ -29,8 +29,6 @@ class Base {
 
             const conditionText = this.stringify(condition, 'and');
 
-            const conn = this.mysqlConn();
-
             let sql = null;
             if (conditionText) {
                 sql = `select * from ${this.tableName} where ${conditionText}`;
@@ -38,17 +36,12 @@ class Base {
                 sql = `select * from ${this.tableName}`;
             }
 
-            conn.query(sql, (err, result) => {
-                conn.end();
-
-                if (err) {
-                    reject(err);
-                    return;
-                }
-
+            this.sqlQuery(sql).then(result => {
                 resolve(result);
+            }).catch(err => {
+                reject(err);
+            })
 
-            });
         })
     }
 
@@ -58,8 +51,6 @@ class Base {
      */
     post(data) {
         return new Promise((resolve, reject) => {
-
-            const conn = this.mysqlConn();
 
             const keyArr = [];
             const valueArr = [];
@@ -71,14 +62,11 @@ class Base {
             const valueText = valueArr.join(',');
 
             const sql = `insert into ${this.tableName} (${keyText}) values (${valueText})`;
-            conn.query(sql, (err, result) => {
-                conn.end();
 
-                if (err) {
-                    reject(err);
-                    return;
-                }
+            this.sqlQuery(sql).then(result => {
                 resolve(result);
+            }).catch(err => {
+                reject(err);
             })
 
         })
@@ -96,15 +84,10 @@ class Base {
             const conditionText = this.stringify(condition);
             const sql = `update ${this.tableName} set ${dataText} where ${conditionText}`;
 
-            const conn = this.mysqlConn();
-            conn.query(sql, (err, result) => {
-                conn.end();
-
-                if (err) {
-                    reject(err);
-                    return;
-                }
+            this.sqlQuery(sql).then(result => {
                 resolve(result);
+            }).catch(err => {
+                reject(err);
             })
 
         })
@@ -124,21 +107,32 @@ class Base {
                 return;
             }
 
-            const conn = this.mysqlConn();
 
             const sql = `delete from ${this.tableName} where ${conditionText}`;
 
-            conn.query(sql, (err, result) => {
-                conn.end();
-
-                if (err) {
-                    reject(err);
-                    return;
-                }
+            this.sqlQuery(sql).then(result => {
                 resolve(result);
+            }).catch(err => {
+                reject(err);
             })
         })
 
+    }
+
+    count(column) {
+
+        return new Promise((resolve, reject) => {
+            const sql = `select count(${column}) from ${this.tableName};`
+            this.sqlQuery(sql).then(result => {
+
+                resolve({
+                    [column]: result[0][`count(${column})`]
+                })
+
+            }).catch(err => {
+                reject(err);
+            })
+        })
     }
 
     /**
@@ -152,6 +146,20 @@ class Base {
             dataArr.push(`${key}='${data[key]}'`)
         }
         return dataArr.join(` ${character} `);
+    }
+
+    sqlQuery(sql) {
+        return new Promise((resolve, reject) => {
+            const connection = this.mysqlConn();
+            connection.query(sql, (err, result) => {
+                connection.end();
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            })
+        })
     }
 
 }

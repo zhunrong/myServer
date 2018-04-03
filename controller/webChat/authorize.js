@@ -1,15 +1,8 @@
 const userModel = require('../../model/webChat/user');
 
 exports.login = (req, res) => {
-    res.send('login');
-}
-
-
-exports.register = (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
-
-    console.log(req.body);
 
     if (!username) {
         res.status(400).send('用户名不能为空');
@@ -24,15 +17,66 @@ exports.register = (req, res) => {
         username: username
     }).then(result => {
         if (result.length === 0) {
-            userModel.post({
+            res.status(400).send({
+                error: '用户名不存在'
+            })
+        } else if (result[0].password != password) {
+            res.status(400).send({
+                error: "密码不正确"
+            })
+        } else {
+            res.send({
+                data: '登录成功'
+            })
+        }
+    })
+
+}
+
+
+exports.register = (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    if (!username) {
+        res.status(400).send('用户名不能为空');
+        return;
+    }
+    if (!password) {
+        res.status(400).send('密码不能为空');
+        return;
+    }
+
+    Promise.all([userModel.get({
+        username: username
+    }), userModel.count('id')]).then(result => {
+        if (result[0].length === 0) {
+            const registerData = {
                 username: username,
                 password: password
-            }).then(result => {
-                res.send('注册成功');
-            })
-            return;
-        }
+            }
+            if (result[1].id === 0) {
+                //用户id从10000开始
+                registerData['id'] = 10000;
+            }
+            userModel.post(registerData).then(result => {
 
-        res.status(400).send('用户已存在');
+                return userModel.get({
+                    username: username
+                })
+
+            }).then(result => {
+                res.send({
+                    data: result[0]
+                });
+            })
+        } else {
+            res.status(400).send({
+                error: '用户已存在'
+            });
+        }
+    }).catch(err => {
+        res.send(err);
     })
+
 }

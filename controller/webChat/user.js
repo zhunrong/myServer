@@ -1,5 +1,11 @@
 const userModel = require('../../model/webChat/user');
 
+
+/**
+ * 获取用户列表
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.get = (req, res) => {
 
     userModel.get(req.query).then(result => {
@@ -8,6 +14,11 @@ exports.get = (req, res) => {
 
 }
 
+/**
+ * 删除用户
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.delete = (req, res) => {
 
     userModel.delete(req.body).then(result => {
@@ -16,6 +27,11 @@ exports.delete = (req, res) => {
 
 }
 
+/**
+ * 修改用户
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.put = (req, res) => {
 
     const id = req.body.id;
