@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50721
 File Encoding         : 65001
 
-Date: 2018-04-02 17:21:55
+Date: 2018-04-03 13:30:46
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -24,8 +24,8 @@ CREATE TABLE `user` (
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `nickname` varchar(255) NOT NULL DEFAULT '',
-  `gender` int(1) unsigned DEFAULT NULL,
-  `age` int(3) unsigned DEFAULT NULL,
+  `gender` int(1) unsigned NOT NULL DEFAULT '0',
+  `age` int(3) unsigned NOT NULL DEFAULT '0',
   `province` varchar(255) NOT NULL DEFAULT '',
   `city` varchar(255) NOT NULL DEFAULT '',
   `say` varchar(255) NOT NULL DEFAULT '',
@@ -34,9 +34,11 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10004 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('7', 'zhunrongfd232', 'sdfsdfsdf', 'sdfsd', '1', '25', '', '', '茫茫长夜无心睡眠', '2018-04-02 13:14:36', '2018-04-02 17:18:19');
+INSERT INTO `user` VALUES ('10000', 'zhunrong122', 'sdfsdfsdf', '', '0', '0', '', '', '', '2018-04-03 13:04:31', '2018-04-03 13:04:31');
+INSERT INTO `user` VALUES ('10002', 'zhunrong123', 'sdfsdfsdf', '', '0', '0', '', '', '', '2018-04-03 13:12:19', '2018-04-03 13:12:19');
+INSERT INTO `user` VALUES ('10003', 'zhunrong', '119', '', '0', '0', '', '', '', '2018-04-03 13:27:45', '2018-04-03 13:27:45');
