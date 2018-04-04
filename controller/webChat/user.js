@@ -82,3 +82,21 @@ exports.put = (req, res) => {
     })
 
 }
+
+
+exports.getMe = (req, res) => {
+
+    const userID = req.session.uid;
+
+    userModel.get({
+        id: userID
+    }).then(result => {
+        res.send({
+            data: result[0]
+        })
+    })
+
+
+
+
+}

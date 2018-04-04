@@ -10,4 +10,6 @@ router.delete('/user', userController.delete);
 
 router.put('/user', userController.put);
 
+router.get('/user/me', userController.getMe);
+
 module.exports = router;

@@ -6,7 +6,6 @@ const websocket = require('./websocket');
 /*route*/
 const router = require('./routes/index');
 
-
 //中间件
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -17,9 +16,7 @@ app.use('/', express.static('public'));
 app.use('/html', express.static('html'));
 app.use('/file', express.static('file'));
 
-
-//使用中间件
-// app.use(cookieParser());
+//使用中间件 app.use(cookieParser());
 app.use(cookieSession({
     name: 'uid',
     keys: ['dangerous'],
@@ -30,7 +27,6 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({
     extended: true
 })); // for parsing application/x-www-form-urlencoded
-
 
 //CORS
 app.use((req, res, next) => {
@@ -44,22 +40,23 @@ app.use((req, res, next) => {
         res.setHeader('Access-Control-Allow-Credentials', 'true'); //允许跨域名设置cookie
     }
 
-
     next();
 })
 
-
 //session check
 app.use((req, res, next) => {
-    switch (true) {
-        case '/login' === req.path:
-        case '/register' === req.path:
-        case /^\/chat\/.*/.test(req.path):
+    switch (req.path) {
+        case '/login':
+        case '/register':
+        case '/chat/login':
+        case '/chat/register':
             next();
             break;
         default:
             if (!req.session.uid) {
-                res.send('not login');
+                res.status(400).send({
+                    error: "用户未登陆"
+                });
                 return;
             }
             req.session.uid = req.session.uid;
