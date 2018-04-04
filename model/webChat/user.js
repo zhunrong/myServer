@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const Base = require('../base');
+const config = require('../../config');
 
 class User extends Base {
     constructor(options) {
@@ -17,9 +18,9 @@ class User extends Base {
 }
 
 module.exports = new User({
-    host: 'localhost',
-    user: 'zr_dev',
-    password: 'YZ4371716',
+    host: config.dbHost,
+    user: config.dbUsername,
+    password: config.dbPassword,
     database: 'web_chat',
     tableName: 'user'
 })

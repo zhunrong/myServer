@@ -1,4 +1,5 @@
 const mysql = require('mysql');
+const config = require('../config');
 
 class Authorize {
 
@@ -114,9 +115,9 @@ class Authorize {
 }
 
 module.exports = new Authorize({
-    host: 'localhost',
-    user: 'zr_dev',
-    password: 'YZ4371716',
+    host: config.dbHost,
+    user: config.dbUsername,
+    password: config.dbPassword,
     database: 'zr_dev',
     tableName: 'user'
 })

@@ -1,4 +1,5 @@
 const userModel = require('../../model/webChat/user');
+const config = require('../../config');
 
 
 /**
@@ -34,7 +35,7 @@ exports.delete = (req, res) => {
  */
 exports.put = (req, res) => {
 
-    const id = req.body.id;
+    const id = req.body.id || req.session[config.sessionName];
     const nickname = req.body.nickname;
     const gender = req.body.gender;
     const age = req.body.age;
@@ -83,10 +84,14 @@ exports.put = (req, res) => {
 
 }
 
-
+/**
+ * 获取当前用户信息
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.getMe = (req, res) => {
 
-    const userID = req.session.uid;
+    const userID = req.session[config.sessionName];
 
     userModel.get({
         id: userID
@@ -95,8 +100,5 @@ exports.getMe = (req, res) => {
             data: result[0]
         })
     })
-
-
-
 
 }

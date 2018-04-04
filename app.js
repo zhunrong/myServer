@@ -18,7 +18,7 @@ app.use('/file', express.static('file'));
 
 //使用中间件 app.use(cookieParser());
 app.use(cookieSession({
-    name: 'uid',
+    name: config.sessionName,
     keys: ['dangerous'],
     maxAge: 30 * 60 * 1000,
     // domain: 'http://localhost:8080'
@@ -53,13 +53,13 @@ app.use((req, res, next) => {
             next();
             break;
         default:
-            if (!req.session.uid) {
+            if (!req.session[config.sessionName]) {
                 res.status(400).send({
                     error: "用户未登陆"
                 });
                 return;
             }
-            req.session.uid = req.session.uid;
+            req.session[config.sessionName] = req.session[config.sessionName];
             next();
     }
 })

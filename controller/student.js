@@ -1,4 +1,5 @@
 const mysql = require('mysql');
+const config = require('../config');
 
 class Student {
     constructor(options) {
@@ -152,9 +153,9 @@ class Student {
 
 
 module.exports = new Student({
-    host: 'localhost',
-    user: 'zr_dev',
-    password: 'YZ4371716',
+    host: config.dbHost,
+    user: config.dbUsername,
+    password: config.dbPassword,
     database: 'zr_dev',
     tableName: 'students'
 })
