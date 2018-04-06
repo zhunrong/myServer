@@ -21,19 +21,24 @@ class Base {
 
     /**
      * 查询数据
-     * @param {Object} condition 
+     * @param {Object} condition 查询的字段与值
      */
     get(condition) {
 
         return new Promise((resolve, reject) => {
 
             const conditionText = this.stringify(condition, 'and');
+            const perPage = condition._perPage || 10;
+            const page = condition._page || 1;
+
+            const limitValue = perPage;
+            const offsetValue = (page - 1) * limitValue;
 
             let sql = null;
             if (conditionText) {
-                sql = `select * from ${this.tableName} where ${conditionText}`;
+                sql = `select * from ${this.tableName} where ${conditionText} limit ${limitValue} offset ${offsetValue}`;
             } else {
-                sql = `select * from ${this.tableName}`;
+                sql = `select * from ${this.tableName} limit ${limitValue} offset ${offsetValue}`;
             }
 
             this.sqlQuery(sql).then(result => {
@@ -143,6 +148,9 @@ class Base {
     stringify(data, character = ',') {
         const dataArr = [];
         for (let key in data) {
+            if (key === '_page' || key === '_perPage') {
+                continue;
+            }
             dataArr.push(`${key}='${data[key]}'`)
         }
         return dataArr.join(` ${character} `);

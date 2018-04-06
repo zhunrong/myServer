@@ -9,8 +9,13 @@ const config = require('../../config');
  */
 exports.get = (req, res) => {
 
+
     userModel.get(req.query).then(result => {
-        res.send(result);
+        res.send({
+            data: result
+        });
+    }).catch(err => {
+        res.status(400).send(err);
     })
 
 }
@@ -35,6 +40,7 @@ exports.delete = (req, res) => {
  */
 exports.put = (req, res) => {
 
+    //如果未指定id，则取当前用户的id
     const id = req.body.id || req.session[config.sessionName];
     const nickname = req.body.nickname;
     const gender = req.body.gender;

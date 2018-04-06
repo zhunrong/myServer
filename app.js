@@ -45,6 +45,11 @@ app.use((req, res, next) => {
 
 //session check
 app.use((req, res, next) => {
+
+    if (req.method === 'OPTIONS') {
+        res.send('ok');
+        return;
+    }
     switch (req.path) {
         case '/login':
         case '/register':
@@ -55,7 +60,8 @@ app.use((req, res, next) => {
         default:
             if (!req.session[config.sessionName]) {
                 res.status(400).send({
-                    error: "用户未登陆"
+                    error: "用户未登陆",
+                    code: 1010
                 });
                 return;
             }
