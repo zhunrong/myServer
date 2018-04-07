@@ -48,9 +48,13 @@ exports.put = (req, res) => {
     const province = req.body.province;
     const city = req.body.city;
     const say = req.body.say;
+    const name = req.body.name;
 
     const dataObj = {};
 
+    if (name) {
+        dataObj['name'] = name;
+    }
     if (nickname) {
         dataObj['nickname'] = nickname;
     }
