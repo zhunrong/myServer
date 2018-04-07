@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : 本地mysql
+Source Server         : localhost
 Source Server Version : 50721
 Source Host           : localhost:3306
 Source Database       : web_chat
@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50721
 File Encoding         : 65001
 
-Date: 2018-04-03 13:30:46
+Date: 2018-04-07 16:56:08
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -23,6 +23,8 @@ CREATE TABLE `user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `avatar` varchar(255) NOT NULL DEFAULT '',
   `nickname` varchar(255) NOT NULL DEFAULT '',
   `gender` int(1) unsigned NOT NULL DEFAULT '0',
   `age` int(3) unsigned NOT NULL DEFAULT '0',
@@ -34,11 +36,4 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10004 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of user
--- ----------------------------
-INSERT INTO `user` VALUES ('10000', 'zhunrong122', 'sdfsdfsdf', '', '0', '0', '', '', '', '2018-04-03 13:04:31', '2018-04-03 13:04:31');
-INSERT INTO `user` VALUES ('10002', 'zhunrong123', 'sdfsdfsdf', '', '0', '0', '', '', '', '2018-04-03 13:12:19', '2018-04-03 13:12:19');
-INSERT INTO `user` VALUES ('10003', 'zhunrong', '119', '', '0', '0', '', '', '', '2018-04-03 13:27:45', '2018-04-03 13:27:45');
+) ENGINE=InnoDB AUTO_INCREMENT=10006 DEFAULT CHARSET=utf8;
