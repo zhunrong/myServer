@@ -84,7 +84,9 @@ exports.register = (req, res) => {
         if (result[0].length === 0) {
             const registerData = {
                 username: username,
-                password: password
+                password: password,
+                avatar: 'https://zr-1253381776.cos.ap-guangzhou.myqcloud.com/images/avatar/man.png',
+                gender: 1
             }
             if (result[1].id === 0) {
                 //用户id从10000开始
