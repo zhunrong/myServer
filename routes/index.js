@@ -5,6 +5,8 @@ const authorize = require('./authorize');
 
 //web-chat router
 const chat = require('./webChat');
+//common
+const common = require('./common');
 
 
 module.exports = app => {
@@ -14,4 +16,5 @@ module.exports = app => {
     app.use(authorize);
 
     chat(app);
+    common(app);
 }
