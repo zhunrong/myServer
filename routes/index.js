@@ -7,6 +7,8 @@ const authorize = require('./authorize');
 const chat = require('./webChat');
 //common
 const common = require('./common');
+// explorer
+const explorer = require('./explorer');
 
 
 module.exports = app => {
@@ -17,4 +19,5 @@ module.exports = app => {
 
     chat(app);
     common(app);
+    explorer(app);
 }

@@ -3,18 +3,27 @@ const config = require('./config');
 const app = express();
 const websocket = require('./websocket');
 
-/*route*/
+/* 配置模板引擎 start */
+app.set('views', './template');
+app.set('view engine', 'ejs');
+/* 配置模板引擎 end */
+
+/* 定义路由 start */
 const router = require('./routes/index');
+router(app);
+/* 定义路由 end */
 
 //中间件
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 
-//静态资源
+/* 静态资源 start */
 app.use('/', express.static('public'));
 app.use('/html', express.static('html'));
 app.use('/file', express.static('file'));
+app.use('/static', express.static('static'));
+/* 静态资源 end */
 
 //使用中间件 app.use(cookieParser());
 app.use(cookieSession({
@@ -50,12 +59,12 @@ app.use((req, res, next) => {
         res.send('ok');
         return;
     }
-    console.log(req.path);
     switch (req.path) {
         case '/login':
         case '/register':
         case '/chat/login':
         case '/chat/register':
+        case '/explorer/':
             next();
             break;
         default:
@@ -71,8 +80,7 @@ app.use((req, res, next) => {
     }
 })
 
-//使用模块化路由
-router(app);
+
 
 
 const server = app.listen(config.httpPort, function () {
