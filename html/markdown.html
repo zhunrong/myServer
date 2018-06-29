@@ -47,7 +47,6 @@
 
 <body>
     <ul id="list">
-        <li></li>
     </ul>
     <div class="article">
         <div class="content"></div>
@@ -56,25 +55,31 @@
     <script src="./lib/marked.js"></script>
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script>
-        $.get('/md', function (res) {
-
-            if (res === 'not login') {
-                location.href = './login.html';
-                return;
-            }
-
-            var html = '';
-            res.forEach(function (file) {
-                html += '<li data-name="' + file + '">' + file + '</li>';
-            })
-
-            $('#list').html(html);
-
-            $('#list li').on('click', function (e) {
-                $.get('/md?file=' + this.dataset.name, function (res) {
-                    $('.article').find('.content').html(res).end().addClass('active');
+        $.ajax({
+            url: '/md',
+            method: 'get',
+            success: function (res) {
+                console.log(res);
+                var html = '';
+                res.forEach(function (file) {
+                    html += '<li data-name="' + file + '">' + file + '</li>';
                 })
-            })
+
+                $('#list').html(html);
+
+                $('#list li').on('click', function (e) {
+                    $.get('/md?file=' + this.dataset.name, function (res) {
+                        $('.article').find('.content').html(res).end().addClass('active');
+                    })
+                })
+
+            },
+            error: function (err) {
+                console.log('error', err);
+                if (err.responseJSON.code === 1010) {
+                    location.href = './login.html';
+                }
+            }
         })
 
 

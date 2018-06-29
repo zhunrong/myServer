@@ -27,7 +27,7 @@
                 url: '/login',
                 method: "post",
                 data: {
-                    nickname: $('#nickname').val(),
+                    username: $('#nickname').val(),
                     password: $('#password').val()
                 },
                 success: function (res) {
@@ -45,18 +45,13 @@
                 url: '/register',
                 method: "post",
                 data: {
-                    nickname: $('#nickname').val(),
+                    username: $('#nickname').val(),
                     password: $('#password').val()
                 },
                 success: function (res) {
                     console.log(res);
                 }
             })
-        })
-
-
-        $.get('/md', function (res) {
-            console.log(res);
         })
     </script>
 </body>

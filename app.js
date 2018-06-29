@@ -50,6 +50,7 @@ app.use((req, res, next) => {
         res.send('ok');
         return;
     }
+    console.log(req.path);
     switch (req.path) {
         case '/login':
         case '/register':
