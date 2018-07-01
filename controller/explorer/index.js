@@ -12,17 +12,34 @@ exports.get = (req, res) => {
     const pattern = /^\/explorer\/(\S*)/;
     const match = pattern.exec(req.path);
 
-    const dirPath = path.resolve(rootDirPath, match[1]);
+    const relPath = match[1];
+    const dirPath = path.resolve(rootDirPath, relPath);
 
-    dirReader(dirPath).then(fileArray => {
-        res.render('explorer/index', {
-            fileArray
-        });
-    }).catch(err => {
-        res.send({
-            code: 1200,
-            message: '读取错误'
-        })
+    fs.stat(dirPath, (err, stats) => {
+        if (err) {
+            res.send(err);
+            return;
+        }
+        if (stats.isDirectory()) {
+            dirReader(rootDirPath, relPath).then(fileArray => {
+                res.render('explorer/index', {
+                    fileArray
+                });
+            }).catch(err => {
+                res.send({
+                    code: 1200,
+                    message: '读取错误'
+                })
+            })
+        } else {
+            console.log(`/${match[1]}`);
+            res.render('explorer/index', {
+                file: {
+                    name: '',
+                    url: `/${match[1]}`,
+                    type: 'img'
+                }
+            })
+        }
     })
-
 }

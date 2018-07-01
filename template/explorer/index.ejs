@@ -11,20 +11,25 @@
 </head>
 
 <body>
-    <ul class="file-list">
-        <% fileArray.forEach(file=>{ %>
-            <li>
-                <a href="/explorer/<%= file.name %>">
-                    <p>
-                        <%= file.name %>
-                    </p>
-                    <p>
-                        <%= file.type %>
-                    </p>
-                </a>
-            </li>
-            <% }) %>
-    </ul>
+
+    <div class="explorer">
+    <%# 文件列表 %>
+        <% if(typeof fileArray != 'undefined'&&fileArray.length){ %>
+            <%- include('fileList',{fileArray:fileArray}) %>
+        <% } %>
+
+        <%# 单个文件展示 %>
+        <div class="show">
+            <img src="" alt="">
+        </div>
+    </div>
+    
+    
+
+    
+
+    <script src="/static/explorer/index.js"></script>
+
 </body>
 
 </html>

@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-function statPromise(filePath, filename) {
+function statPromise(filePath, filename, relPath) {
     return new Promise((resolve, reject) => {
         fs.stat(filePath, (err, stats) => {
             if (err) {
@@ -10,6 +10,7 @@ function statPromise(filePath, filename) {
             }
             const file = {
                 name: filename,
+                path: relPath,
                 type: stats.isDirectory() ? 'directory' : 'file'
             }
             resolve(file);
@@ -17,7 +18,8 @@ function statPromise(filePath, filename) {
     })
 }
 
-module.exports = dirPath => {
+module.exports = (rootDir, relPath) => {
+    const dirPath = path.resolve(rootDir, relPath);
     return new Promise((resolve, reject) => {
         fs.readdir(dirPath, (err, files) => {
 
@@ -27,7 +29,8 @@ module.exports = dirPath => {
             }
             const promiseArr = [];
             files.forEach(filename => {
-                promiseArr.push(statPromise(path.resolve(dirPath, filename), filename))
+                const filePath = path.join(relPath, filename);
+                promiseArr.push(statPromise(path.resolve(dirPath, filename), filename, filePath))
             })
             Promise.all(promiseArr).then(res => {
                 resolve(res);
