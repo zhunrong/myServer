@@ -8,15 +8,12 @@ app.set('views', './template');
 app.set('view engine', 'ejs');
 /* 配置模板引擎 end */
 
-/* 定义路由 start */
-const router = require('./routes/index');
-router(app);
-/* 定义路由 end */
 
-//中间件
+
+// 中间件
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
+const session = require('express-session');
 
 /* 静态资源 start */
 app.use('/', express.static('public'));
@@ -25,7 +22,7 @@ app.use('/file', express.static('file'));
 app.use('/static', express.static('static'));
 /* 静态资源 end */
 
-//使用中间件 app.use(cookieParser());
+// 使用中间件
 app.use(cookieSession({
     name: config.sessionName,
     keys: ['dangerous'],
@@ -37,7 +34,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 })); // for parsing application/x-www-form-urlencoded
 
-//CORS
+// CORS
 app.use((req, res, next) => {
     const origin = req.headers.origin;
     if (origin) {
@@ -52,7 +49,7 @@ app.use((req, res, next) => {
     next();
 })
 
-//session check
+// session check
 app.use((req, res, next) => {
 
     if (req.method === 'OPTIONS') {
@@ -79,6 +76,11 @@ app.use((req, res, next) => {
             next();
     }
 })
+
+/* 定义路由 start */
+const router = require('./routes');
+router(app);
+/* 定义路由 end */
 
 
 
