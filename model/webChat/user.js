@@ -1,4 +1,3 @@
-const mysql = require('mysql');
 const Base = require('../base');
 const config = require('../../config');
 

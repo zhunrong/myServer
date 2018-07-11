@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const authorize = require('../controller/authorize');
+const authorize = require('../../controller/authorize');
 
 
 router.post('/login', authorize.login.bind(authorize));
