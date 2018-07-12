@@ -26,3 +26,8 @@ Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT;
 ## Cookie的`SameSite`(实验性)
 
 SameSite Cookie允许服务器要求某个cookie在跨站请求时不会被发送，从而可以阻止跨站请求伪造攻击（CSRF）。但目前SameSite Cookie还处于实验阶段，并不是所有浏览器都支持。
+
+## `withCredentials`
+
+一个跨域的请求，如果xhr.withCredentials=false,那么服务端返回的cookie将不会保存在浏览器上。  
+Note: 不同域下的XmlHttpRequest 响应，不论其Access-Control- header 设置什么值，都无法为它自身站点设置cookie值，除非它在请求之前将withCredentials 设为true。

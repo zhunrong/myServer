@@ -6,12 +6,12 @@ const middleWare = session({
     cookie: {
         domain: '',
         maxAge: 30 * 60 * 1000,
-        httpOnly: true,
+        httpOnly: false,
         path: '/',
         sameSite: false,
         secure: false
     },
-    name: 'express.sid',
+    name: 'system.auth',
     resave: false,
     rolling: true,
     saveUninitialized: false,
@@ -21,12 +21,27 @@ const middleWare = session({
         port: 3306,
         user: config.dbUsername,
         password: config.dbPassword,
-        database: 'web_chat'
+        database: 'session_db'
     })
 })
 
 module.exports = app => {
     app.use(middleWare);
+
+    // CORS
+    app.use((req, res, next) => {
+        const origin = req.headers.origin;
+        if (origin) {
+            //如果是同源的，则没有origin字段
+            res.setHeader('Access-Control-Allow-Origin', origin);
+            res.setHeader('Access-Control-Allow-Methods', 'POST,GET,PUT,DELETE');
+            res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+            res.setHeader('Access-Control-Max-Age', 604800);
+            res.setHeader('Access-Control-Allow-Credentials', 'true'); //允许跨域名设置cookie
+        }
+
+        next();
+    })
 
     // session check
     app.use((req, res, next) => {

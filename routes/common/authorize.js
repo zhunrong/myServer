@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-const authorize = require('../../controller/authorize');
+const authorize = require('../../controller/common/authorize');
 
 
-router.post('/login', authorize.login.bind(authorize));
+router.post('/login', authorize.login);
 
-router.post('/register', authorize.register.bind(authorize));
+router.post('/register', authorize.register);
 
 
 module.exports = router;
