@@ -5,15 +5,17 @@ const {
     readDirPromise,
     statPromise,
     mkDirPromise
-} = require('../../utils/dirReader');
+} = require('../../utils/fsPromise');
 const rootDirPath = path.resolve(__dirname, '../../private');
 
+/**
+ * 获取目录/文件
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.get = (req, res) => {
-    const pattern = /^\/explorer\/(\S*)/;
-    // req.path可能包含中文被编码后的字符
-    const match = pattern.exec(decodeURIComponent(req.path));
 
-    const relPath = match[1];
+    const relPath = getRelativePath(req.path);
     const filePath = path.resolve(rootDirPath, relPath);
 
     statPromise(filePath).then(file => {
@@ -65,10 +67,7 @@ const upload = multer({
     storage: multer.diskStorage({
         destination: (req, file, cb) => {
             // 注意 req.body 可能还没有完全填充，这取决于向客户端发送字段和文件到服务器的顺序
-            const pattern = /^\/explorer\/(\S*)/;
-            // req.path可能包含中文被编码后的字符
-            const match = pattern.exec(decodeURIComponent(req.path));
-            const relPath = match[1];
+            const relPath = getRelativePath(req.path);
             cb(null, path.resolve(rootDirPath, relPath));
         },
         filename: (req, file, cb) => {
@@ -78,25 +77,39 @@ const upload = multer({
     })
 })
 
+/**
+ * 新建目录/文件
+ */
 exports.post = [upload.single('file'), (req, res) => {
-
     const body = req.body;
-    console.log(req.body);
 
-    if (!body.filename) {
-        res.status(400).send({
-            message: '文件名不能为空'
-        })
-        return;
-    }
+    const relPath = getRelativePath(req.path);
+    const filePath = path.resolve(rootDirPath, relPath, body.filename || '');
 
-    const pattern = /^\/explorer\/(\S*)/;
-    // req.path可能包含中文被编码后的字符
-    const match = pattern.exec(decodeURIComponent(req.path));
-    const relPath = match[1];
-    const filePath = path.resolve(rootDirPath, relPath, body.filename);
-
-    if (req.body.isDirectory) {
+    if (req.file) {
+        if (body.filename) {
+            fs.rename(req.file.path, filePath, error => {
+                if (error) {
+                    return res.status(400).send({
+                        error
+                    })
+                }
+                res.status(200).send({
+                    message: '创建成功'
+                });
+            })
+        } else {
+            res.status(200).send({
+                message: '创建成功'
+            });
+        }
+    } else if (body.isDirectory) {
+        if (!body.filename) {
+            res.status(400).send({
+                message: '文件名不能为空'
+            })
+            return;
+        }
         mkDirPromise(filePath).then(() => {
             res.status(200).send({
                 message: '创建成功'
@@ -111,13 +124,61 @@ exports.post = [upload.single('file'), (req, res) => {
             })
         })
     } else {
-        console.log(req.file);
-        if (req.file) {
-            res.send('file');
-        } else {
-            res.status(400).send({
-                message: '没有文件'
-            })
-        }
+        res.status(400).send({
+            message: '缺少file或isDirectory字段'
+        })
     }
 }]
+
+exports.delete = (req, res) => {
+    const relPath = getRelativePath(req.path);
+    const filePath = path.resolve(rootDirPath, relPath);
+    statPromise(filePath).then(file => {
+        if (file.isDirectory) {
+            fs.rmdir(filePath, error => {
+                let message = '成功';
+                if (error) {
+                    message = error;
+                    console.log(error);
+                    if (error.errno = -4051) {
+                        message = '不能删除非空目录';
+                    }
+                    return res.status(400).send({
+                        message
+                    })
+                }
+                res.status(200).send({
+                    message
+                })
+            })
+        } else {
+            fs.unlink(filePath, error => {
+                let message = '成功';
+                if (error) {
+                    message = error;
+                    if (error.errno === -4058) {
+                        message = '文件不存在';
+                    }
+                    return res.status(400).send({
+                        message
+                    })
+                }
+                res.status(200).send({
+                    message
+                })
+            })
+        }
+    })
+
+}
+
+/**
+ * 获取相对于/explorer/的路径
+ * @param {String} path 
+ */
+function getRelativePath(path) {
+    const pattern = /^\/explorer\/(\S*)/;
+    // req.path可能包含中文被编码后的字符
+    const match = pattern.exec(decodeURIComponent(path));
+    return match[1];
+}
