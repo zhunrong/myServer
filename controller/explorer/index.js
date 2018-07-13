@@ -1,6 +1,9 @@
 const path = require('path');
 const fs = require('fs');
-const dirReader = require('../../utils/dirReader');
+const {
+    readDirPromise,
+    statPromise
+} = require('../../utils/dirReader');
 const rootDirPath = path.resolve(__dirname, '../../public');
 
 exports.get = (req, res) => {
@@ -8,32 +11,52 @@ exports.get = (req, res) => {
     const match = pattern.exec(req.path);
 
     const relPath = match[1];
-    const dirPath = path.resolve(rootDirPath, relPath);
+    const filePath = path.resolve(rootDirPath, relPath);
 
-    fs.stat(dirPath, (err, stats) => {
-        if (err) {
-            res.send(err);
-            return;
-        }
-        if (stats.isDirectory()) {
-            dirReader(rootDirPath, relPath).then(fileArray => {
+    statPromise(filePath).then(file => {
+        const rootDir = '/';
+        let currentDir = rootDir + relPath;
+        let parentDir = '/';
+        if (file.isDirectory) {
+            readDirPromise(rootDirPath, relPath).then(files => {
+                // 使目录路径以'/'结尾
+                if (!/.*\/$/.test(currentDir)) {
+                    currentDir += '/';
+                }
+                if (currentDir != '/') {
+                    const parentDirRE = /(.*\/)[^\/]+\//;
+                    parentDir = parentDirRE.exec(currentDir)[1];
+                }
                 res.status(200).send({
-                    data: fileArray
+                    files,
+                    currentDir,
+                    parentDir,
+                    rootDir,
+                    filePath
                 })
-            }).catch(err => {
-                res.send({
+            }).catch(error => {
+                res.status(400).send({
                     code: 1200,
-                    message: '读取错误'
+                    message: '读取错误',
+                    error
                 })
             })
         } else {
+            const parentDirRE = /(.*\/)[^\/]+/;
+            parentDir = parentDirRE.exec(currentDir)[1];
             res.status(200).send({
-                data: {
-                    name: '',
-                    url: `/${match[1]}`,
-                    type: 'img'
-                }
+                files: [file],
+                currentDir,
+                parentDir,
+                rootDir,
+                filePath
             })
         }
+    }).catch(error => {
+        res.status(400).send({
+            code: 1200,
+            message: '读取错误',
+            error
+        })
     })
 }

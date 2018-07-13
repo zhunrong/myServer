@@ -37,7 +37,6 @@ router(app);
 const server = app.listen(config.httpPort, function () {
     const host = server.address().address;
     const port = server.address().port;
-    console.log(server.address());
     console.log('express app listening at http://%s:%s', host, port);
 });
 
