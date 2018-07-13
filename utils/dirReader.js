@@ -23,7 +23,11 @@ function statPromise(filePath) {
     })
 }
 
-
+/**
+ * 读取目录内的文件
+ * @param {*} rootDir 
+ * @param {*} relPath 
+ */
 function readDirPromise(rootDir, relPath) {
     const dirPath = path.resolve(rootDir, relPath);
     return new Promise((resolve, reject) => {
@@ -60,7 +64,21 @@ function readDirPromise(rootDir, relPath) {
     })
 }
 
+
+function mkDirPromise(dirPath) {
+    return new Promise((resolve, reject) => {
+        fs.mkdir(dirPath, (err) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve();
+        })
+    })
+}
+
 module.exports = {
     statPromise,
-    readDirPromise
+    readDirPromise,
+    mkDirPromise
 }
