@@ -130,6 +130,11 @@ exports.post = [upload.single('file'), (req, res) => {
     }
 }]
 
+/**
+ * 删除文件/目录
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.delete = (req, res) => {
     const relPath = getRelativePath(req.path);
     const filePath = path.resolve(rootDirPath, relPath);
@@ -173,6 +178,45 @@ exports.delete = (req, res) => {
 }
 
 /**
+ * 重命名文件/目录
+ * @param {*} req 
+ * @param {*} res 
+ */
+exports.put = (req, res) => {
+    const relPath = getRelativePath(req.path);
+    const filename = getFileName(req.path);
+    const oldPath = path.resolve(rootDirPath, relPath);
+    const body = req.body;
+
+    if (relPath === '') {
+        return res.status(400).send({
+            message: '根目录不能修改'
+        })
+    }
+    if (!body.rename) {
+        return res.status(400).send({
+            message: 'rename不能为空'
+        })
+    }
+    const newPath = oldPath.replace(filename, body.rename);
+    fs.rename(oldPath, newPath, err => {
+        let message = '成功';
+        if (err) {
+            message = err;
+            if (err.errno === -4058) {
+                message = '文件不存在';
+            }
+            return res.status(400).send({
+                message
+            })
+        }
+        res.send({
+            message
+        })
+    })
+}
+
+/**
  * 获取相对于/explorer/的路径
  * @param {String} path 
  */
@@ -181,4 +225,14 @@ function getRelativePath(path) {
     // req.path可能包含中文被编码后的字符
     const match = pattern.exec(decodeURIComponent(path));
     return match[1];
+}
+
+function getFileName(path) {
+    let pattern;
+    if (/.*\/$/.test(path)) {
+        pattern = /.*\/([^/]+\/)/;
+    } else {
+        pattern = /.*\/([^/]+)/;
+    }
+    return pattern.exec(path)[1];
 }
