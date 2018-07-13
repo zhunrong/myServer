@@ -8,7 +8,8 @@ const rootDirPath = path.resolve(__dirname, '../../public');
 
 exports.get = (req, res) => {
     const pattern = /^\/explorer\/(\S*)/;
-    const match = pattern.exec(req.path);
+    // req.path可能包含中文被编码后的字符
+    const match = pattern.exec(decodeURIComponent(req.path));
 
     const relPath = match[1];
     const filePath = path.resolve(rootDirPath, relPath);
@@ -44,13 +45,9 @@ exports.get = (req, res) => {
         } else {
             const parentDirRE = /(.*\/)[^\/]+/;
             parentDir = parentDirRE.exec(currentDir)[1];
-            res.status(200).send({
-                files: [file],
-                currentDir,
-                parentDir,
-                rootDir,
-                filePath
-            })
+
+            // 直接返回一个文件
+            fs.createReadStream(filePath).pipe(res);
         }
     }).catch(error => {
         res.status(400).send({

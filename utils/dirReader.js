@@ -34,7 +34,6 @@ function readDirPromise(rootDir, relPath) {
             }
             const promiseArr = [];
             files.forEach(filename => {
-                const filePath = path.join(relPath, filename);
                 promiseArr.push(new Promise((resolve, reject) => {
                     statPromise(path.resolve(dirPath, filename)).then(file => {
                         resolve(Object.assign(file, {
@@ -43,8 +42,17 @@ function readDirPromise(rootDir, relPath) {
                     })
                 }))
             })
-            Promise.all(promiseArr).then(res => {
-                resolve(res);
+            Promise.all(promiseArr).then(files => {
+                // 将目录文件排在前面
+                const sortedFiles = [];
+                files.forEach(file => {
+                    if (file.isDirectory) {
+                        sortedFiles.unshift(file);
+                    } else {
+                        sortedFiles.push(file);
+                    }
+                })
+                resolve(sortedFiles);
             }).catch(err => {
                 reject(err);
             })
