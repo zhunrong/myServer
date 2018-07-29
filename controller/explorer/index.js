@@ -8,6 +8,11 @@ const {
 } = require('../../utils/fsPromise');
 const rootDirPath = path.resolve(__dirname, '../../private');
 
+const isExist = fs.existsSync(rootDirPath);
+if (!isExist) {
+    fs.mkdirSync(rootDirPath);
+}
+
 /**
  * 获取目录/文件
  * @param {*} req 
@@ -227,7 +232,12 @@ function getRelativePath(path) {
     return match[1];
 }
 
+/**
+ * 通过文件路径解析文件名
+ * @param {*} path 
+ */
 function getFileName(path) {
+    path = decodeURIComponent(path);
     let pattern;
     if (/.*\/$/.test(path)) {
         pattern = /.*\/([^/]+\/)/;

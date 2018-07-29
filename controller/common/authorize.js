@@ -80,7 +80,6 @@ exports.login = (req, res) => {
             })
         }
         req.session[config.sessionName] = findUser.id;
-        console.log(req.session);
         res.status(200).send({
             message: '登录成功'
         })
