@@ -226,7 +226,7 @@ exports.put = (req, res) => {
  * @param {String} path 
  */
 function getRelativePath(path) {
-    const pattern = /^\/explorer\/(\S*)/;
+    const pattern = /^\/explorer\/([^\\\/:*?"><|]*)/;
     // req.path可能包含中文被编码后的字符
     const match = pattern.exec(decodeURIComponent(path));
     return match[1];
