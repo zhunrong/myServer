@@ -22,11 +22,14 @@ exports.get = (req, res) => {
 
     const relPath = getRelativePath(req.path);
     const filePath = path.resolve(rootDirPath, relPath);
-
+    console.log('rootDirPath', rootDirPath);
+    console.log('relPath', relPath);
+    console.log('filePath', filePath);
     statPromise(filePath).then(file => {
         const rootDir = '/';
         let currentDir = rootDir + relPath;
         let parentDir = '/';
+        console.log('file', file);
         if (file.isDirectory) {
             readDirPromise(rootDirPath, relPath).then(files => {
                 // 使目录路径以'/'结尾
@@ -54,8 +57,6 @@ exports.get = (req, res) => {
         } else {
             const parentDirRE = /(.*\/)[^\/]+/;
             parentDir = parentDirRE.exec(currentDir)[1];
-            console.log('filePath', filePath);
-
             // 直接返回一个文件
             fs.createReadStream(filePath).pipe(res);
         }
