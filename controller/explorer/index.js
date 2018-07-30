@@ -22,15 +22,10 @@ exports.get = (req, res) => {
 
     const relPath = getRelativePath(req.path);
     const filePath = path.resolve(rootDirPath, relPath);
-    console.log('req.path', req.path);
-    console.log('rootDirPath', rootDirPath);
-    console.log('relPath', relPath);
-    console.log('filePath', filePath);
     statPromise(filePath).then(file => {
         const rootDir = '/';
         let currentDir = rootDir + relPath;
         let parentDir = '/';
-        console.log('file', file);
         if (file.isDirectory) {
             readDirPromise(rootDirPath, relPath).then(files => {
                 // 使目录路径以'/'结尾
@@ -229,7 +224,7 @@ exports.put = (req, res) => {
  * @param {String} path 
  */
 function getRelativePath(path) {
-    const pattern = /^\/explorer\/([^\\\/:*?"><|]*)/;
+    const pattern = /^\/explorer\/([^\\:*?"><|]*)/;
     // req.path可能包含中文被编码后的字符
     const match = pattern.exec(decodeURIComponent(path));
     return match[1];
