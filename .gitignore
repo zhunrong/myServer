@@ -28,3 +28,5 @@ node_modules
 
 # 本地文件根目录
 private
+# 静态资源目录
+public

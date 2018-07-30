@@ -54,6 +54,7 @@ exports.get = (req, res) => {
         } else {
             const parentDirRE = /(.*\/)[^\/]+/;
             parentDir = parentDirRE.exec(currentDir)[1];
+            console.log('filePath', filePath);
 
             // 直接返回一个文件
             fs.createReadStream(filePath).pipe(res);
