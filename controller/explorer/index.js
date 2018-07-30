@@ -22,6 +22,7 @@ exports.get = (req, res) => {
 
     const relPath = getRelativePath(req.path);
     const filePath = path.resolve(rootDirPath, relPath);
+    console.log('req.path', req.path);
     console.log('rootDirPath', rootDirPath);
     console.log('relPath', relPath);
     console.log('filePath', filePath);
