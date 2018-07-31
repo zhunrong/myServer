@@ -51,8 +51,10 @@ exports.get = (req, res) => {
                 })
             })
         } else {
-            const parentDirRE = /(.*\/)[^\/]+/;
-            parentDir = parentDirRE.exec(currentDir)[1];
+            const svgRE = /.svg$/;
+            if (svgRE.test(filePath)) {
+                res.append('Content-Type', 'image/svg+xml');
+            }
             // 直接返回一个文件
             fs.createReadStream(filePath).pipe(res);
         }
