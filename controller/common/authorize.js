@@ -1,67 +1,21 @@
 const userModel = require('../../model/common/user');
 const config = require('../../config');
 
-class Authorize {
-
-    register(req, res) {
-
-
-        const username = req.body.username;
-        const password = req.body.password;
-
-        if (!username) {
-            res.send('用户名不能为空');
-            return;
-        } else if (!password) {
-            res.send('密码不能为空');
-            return;
-        }
-
-        const conn = this.mysqlConn();
-        conn.query(`select * from ${this.tableName} where username='${username}'`, (err, result) => {
-
-            if (err) {
-                console.error(err);
-                res.send(err);
-                return;
-            }
-            if (result.length === 0) {
-
-                conn.query(`insert into ${this.tableName} (username,password) values ('${username}','${password}')`, (err, result) => {
-                    conn.end();
-                    if (err) {
-                        console.error(err);
-                        res.send(err);
-                        return;
-                    }
-
-                    res.send('注册成功');
-
-                })
-
-                return;
-            }
-            conn.end();
-
-            res.send('用户已存在');
-
-        })
-
-
-
-    }
-
-}
-
 exports.login = (req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
+    const {
+        username,
+        password
+    } = req.body;
 
     if (!username) {
-        res.send('用户名不能为空');
+        res.status(400).send({
+            message: '用户名不能为空'
+        });
         return;
     } else if (!password) {
-        res.send('密码不能为空');
+        res.status(400).send({
+            message: '密码不能为空'
+        });
         return;
     }
 
@@ -88,5 +42,41 @@ exports.login = (req, res) => {
 }
 
 exports.register = (req, res) => {
+    const {
+        username,
+        password
+    } = req.body;
 
+    if (!username) {
+        return res.status(400).send({
+            message: '用户名不能为空'
+        });
+    } else if (!password) {
+        return res.status(400).send({
+            message: '密码不能为空'
+        });
+    }
+
+    userModel.get({
+        username
+    }).then(result => {
+        if (result.length) {
+            res.status(400).send({
+                message: '用户名已被注册'
+            })
+        } else {
+            return userModel.post({
+                username,
+                password
+            })
+        }
+    }).then(result => {
+        return userModel.get({
+            username
+        })
+    }).then(result => {
+        res.status(200).send({
+            ...result[0]
+        })
+    })
 }
