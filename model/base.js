@@ -1,12 +1,26 @@
 const mysql = require('mysql');
 
 class Base {
-    constructor(options) {
-        this.host = options.host;
-        this.user = options.user;
-        this.password = options.password;
-        this.database = options.database;
-        this.tableName = options.tableName;
+    /**
+     * create model
+     * @param {String} host 
+     * @param {String} user
+     * @param {String} password 
+     * @param {String} database
+     * @param {String} tableName
+     */
+    constructor({
+        host,
+        user,
+        password,
+        database,
+        tableName
+    }) {
+        this.host = host;
+        this.user = user;
+        this.password = password;
+        this.database = database;
+        this.tableName = tableName;
     }
 
     mysqlConn() {

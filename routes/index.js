@@ -1,6 +1,7 @@
 const student = require('./student');
 const upload = require('./upload');
 const markdown = require('./markdown');
+const article = require('./explorer/article');
 
 //web-chat router
 const chat = require('./webChat');
@@ -19,4 +20,5 @@ module.exports = app => {
     chat(app);
     common(app);
     explorer(app);
+    article(app);
 }
