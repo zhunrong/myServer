@@ -1,4 +1,7 @@
 const userModel = require('../../model/common/user');
+
+userModel.init();
+
 exports.update = function (req, res) {
     const id = req.session.uid;
     const {

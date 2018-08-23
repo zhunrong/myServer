@@ -14,6 +14,28 @@ class User extends Base {
         return this.sqlQuery(sql);
     }
 
+    init() {
+        const connection = this.mysqlConn();
+        connection.query(
+            `
+            CREATE TABLE IF NOT EXISTS user (
+                id int(10) unsigned NOT NULL AUTO_INCREMENT,
+                username varchar(255) NOT NULL,
+                password varchar(255) NOT NULL,
+                nickname varchar(255) DEFAULT NULL,
+                avatar varchar(255) DEFAULT NULL,
+                create_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                update_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (id)
+              ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+            `
+            , error => {
+                if (error) {
+                    return console.log('error', error);
+                }
+            });
+    }
+
 }
 
 module.exports = new User({
