@@ -17,21 +17,72 @@ exports.get = (req, res) => {
 
 }
 
-exports.post = (req, res) => {
+// 新建文章
+exports.createArticle = (req, res) => {
     const uid = req.session.uid;
 
     const {
         title,
-        content
+        markdown,
+        html
     } = req.body;
+
+    if (typeof title !== undefined) {
+        if (title === '') {
+            return res.status(400).send({
+                message: '标题不能为空'
+            })
+        }
+    }
 
     articleModel.post({
         uid,
         title,
-        content
+        markdown,
+        html
+    }).then(result => {
+        const id = result.insertId;
+        return articleModel.get({
+            id
+        })
     }).then(result => {
         res.status(200).send({
-            message: "创建成功"
+            ...result[0]
+        })
+    }).catch(err => {
+        console.log(err);
+        res.status(400).send({
+            message: '幺蛾子'
+        })
+    })
+}
+
+// 修改文章
+exports.editArticle = (req, res) => {
+    const {
+        id
+    } = req.params;
+    const {
+        title,
+        markdown,
+        html
+    } = req.body;
+    if (typeof title !== undefined) {
+        if (title === '') {
+            return res.status(400).send({
+                message: 'title不能为空'
+            })
+        }
+    }
+    articleModel.put({
+        id
+    }, {
+        title,
+        markdown,
+        html
+    }).then(result => {
+        res.status(200).send({
+            ...result
         })
     }).catch(err => {
         console.log(err);
