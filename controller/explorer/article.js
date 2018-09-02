@@ -1,5 +1,7 @@
 const articleModel = require('../../model/explorer/article');
 
+articleModel.init();
+
 // 获取用户的文章
 exports.get = (req, res) => {
     const uid = req.session.uid;
