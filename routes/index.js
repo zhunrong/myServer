@@ -1,24 +1,25 @@
-const student = require('./student');
-const upload = require('./upload');
-const markdown = require('./markdown');
-const article = require('./explorer/article');
+const student = require('./student')
+const upload = require('./upload')
+const markdown = require('./markdown')
+const article = require('./explorer/article')
 
 //web-chat router
-const chat = require('./webChat');
+const chat = require('./webChat')
 //common
-const common = require('./common');
+const common = require('./common')
 // explorer
-const explorer = require('./explorer');
-
+const explorer = require('./explorer')
+// yeba
+const yeba = require('./yeba')
 
 module.exports = app => {
+  app.use(upload)
+  app.use(markdown)
 
-    app.use(upload);
-    app.use(markdown);
-
-    student(app);
-    chat(app);
-    common(app);
-    explorer(app);
-    article(app);
+  student(app)
+  chat(app)
+  common(app)
+  explorer(app)
+  article(app)
+  yeba(app)
 }
