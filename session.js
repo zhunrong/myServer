@@ -50,6 +50,10 @@ module.exports = app => {
       return
     }
     switch (req.path) {
+      case '/':
+        // 重定向
+        res.redirect('/html')
+        break
       case '/login':
       case '/register':
       case '/chat/login':
