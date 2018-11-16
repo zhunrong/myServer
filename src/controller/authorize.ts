@@ -1,9 +1,9 @@
-import authorizeModel from '../model/authorize'
+import model from '../model/authorize'
 import config from '../config'
 export async function login(req: any, res: any) {
   const { username, password } = req.body
   try {
-    const { results }: any = await authorizeModel.get({ username })
+    const { results }: any = await model.get({ username })
     const user = results[0]
     if (!user) {
       return res.send({
@@ -33,7 +33,7 @@ export async function login(req: any, res: any) {
 export async function register(req: any, res: any) {
   const { username, password } = req.body
   try {
-    const { results }: any = await authorizeModel.get({ username })
+    const { results }: any = await model.get({ username })
     const user = results[0]
     if (user) {
       return res.send({
@@ -42,7 +42,7 @@ export async function register(req: any, res: any) {
       })
     }
     // 添加新用户
-    await authorizeModel.post({
+    await model.post({
       username,
       password
     })

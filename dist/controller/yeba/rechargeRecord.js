@@ -42,25 +42,35 @@ var rechargeRecord_1 = __importDefault(require("../../model/yeba/rechargeRecord"
 var utils_1 = require("../../modules/utils");
 function get(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var query, condition, results, error_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var query, condition, page, count, _a, results, total, error_1;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     query = req.query;
-                    condition = utils_1.copyValueFromObj(['id', 'type', 'url', 'amount'], query);
-                    _a.label = 1;
+                    condition = utils_1.copyValueFromObj(['id', 'type', 'url', 'amount', 'barId'], query);
+                    page = +query.page || 1;
+                    count = +query.count || 10;
+                    _b.label = 1;
                 case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, rechargeRecord_1.default.get(condition)];
+                    _b.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, Promise.all([
+                            rechargeRecord_1.default.get(condition, count, page),
+                            rechargeRecord_1.default.count('id')
+                        ])];
                 case 2:
-                    results = (_a.sent()).results;
+                    _a = _b.sent(), results = _a[0].results, total = _a[1].count;
                     res.send({
                         status: 'success',
-                        data: results
+                        data: results,
+                        meta: {
+                            page: page,
+                            count: count,
+                            total: total
+                        }
                     });
                     return [3 /*break*/, 4];
                 case 3:
-                    error_1 = _a.sent();
+                    error_1 = _b.sent();
                     res.send({
                         status: 'error',
                         error: error_1
@@ -72,3 +82,35 @@ function get(req, res) {
     });
 }
 exports.get = get;
+function post(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var body, data, results, error_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    body = req.body;
+                    data = utils_1.copyValueFromObj(['barId', 'amount', 'url', 'type'], body);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, rechargeRecord_1.default.post(data)];
+                case 2:
+                    results = (_a.sent()).results;
+                    res.send({
+                        status: 'success',
+                        results: results
+                    });
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_2 = _a.sent();
+                    res.send({
+                        error: error_2,
+                        status: 'error'
+                    });
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.post = post;
