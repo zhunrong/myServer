@@ -3,8 +3,9 @@ import config from '../config'
 import session from 'express-session'
 import MySQLStore from 'express-mysql-session'
 import { get, post, put, del } from '../controller/test'
-import yebaRouter from './yeba'
-import authorize from './authorize'
+import yebaRouter from './router.yeba'
+import authorize from './router.authorize'
+import explorer from './router.explorer'
 
 const sessionMiddleware = session({
   cookie: {
@@ -82,4 +83,5 @@ export default (app: any) => {
   app.use(router)
   app.use(yebaRouter)
   app.use(authorize)
+  app.use(explorer)
 }

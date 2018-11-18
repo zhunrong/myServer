@@ -8,8 +8,9 @@ var config_1 = __importDefault(require("../config"));
 var express_session_1 = __importDefault(require("express-session"));
 var express_mysql_session_1 = __importDefault(require("express-mysql-session"));
 var test_1 = require("../controller/test");
-var yeba_1 = __importDefault(require("./yeba"));
-var authorize_1 = __importDefault(require("./authorize"));
+var router_yeba_1 = __importDefault(require("./router.yeba"));
+var router_authorize_1 = __importDefault(require("./router.authorize"));
+var router_explorer_1 = __importDefault(require("./router.explorer"));
 var sessionMiddleware = express_session_1.default({
     cookie: {
         domain: '',
@@ -82,6 +83,7 @@ exports.default = (function (app) {
     app.use(sessionMiddleware);
     app.use(corsHandler, sessionHandler);
     app.use(router);
-    app.use(yeba_1.default);
-    app.use(authorize_1.default);
+    app.use(router_yeba_1.default);
+    app.use(router_authorize_1.default);
+    app.use(router_explorer_1.default);
 });
