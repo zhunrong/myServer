@@ -1,4 +1,4 @@
-import model from '../model/authorize'
+import model from '../model/model.authorize'
 import config from '../config'
 export async function login(req: any, res: any) {
   const { username, password } = req.body

@@ -38,7 +38,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var rechargeRecord_1 = __importDefault(require("../../model/yeba/rechargeRecord"));
+var model_rechargeRecord_1 = __importDefault(require("../../model/yeba/model.rechargeRecord"));
 var utils_1 = require("../../modules/utils");
 function get(req, res) {
     return __awaiter(this, void 0, void 0, function () {
@@ -54,8 +54,8 @@ function get(req, res) {
                 case 1:
                     _b.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, Promise.all([
-                            rechargeRecord_1.default.get(condition, count, page),
-                            rechargeRecord_1.default.count('id')
+                            model_rechargeRecord_1.default.get(condition, count, page),
+                            model_rechargeRecord_1.default.count('id')
                         ])];
                 case 2:
                     _a = _b.sent(), results = _a[0].results, total = _a[1].count;
@@ -93,7 +93,7 @@ function post(req, res) {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, rechargeRecord_1.default.post(data)];
+                    return [4 /*yield*/, model_rechargeRecord_1.default.post(data)];
                 case 2:
                     results = (_a.sent()).results;
                     res.send({

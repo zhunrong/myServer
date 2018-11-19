@@ -1,4 +1,4 @@
-import model from '../../model/yeba/rechargeRecord'
+import model from '../../model/yeba/model.rechargeRecord'
 import { copyValueFromObj } from '../../modules/utils'
 export async function get(req: any, res: any) {
   const { query } = req

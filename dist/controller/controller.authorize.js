@@ -38,7 +38,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var authorize_1 = __importDefault(require("../model/authorize"));
+var model_authorize_1 = __importDefault(require("../model/model.authorize"));
 var config_1 = __importDefault(require("../config"));
 function login(req, res) {
     return __awaiter(this, void 0, void 0, function () {
@@ -50,7 +50,7 @@ function login(req, res) {
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, authorize_1.default.get({ username: username })];
+                    return [4 /*yield*/, model_authorize_1.default.get({ username: username })];
                 case 2:
                     results = (_b.sent()).results;
                     user = results[0];
@@ -95,7 +95,7 @@ function register(req, res) {
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 4, , 5]);
-                    return [4 /*yield*/, authorize_1.default.get({ username: username })];
+                    return [4 /*yield*/, model_authorize_1.default.get({ username: username })];
                 case 2:
                     results = (_b.sent()).results;
                     user = results[0];
@@ -106,7 +106,7 @@ function register(req, res) {
                             })];
                     }
                     // 添加新用户
-                    return [4 /*yield*/, authorize_1.default.post({
+                    return [4 /*yield*/, model_authorize_1.default.post({
                             username: username,
                             password: password
                         })];

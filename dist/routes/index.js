@@ -11,6 +11,7 @@ var test_1 = require("../controller/test");
 var router_yeba_1 = __importDefault(require("./router.yeba"));
 var router_authorize_1 = __importDefault(require("./router.authorize"));
 var router_explorer_1 = __importDefault(require("./router.explorer"));
+var router_article_1 = __importDefault(require("./router.article"));
 var sessionMiddleware = express_session_1.default({
     cookie: {
         domain: '',
@@ -86,4 +87,5 @@ exports.default = (function (app) {
     app.use(router_yeba_1.default);
     app.use(router_authorize_1.default);
     app.use(router_explorer_1.default);
+    app.use(router_article_1.default);
 });

@@ -6,6 +6,7 @@ import { get, post, put, del } from '../controller/test'
 import yebaRouter from './router.yeba'
 import authorize from './router.authorize'
 import explorer from './router.explorer'
+import article from './router.article'
 
 const sessionMiddleware = session({
   cookie: {
@@ -84,4 +85,5 @@ export default (app: any) => {
   app.use(yebaRouter)
   app.use(authorize)
   app.use(explorer)
+  app.use(article)
 }
