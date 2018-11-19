@@ -51,7 +51,7 @@ const sessionHandler = (req: any, res: any, next: any) => {
   switch (req.path) {
     case '/':
       // 重定向
-      res.redirect('/html')
+      res.redirect('/system')
       break
     case '/login':
     case '/register':
