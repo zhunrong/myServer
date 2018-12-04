@@ -1,3 +1,4 @@
+import moment from 'moment'
 /**
  * 将一个对象转化成key=value形式，并且通过seperator分隔
  * @param obj
@@ -26,4 +27,8 @@ export function copyValueFromObj(keys: string[], obj: any) {
     }
   })
   return newObj
+}
+
+export function timeFormat(time:string){
+  return moment(time).format('YYYY/MM/DD HH:mm:ss')
 }

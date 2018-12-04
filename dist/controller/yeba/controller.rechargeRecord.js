@@ -40,6 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var model_rechargeRecord_1 = __importDefault(require("../../model/yeba/model.rechargeRecord"));
 var utils_1 = require("../../modules/utils");
+// 获取记录
 function get(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var query, condition, page, count, _a, results, total, error_1;
@@ -59,6 +60,9 @@ function get(req, res) {
                         ])];
                 case 2:
                     _a = _b.sent(), results = _a[0].results, total = _a[1].count;
+                    results.forEach(function (item) {
+                        item.time = utils_1.timeFormat(item.time);
+                    });
                     res.send({
                         status: 'success',
                         data: results,

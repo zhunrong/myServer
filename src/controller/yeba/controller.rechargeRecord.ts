@@ -1,5 +1,8 @@
 import model from '../../model/yeba/model.rechargeRecord'
-import { copyValueFromObj } from '../../modules/utils'
+import moment from 'moment'
+import { copyValueFromObj, timeFormat } from '../../modules/utils'
+
+// 获取记录
 export async function get(req: any, res: any) {
   const { query } = req
   const condition = copyValueFromObj(
@@ -13,6 +16,9 @@ export async function get(req: any, res: any) {
       model.get(condition, count, page),
       model.count('id')
     ])
+    results.forEach((item: any) => {
+      item.time = timeFormat(item.time)
+    })
     res.send({
       status: 'success',
       data: results,

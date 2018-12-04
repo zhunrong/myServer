@@ -1,5 +1,9 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+var moment_1 = __importDefault(require("moment"));
 /**
  * 将一个对象转化成key=value形式，并且通过seperator分隔
  * @param obj
@@ -26,3 +30,7 @@ function copyValueFromObj(keys, obj) {
     return newObj;
 }
 exports.copyValueFromObj = copyValueFromObj;
+function timeFormat(time) {
+    return moment_1.default(time).format('YYYY/MM/DD HH:mm:ss');
+}
+exports.timeFormat = timeFormat;
