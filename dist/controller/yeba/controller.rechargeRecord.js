@@ -57,12 +57,16 @@ function get(req, res) {
                     return [4 /*yield*/, Promise.all([
                             model_rechargeRecord_1.default.get(condition, count, page),
                             model_rechargeRecord_1.default.count('id')
-                        ])];
+                        ])
+                        // results.forEach((item: any) => {
+                        //   item.time = timeFormat(item.time)
+                        // })
+                    ];
                 case 2:
                     _a = _b.sent(), results = _a[0].results, total = _a[1].count;
-                    results.forEach(function (item) {
-                        item.time = utils_1.timeFormat(item.time);
-                    });
+                    // results.forEach((item: any) => {
+                    //   item.time = timeFormat(item.time)
+                    // })
                     res.send({
                         status: 'success',
                         data: results,
@@ -119,24 +123,92 @@ function post(req, res) {
     });
 }
 exports.post = post;
+// 统计数据
+function statistic(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, _b, timeType, start, end, pattern, results, statisticObject_1, statisticArray, key, item, error_3;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _a = req.body, _b = _a.timeType, timeType = _b === void 0 ? 'day' : _b, start = _a.start, end = _a.end;
+                    switch (timeType) {
+                        case 'day':
+                            pattern = /\d{4}-\d{2}-\d{2}/;
+                            if (!pattern.test(start)) {
+                                return [2 /*return*/, res.send({
+                                        status: 'error',
+                                        message: '{start}不能为非法值'
+                                    })];
+                            }
+                            if (!pattern.test(end)) {
+                                return [2 /*return*/, res.send({
+                                        status: 'error',
+                                        message: '{end}不能为非法值'
+                                    })];
+                            }
+                            break;
+                    }
+                    _c.label = 1;
+                case 1:
+                    _c.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, model_rechargeRecord_1.default.getItemsBetweenDate(start, end, timeType)];
+                case 2:
+                    results = (_c.sent()).results;
+                    statisticObject_1 = {};
+                    results.forEach(function (item) {
+                        if (!statisticObject_1[item.time]) {
+                            statisticObject_1[item.time] = {
+                                amount: 0,
+                                time: item.time,
+                                count: 0
+                            };
+                        }
+                        statisticObject_1[item.time].amount += item.amount;
+                        statisticObject_1[item.time].count++;
+                    });
+                    statisticArray = [];
+                    for (key in statisticObject_1) {
+                        item = statisticObject_1[key];
+                        item.amount = Math.round(item.amount);
+                        statisticArray.push(item);
+                    }
+                    res.send({
+                        status: 'success',
+                        data: statisticArray
+                    });
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_3 = _c.sent();
+                    res.send({
+                        status: 'error',
+                        error: error_3
+                    });
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.statistic = statistic;
+var offset = 0;
+var limit = 2;
 function temp() {
     return __awaiter(this, void 0, void 0, function () {
-        var results, error_3;
+        var results, error_4;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, model_rechargeRecord_1.default.getItemsMoreThanId(3)];
+                    return [4 /*yield*/, model_rechargeRecord_1.default.getItems(offset, limit)];
                 case 1:
                     results = (_a.sent()).results;
-                    console.log(results);
                     results.forEach(function (item) {
                         console.log(item);
                     });
                     return [3 /*break*/, 3];
                 case 2:
-                    error_3 = _a.sent();
-                    console.log(error_3);
+                    error_4 = _a.sent();
+                    console.log(error_4);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }

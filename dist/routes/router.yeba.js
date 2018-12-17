@@ -8,4 +8,6 @@ var controller_rechargeRecord_1 = require("../controller/yeba/controller.recharg
 var router = express_1.default.Router();
 router.get('/yeba/rechargeOrder', controller_rechargeRecord_1.get);
 router.post('/yeba/rechargeOrder', controller_rechargeRecord_1.post);
+// 统计
+router.post('/yeba/rechargeOrder/statistic', controller_rechargeRecord_1.statistic);
 exports.default = router;
