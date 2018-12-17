@@ -172,6 +172,11 @@ function post(req, res) {
     });
 }
 exports.post = post;
+/**
+ * 编辑文章
+ * @param req request
+ * @param res response
+ */
 function put(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var id, data, error_4;

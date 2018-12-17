@@ -23,6 +23,16 @@ var RechargeRecord = /** @class */ (function (_super) {
     function RechargeRecord(options) {
         return _super.call(this, options) || this;
     }
+    /**
+     * 获取id大于指定值的数据
+     * @param id
+     * @param count
+     */
+    RechargeRecord.prototype.getItemsMoreThanId = function (id, count) {
+        if (count === void 0) { count = 100; }
+        var sql = "select * from " + this.table + " where id>=" + id + " limit " + count;
+        return this.query(sql);
+    };
     return RechargeRecord;
 }(model_1.default));
 exports.default = new RechargeRecord({

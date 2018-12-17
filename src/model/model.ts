@@ -11,8 +11,8 @@ export default class Model {
   private host: string
   private user: string
   private password: string
-  private database: string
-  private table: string
+  public database: string
+  public table: string
 
   constructor({ host, user, password, database, table }: Options) {
     this.host = host
@@ -153,7 +153,7 @@ export default class Model {
    * 执行sql
    * @param sql
    */
-  public query(sql: string) {
+  public query(sql: string):Promise<{}> {
     const connection = this.connect()
     return new Promise((resolve, reject) => {
       connection.query(sql, (error, results, fields) => {

@@ -36,6 +36,7 @@ export async function get(req: any, res: any) {
   }
 }
 
+// 新增一条记录
 export async function post(req: any, res: any) {
   const { body } = req
   const data = copyValueFromObj(['barId', 'amount', 'url', 'type'], body)
@@ -52,3 +53,17 @@ export async function post(req: any, res: any) {
     })
   }
 }
+
+async function temp() {
+  try {
+    const { results }: any = await model.getItemsMoreThanId(3)
+    console.log(results)
+    results.forEach((item: any) => {
+      console.log(item)
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// temp()

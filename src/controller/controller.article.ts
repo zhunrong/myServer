@@ -81,6 +81,11 @@ export async function post(req: any, res: any) {
   }
 }
 
+/**
+ * 编辑文章
+ * @param req request
+ * @param res response
+ */
 export async function put(req: any, res: any) {
   const { id } = req.params
   const data = copyValueFromObj(['title', 'markdown', 'html'], req.body)

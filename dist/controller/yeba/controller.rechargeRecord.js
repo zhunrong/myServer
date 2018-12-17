@@ -86,6 +86,7 @@ function get(req, res) {
     });
 }
 exports.get = get;
+// 新增一条记录
 function post(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var body, data, results, error_2;
@@ -118,3 +119,28 @@ function post(req, res) {
     });
 }
 exports.post = post;
+function temp() {
+    return __awaiter(this, void 0, void 0, function () {
+        var results, error_3;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, model_rechargeRecord_1.default.getItemsMoreThanId(3)];
+                case 1:
+                    results = (_a.sent()).results;
+                    console.log(results);
+                    results.forEach(function (item) {
+                        console.log(item);
+                    });
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_3 = _a.sent();
+                    console.log(error_3);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+// temp()
