@@ -16,9 +16,6 @@ export async function get(req: any, res: any) {
       model.get(condition, count, page),
       model.count('id')
     ])
-    // results.forEach((item: any) => {
-    //   item.time = timeFormat(item.time)
-    // })
     res.send({
       status: 'success',
       data: results,
@@ -56,7 +53,7 @@ export async function post(req: any, res: any) {
 
 // 统计数据
 export async function statistic(req: any, res: any) {
-  const { timeType = 'day', start, end } = req.body
+  const { timeType = 'day', start, end, category = 'time' } = req.body
   switch (timeType) {
     case 'day':
       const pattern = /\d{4}-\d{2}-\d{2}/
@@ -80,6 +77,21 @@ export async function statistic(req: any, res: any) {
       end,
       timeType
     )
+    res.send({
+      status: 'success',
+      data: statisticFunction[category](results)
+    })
+  } catch (error) {
+    res.send({
+      status: 'error',
+      error
+    })
+  }
+}
+// 统计函数集合
+const statisticFunction: any = {
+  // 按时间统计
+  time(results: any) {
     const statisticObject: any = {}
     results.forEach((item: any) => {
       if (!statisticObject[item.time]) {
@@ -98,29 +110,28 @@ export async function statistic(req: any, res: any) {
       item.amount = Math.round(item.amount)
       statisticArray.push(item)
     }
-    res.send({
-      status: 'success',
-      data: statisticArray
-    })
-  } catch (error) {
-    res.send({
-      status: 'error',
-      error
-    })
-  }
-}
-
-let offset = 0
-let limit = 2
-async function temp() {
-  try {
-    const { results }: any = await model.getItems(offset, limit)
+    return statisticArray
+  },
+  // 按酒吧id统计
+  bar(results: any) {
+    const statisticObject: any = {}
     results.forEach((item: any) => {
-      console.log(item)
+      if (!statisticObject[item.barId]) {
+        statisticObject[item.barId] = {
+          amount: 0,
+          barId: item.barId,
+          count: 0
+        }
+      }
+      statisticObject[item.barId].amount += item.amount
+      statisticObject[item.barId].count++
     })
-  } catch (error) {
-    console.log(error)
+    const statisticArray: any[] = []
+    for (let key in statisticObject) {
+      const item = statisticObject[key]
+      item.amount = Math.round(item.amount)
+      statisticArray.push(item)
+    }
+    return statisticArray
   }
 }
-
-// temp()

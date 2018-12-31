@@ -126,11 +126,11 @@ exports.post = post;
 // 统计数据
 function statistic(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, timeType, start, end, pattern, results, statisticObject_1, statisticArray, key, item, error_3;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var _a, _b, timeType, start, end, _c, category, pattern, results, error_3;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
                 case 0:
-                    _a = req.body, _b = _a.timeType, timeType = _b === void 0 ? 'day' : _b, start = _a.start, end = _a.end;
+                    _a = req.body, _b = _a.timeType, timeType = _b === void 0 ? 'day' : _b, start = _a.start, end = _a.end, _c = _a.category, category = _c === void 0 ? 'time' : _c;
                     switch (timeType) {
                         case 'day':
                             pattern = /\d{4}-\d{2}-\d{2}/;
@@ -148,37 +148,19 @@ function statistic(req, res) {
                             }
                             break;
                     }
-                    _c.label = 1;
+                    _d.label = 1;
                 case 1:
-                    _c.trys.push([1, 3, , 4]);
+                    _d.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, model_rechargeRecord_1.default.getItemsBetweenDate(start, end, timeType)];
                 case 2:
-                    results = (_c.sent()).results;
-                    statisticObject_1 = {};
-                    results.forEach(function (item) {
-                        if (!statisticObject_1[item.time]) {
-                            statisticObject_1[item.time] = {
-                                amount: 0,
-                                time: item.time,
-                                count: 0
-                            };
-                        }
-                        statisticObject_1[item.time].amount += item.amount;
-                        statisticObject_1[item.time].count++;
-                    });
-                    statisticArray = [];
-                    for (key in statisticObject_1) {
-                        item = statisticObject_1[key];
-                        item.amount = Math.round(item.amount);
-                        statisticArray.push(item);
-                    }
+                    results = (_d.sent()).results;
                     res.send({
                         status: 'success',
-                        data: statisticArray
+                        data: statisticFunction[category](results)
                     });
                     return [3 /*break*/, 4];
                 case 3:
-                    error_3 = _c.sent();
+                    error_3 = _d.sent();
                     res.send({
                         status: 'error',
                         error: error_3
@@ -190,29 +172,48 @@ function statistic(req, res) {
     });
 }
 exports.statistic = statistic;
-var offset = 0;
-var limit = 2;
-function temp() {
-    return __awaiter(this, void 0, void 0, function () {
-        var results, error_4;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, model_rechargeRecord_1.default.getItems(offset, limit)];
-                case 1:
-                    results = (_a.sent()).results;
-                    results.forEach(function (item) {
-                        console.log(item);
-                    });
-                    return [3 /*break*/, 3];
-                case 2:
-                    error_4 = _a.sent();
-                    console.log(error_4);
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
+// 统计函数集合
+var statisticFunction = {
+    time: function (results) {
+        var statisticObject = {};
+        results.forEach(function (item) {
+            if (!statisticObject[item.time]) {
+                statisticObject[item.time] = {
+                    amount: 0,
+                    time: item.time,
+                    count: 0
+                };
             }
+            statisticObject[item.time].amount += item.amount;
+            statisticObject[item.time].count++;
         });
-    });
-}
-// temp()
+        var statisticArray = [];
+        for (var key in statisticObject) {
+            var item = statisticObject[key];
+            item.amount = Math.round(item.amount);
+            statisticArray.push(item);
+        }
+        return statisticArray;
+    },
+    bar: function (results) {
+        var statisticObject = {};
+        results.forEach(function (item) {
+            if (!statisticObject[item.barId]) {
+                statisticObject[item.barId] = {
+                    amount: 0,
+                    barId: item.barId,
+                    count: 0
+                };
+            }
+            statisticObject[item.barId].amount += item.amount;
+            statisticObject[item.barId].count++;
+        });
+        var statisticArray = [];
+        for (var key in statisticObject) {
+            var item = statisticObject[key];
+            item.amount = Math.round(item.amount);
+            statisticArray.push(item);
+        }
+        return statisticArray;
+    }
+};
