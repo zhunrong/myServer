@@ -1,6 +1,7 @@
 import model from '../../model/yeba/model.rechargeRecord'
 import moment from 'moment'
 import { copyValueFromObj, timeFormat } from '../../modules/utils'
+import { Response } from '../../interface/interface'
 
 // 获取记录
 export async function get(req: any, res: any) {
@@ -16,15 +17,16 @@ export async function get(req: any, res: any) {
       model.get(condition, count, page),
       model.count('id')
     ])
-    res.send({
-      status: 'success',
+    const successResponse: Response = {
+      status:'success',
       data: results,
       meta: {
         page,
         count,
         total
       }
-    })
+    }
+    res.send(successResponse)
   } catch (error) {
     res.send({
       status: 'error',
@@ -60,13 +62,13 @@ export async function statistic(req: any, res: any) {
       if (!pattern.test(start)) {
         return res.send({
           status: 'error',
-          message: '{start}不能为非法值'
+          message: '{start}格式：YYYY-mm-dd'
         })
       }
       if (!pattern.test(end)) {
         return res.send({
           status: 'error',
-          message: '{end}不能为非法值'
+          message: '{end}格式：YYYY-mm-dd'
         })
       }
       break

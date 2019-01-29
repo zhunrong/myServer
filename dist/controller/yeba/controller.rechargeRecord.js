@@ -43,7 +43,7 @@ var utils_1 = require("../../modules/utils");
 // 获取记录
 function get(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var query, condition, page, count, _a, results, total, error_1;
+        var query, condition, page, count, _a, results, total, successResponse, error_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -57,17 +57,10 @@ function get(req, res) {
                     return [4 /*yield*/, Promise.all([
                             model_rechargeRecord_1.default.get(condition, count, page),
                             model_rechargeRecord_1.default.count('id')
-                        ])
-                        // results.forEach((item: any) => {
-                        //   item.time = timeFormat(item.time)
-                        // })
-                    ];
+                        ])];
                 case 2:
                     _a = _b.sent(), results = _a[0].results, total = _a[1].count;
-                    // results.forEach((item: any) => {
-                    //   item.time = timeFormat(item.time)
-                    // })
-                    res.send({
+                    successResponse = {
                         status: 'success',
                         data: results,
                         meta: {
@@ -75,7 +68,8 @@ function get(req, res) {
                             count: count,
                             total: total
                         }
-                    });
+                    };
+                    res.send(successResponse);
                     return [3 /*break*/, 4];
                 case 3:
                     error_1 = _b.sent();
@@ -137,13 +131,13 @@ function statistic(req, res) {
                             if (!pattern.test(start)) {
                                 return [2 /*return*/, res.send({
                                         status: 'error',
-                                        message: '{start}不能为非法值'
+                                        message: '{start}格式：YYYY-mm-dd'
                                     })];
                             }
                             if (!pattern.test(end)) {
                                 return [2 /*return*/, res.send({
                                         status: 'error',
-                                        message: '{end}不能为非法值'
+                                        message: '{end}格式：YYYY-mm-dd'
                                     })];
                             }
                             break;
@@ -174,6 +168,7 @@ function statistic(req, res) {
 exports.statistic = statistic;
 // 统计函数集合
 var statisticFunction = {
+    // 按时间统计
     time: function (results) {
         var statisticObject = {};
         results.forEach(function (item) {
@@ -195,6 +190,7 @@ var statisticFunction = {
         }
         return statisticArray;
     },
+    // 按酒吧id统计
     bar: function (results) {
         var statisticObject = {};
         results.forEach(function (item) {
