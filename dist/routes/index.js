@@ -62,6 +62,7 @@ var sessionHandler = function (req, res, next) {
         case '/chat/login':
         case '/chat/register':
         case '/yeba/rechargeOrder':
+        case '/yeba/visit':
             next();
             break;
         default:

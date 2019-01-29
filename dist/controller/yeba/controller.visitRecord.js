@@ -222,7 +222,6 @@ function getVisitStatistic(req, res) {
                     return [3 /*break*/, 4];
                 case 3:
                     error_3 = _e.sent();
-                    console.log(error_3);
                     errorResponse = {
                         status: 'success',
                         error: JSON.stringify(error_3)
