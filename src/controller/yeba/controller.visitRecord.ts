@@ -156,7 +156,6 @@ export async function getVisitStatistic(req: any, res: any) {
     }
     res.send(successResponse)
   } catch (error) {
-    console.log(error)
     const errorResponse: Response = {
       status: 'success',
       error: JSON.stringify(error)
