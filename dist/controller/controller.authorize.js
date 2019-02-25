@@ -39,10 +39,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var model_authorize_1 = __importDefault(require("../model/model.authorize"));
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var config_1 = __importDefault(require("../config"));
 function login(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, username, password, results, user, error_1;
+        var _a, username, password, results, user, maxAge, token, error_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -66,10 +67,18 @@ function login(req, res) {
                                 message: '密码不正确'
                             })];
                     }
-                    req.session[config_1.default.SESSION_NAME] = user.id;
+                    maxAge = config_1.default.TOKEN_MAX_AGE;
+                    token = jsonwebtoken_1.default.sign({
+                        uid: user.id,
+                        exp: Math.floor(Date.now() / 1000) + maxAge
+                    }, config_1.default.TOKEN_SECRET);
                     res.send({
                         status: 'success',
-                        user: user
+                        user: user,
+                        authorization: {
+                            token: token,
+                            maxAge: maxAge
+                        }
                     });
                     return [3 /*break*/, 4];
                 case 3:

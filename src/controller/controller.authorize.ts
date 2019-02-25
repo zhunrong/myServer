@@ -1,4 +1,5 @@
 import model from '../model/model.authorize'
+import jwt from 'jsonwebtoken'
 import config from '../config'
 export async function login(req: any, res: any) {
   const { username, password } = req.body
@@ -17,10 +18,22 @@ export async function login(req: any, res: any) {
         message: '密码不正确'
       })
     }
-    req.session[config.SESSION_NAME] = user.id
+    // 生成token
+    const maxAge: number = config.TOKEN_MAX_AGE
+    const token: string = jwt.sign(
+      {
+        uid: user.id,
+        exp: Math.floor(Date.now() / 1000) + maxAge
+      },
+      config.TOKEN_SECRET
+    )
     res.send({
       status: 'success',
-      user
+      user,
+      authorization: {
+        token,
+        maxAge
+      }
     })
   } catch (error) {
     res.send({

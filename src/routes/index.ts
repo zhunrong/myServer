@@ -1,35 +1,12 @@
 import express from 'express'
+import expressJwt from 'express-jwt'
 import config from '../config'
-import session from 'express-session'
-import MySQLStore from 'express-mysql-session'
 import { get, post, put, del } from '../controller/test'
 import yebaRouter from './router.yeba'
 import authorize from './router.authorize'
 import explorer from './router.explorer'
 import article from './router.article'
 
-const sessionMiddleware = session({
-  cookie: {
-    domain: '',
-    maxAge: 30 * 60 * 1000,
-    httpOnly: false,
-    path: '/',
-    sameSite: false,
-    secure: false
-  },
-  name: 'system.auth',
-  resave: false,
-  rolling: true,
-  saveUninitialized: false,
-  secret: 'dangerous',
-  store: new MySQLStore({
-    host: config.DATABASE_HOST,
-    port: 3306,
-    user: config.USER,
-    password: config.PASSWORD,
-    database: config.SESSION_DATABASE
-  }) as any
-})
 // CORS
 const corsHandler = (req: any, res: any, next: any) => {
   const origin = req.headers.origin
@@ -43,35 +20,12 @@ const corsHandler = (req: any, res: any, next: any) => {
   }
   next()
 }
-// session
-const sessionHandler = (req: any, res: any, next: any) => {
-  if (req.method === 'OPTIONS') {
-    return res.send('success')
-  }
-  switch (req.path) {
-    case '/':
-      // 重定向
-      res.redirect('/system')
-      break
-    case '/login':
-    case '/register':
-    case '/chat/login':
-    case '/chat/register':
-    case '/yeba/rechargeOrder':
-    case '/yeba/visit':
-      next()
-      break
-    default:
-      if (!req.session[config.SESSION_NAME]) {
-        return res.send({
-          status: 'error',
-          message: '用户未登录'
-        })
-      }
-      req.session[config.SESSION_NAME] = req.session[config.SESSION_NAME]
-      next()
-  }
-}
+
+const tokenChecker = expressJwt({
+  secret: config.TOKEN_SECRET
+}).unless({
+  path: ['/login', '/register']
+})
 
 const router = express.Router()
 router.get('/express', get)
@@ -80,8 +34,16 @@ router.put('/express', put)
 router.delete('/express', del)
 
 export default (app: any) => {
-  app.use(sessionMiddleware)
-  app.use(corsHandler, sessionHandler)
+  app.use(corsHandler)
+  app.use(tokenChecker, (error: any, req: any, res: any, next: any) => {
+    if (error) {
+      return res.status(401).send({
+        status: 'error',
+        message: error.message
+      })
+    }
+    next()
+  })
   app.use(router)
   app.use(yebaRouter)
   app.use(authorize)
