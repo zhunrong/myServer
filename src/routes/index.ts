@@ -6,7 +6,7 @@ import yebaRouter from './router.yeba'
 import authorize from './router.authorize'
 import explorer from './router.explorer'
 import article from './router.article'
-
+import user from './router.user'
 // CORS
 const corsHandler = (req: any, res: any, next: any) => {
   const origin = req.headers.origin
@@ -22,9 +22,10 @@ const corsHandler = (req: any, res: any, next: any) => {
 }
 
 const tokenChecker = expressJwt({
-  secret: config.TOKEN_SECRET
+  secret: config.TOKEN_SECRET,
+  requestProperty: 'auth'
 }).unless({
-  path: ['/login', '/register']
+  path: config.DO_NOT_CHECK_REQUEST_PATH
 })
 
 const router = express.Router()
@@ -49,4 +50,5 @@ export default (app: any) => {
   app.use(authorize)
   app.use(explorer)
   app.use(article)
+  app.use(user)
 }

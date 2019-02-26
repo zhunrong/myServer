@@ -1,10 +1,10 @@
-import model from '../model/model.authorize'
+import userModel from '../model/model.user'
 import jwt from 'jsonwebtoken'
 import config from '../config'
 export async function login(req: any, res: any) {
   const { username, password } = req.body
   try {
-    const { results }: any = await model.get({ username })
+    const { results }: any = await userModel.get({ username })
     const user = results[0]
     if (!user) {
       return res.send({
@@ -46,7 +46,7 @@ export async function login(req: any, res: any) {
 export async function register(req: any, res: any) {
   const { username, password } = req.body
   try {
-    const { results }: any = await model.get({ username })
+    const { results }: any = await userModel.get({ username })
     const user = results[0]
     if (user) {
       return res.send({
@@ -55,7 +55,7 @@ export async function register(req: any, res: any) {
       })
     }
     // 添加新用户
-    await model.post({
+    await userModel.post({
       username,
       password
     })

@@ -1,12 +1,12 @@
 import Model, { Options } from './model'
 import config from '../config'
-class Authorize extends Model {
+class User extends Model {
   constructor(options: Options) {
     super(options)
   }
 }
 
-export default new Authorize({
+export default new User({
   host: config.DATABASE_HOST,
   user: config.USER,
   password: config.PASSWORD,
