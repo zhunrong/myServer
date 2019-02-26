@@ -59,27 +59,28 @@ var utils_1 = require("../modules/utils");
  */
 function get(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var uid, results, error_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var uid, results, _a, message;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     uid = req.session[config_1.default.SESSION_NAME];
-                    _a.label = 1;
+                    _b.label = 1;
                 case 1:
-                    _a.trys.push([1, 3, , 4]);
+                    _b.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, model_article_1.default.get({ uid: uid })];
                 case 2:
-                    results = (_a.sent()).results;
+                    results = (_b.sent()).results;
                     res.send({
                         status: 'success',
                         data: results
                     });
                     return [3 /*break*/, 4];
                 case 3:
-                    error_1 = _a.sent();
+                    _a = _b.sent();
+                    message = _a.message;
                     res.send({
                         status: 'error',
-                        error: error_1
+                        message: message
                     });
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
@@ -95,33 +96,31 @@ exports.get = get;
  */
 function detail(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var id, uid, article, error_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var id, uid, article, _a, message;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     id = req.params.id;
                     uid = req.session[config_1.default.SESSION_NAME];
-                    _a.label = 1;
+                    _b.label = 1;
                 case 1:
-                    _a.trys.push([1, 3, , 4]);
+                    _b.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, model_article_1.default.get({ id: id, uid: uid })];
                 case 2:
-                    article = (_a.sent()).results[0];
+                    article = (_b.sent()).results[0];
                     if (article) {
                         res.send(__assign({ status: 'success' }, article));
                     }
                     else {
-                        res.send({
-                            status: 'error',
-                            message: '文章不存在'
-                        });
+                        throw new Error('文章不存在');
                     }
                     return [3 /*break*/, 4];
                 case 3:
-                    error_2 = _a.sent();
+                    _a = _b.sent();
+                    message = _a.message;
                     res.send({
                         status: 'error',
-                        error: error_2
+                        message: message
                     });
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
@@ -137,32 +136,30 @@ exports.detail = detail;
  */
 function post(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var uid, _a, _b, title, markdown, html, results, id, error_3;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var uid, _a, _b, title, markdown, html, results, id, _c, message;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
                 case 0:
                     uid = req.session[config_1.default.SESSION_NAME];
                     _a = req.body, _b = _a.title, title = _b === void 0 ? '' : _b, markdown = _a.markdown, html = _a.html;
-                    if (title === '') {
-                        return [2 /*return*/, res.send({
-                                message: '标题不能为空',
-                                status: 'error'
-                            })];
-                    }
-                    _c.label = 1;
+                    _d.label = 1;
                 case 1:
-                    _c.trys.push([1, 3, , 4]);
+                    _d.trys.push([1, 3, , 4]);
+                    if (title === '') {
+                        throw new Error('标题不能为空');
+                    }
                     return [4 /*yield*/, model_article_1.default.post({ uid: uid, title: title, markdown: markdown, html: html })];
                 case 2:
-                    results = (_c.sent()).results;
+                    results = (_d.sent()).results;
                     id = results.insertId;
                     req.params.id = id;
                     detail(req, res);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_3 = _c.sent();
+                    _c = _d.sent();
+                    message = _c.message;
                     res.send({
-                        error: error_3,
+                        message: message,
                         status: 'error'
                     });
                     return [3 /*break*/, 4];
@@ -179,31 +176,29 @@ exports.post = post;
  */
 function put(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var id, data, error_4;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var id, data, _a, message;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     id = req.params.id;
                     data = utils_1.copyValueFromObj(['title', 'markdown', 'html'], req.body);
-                    if (typeof data.title !== undefined && data.title === '') {
-                        return [2 /*return*/, res.send({
-                                status: 'error',
-                                message: 'title不能为空'
-                            })];
-                    }
-                    _a.label = 1;
+                    _b.label = 1;
                 case 1:
-                    _a.trys.push([1, 3, , 4]);
+                    _b.trys.push([1, 3, , 4]);
+                    if (typeof data.title !== undefined && data.title === '') {
+                        throw new Error('title不能为空');
+                    }
                     return [4 /*yield*/, model_article_1.default.put(data, { id: id })];
                 case 2:
-                    _a.sent();
+                    _b.sent();
                     req.params.id = id;
                     detail(req, res);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_4 = _a.sent();
+                    _a = _b.sent();
+                    message = _a.message;
                     res.send({
-                        error: error_4,
+                        message: message,
                         status: 'error'
                     });
                     return [3 /*break*/, 4];

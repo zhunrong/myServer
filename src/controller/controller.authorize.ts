@@ -1,22 +1,21 @@
 import userModel from '../model/model.user'
 import jwt from 'jsonwebtoken'
 import config from '../config'
+/**
+ * 登录
+ * @param req 
+ * @param res 
+ */
 export async function login(req: any, res: any) {
   const { username, password } = req.body
   try {
     const { results }: any = await userModel.get({ username })
     const user = results[0]
     if (!user) {
-      return res.send({
-        status: 'error',
-        message: '用户不存在'
-      })
+      throw new Error('用户不存在')
     }
     if (user.password !== password) {
-      return res.send({
-        status: 'error',
-        message: '密码不正确'
-      })
+      throw new Error('密码不正确')
     }
     // 生成token
     const maxAge: number = config.TOKEN_MAX_AGE
@@ -35,24 +34,26 @@ export async function login(req: any, res: any) {
         maxAge
       }
     })
-  } catch (error) {
+  } catch ({ message }) {
     res.send({
-      error,
+      message,
       status: 'error'
     })
   }
 }
 
+/**
+ * 注册
+ * @param req 
+ * @param res 
+ */
 export async function register(req: any, res: any) {
   const { username, password } = req.body
   try {
     const { results }: any = await userModel.get({ username })
     const user = results[0]
     if (user) {
-      return res.send({
-        status: 'error',
-        message: '用户已存在'
-      })
+      throw new Error('用户已存在')
     }
     // 添加新用户
     await userModel.post({
@@ -60,9 +61,9 @@ export async function register(req: any, res: any) {
       password
     })
     login(req, res)
-  } catch (error) {
+  } catch ({ message }) {
     res.send({
-      error,
+      message,
       status: 'error'
     })
   }

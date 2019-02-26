@@ -46,30 +46,30 @@ var model_user_1 = __importDefault(require("../model/model.user"));
  */
 function getUserInfo(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var uid, results, error_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var uid, results, _a, message;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
-                    console.log(req.auth);
                     uid = req.auth.uid;
-                    _a.label = 1;
+                    _b.label = 1;
                 case 1:
-                    _a.trys.push([1, 3, , 4]);
+                    _b.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, model_user_1.default.get({
                             id: uid
                         })];
                 case 2:
-                    results = (_a.sent()).results;
+                    results = (_b.sent()).results;
                     res.send({
                         status: 'success',
-                        user: results
+                        user: results[0]
                     });
                     return [3 /*break*/, 4];
                 case 3:
-                    error_1 = _a.sent();
+                    _a = _b.sent();
+                    message = _a.message;
                     res.send({
                         status: 'error',
-                        error: error_1
+                        message: message
                     });
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];

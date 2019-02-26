@@ -15,10 +15,10 @@ export async function getUserInfo(req: any, res: any) {
       status: 'success',
       user: results[0]
     })
-  } catch (error) {
+  } catch ({ message }) {
     res.send({
       status: 'error',
-      error
+      message
     })
   }
 }

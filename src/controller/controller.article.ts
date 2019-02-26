@@ -14,10 +14,10 @@ export async function get(req: any, res: any) {
       status: 'success',
       data: results
     })
-  } catch (error) {
+  } catch ({ message }) {
     res.send({
       status: 'error',
-      error
+      message
     })
   }
 }
@@ -40,15 +40,12 @@ export async function detail(req: any, res: any) {
         ...article
       })
     } else {
-      res.send({
-        status: 'error',
-        message: '文章不存在'
-      })
+      throw new Error('文章不存在')
     }
-  } catch (error) {
+  } catch ({ message }) {
     res.send({
       status: 'error',
-      error
+      message
     })
   }
 }
@@ -62,20 +59,17 @@ export async function post(req: any, res: any) {
   const uid = req.session[config.SESSION_NAME]
   const { title = '', markdown, html } = req.body
 
-  if (title === '') {
-    return res.send({
-      message: '标题不能为空',
-      status: 'error'
-    })
-  }
   try {
+    if (title === '') {
+      throw new Error('标题不能为空')
+    }
     const { results }: any = await model.post({ uid, title, markdown, html })
     const id = results.insertId
     req.params.id = id
     detail(req, res)
-  } catch (error) {
+  } catch ({ message }) {
     res.send({
-      error,
+      message,
       status: 'error'
     })
   }
@@ -89,19 +83,17 @@ export async function post(req: any, res: any) {
 export async function put(req: any, res: any) {
   const { id } = req.params
   const data = copyValueFromObj(['title', 'markdown', 'html'], req.body)
-  if (typeof data.title !== undefined && data.title === '') {
-    return res.send({
-      status: 'error',
-      message: 'title不能为空'
-    })
-  }
+
   try {
+    if (typeof data.title !== undefined && data.title === '') {
+      throw new Error('title不能为空')
+    }
     await model.put(data, { id })
     req.params.id = id
     detail(req, res)
-  } catch (error) {
+  } catch ({ message }) {
     res.send({
-      error,
+      message,
       status: 'error'
     })
   }

@@ -41,31 +41,30 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var model_user_1 = __importDefault(require("../model/model.user"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var config_1 = __importDefault(require("../config"));
+/**
+ * 登录
+ * @param req
+ * @param res
+ */
 function login(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, username, password, results, user, maxAge, token, error_1;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _a, username, password, results, user, maxAge, token, _b, message;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     _a = req.body, username = _a.username, password = _a.password;
-                    _b.label = 1;
+                    _c.label = 1;
                 case 1:
-                    _b.trys.push([1, 3, , 4]);
+                    _c.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, model_user_1.default.get({ username: username })];
                 case 2:
-                    results = (_b.sent()).results;
+                    results = (_c.sent()).results;
                     user = results[0];
                     if (!user) {
-                        return [2 /*return*/, res.send({
-                                status: 'error',
-                                message: '用户不存在'
-                            })];
+                        throw new Error('用户不存在');
                     }
                     if (user.password !== password) {
-                        return [2 /*return*/, res.send({
-                                status: 'error',
-                                message: '密码不正确'
-                            })];
+                        throw new Error('密码不正确');
                     }
                     maxAge = config_1.default.TOKEN_MAX_AGE;
                     token = jsonwebtoken_1.default.sign({
@@ -82,9 +81,10 @@ function login(req, res) {
                     });
                     return [3 /*break*/, 4];
                 case 3:
-                    error_1 = _b.sent();
+                    _b = _c.sent();
+                    message = _b.message;
                     res.send({
-                        error: error_1,
+                        message: message,
                         status: 'error'
                     });
                     return [3 /*break*/, 4];
@@ -94,25 +94,27 @@ function login(req, res) {
     });
 }
 exports.login = login;
+/**
+ * 注册
+ * @param req
+ * @param res
+ */
 function register(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, username, password, results, user, error_2;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _a, username, password, results, user, _b, message;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     _a = req.body, username = _a.username, password = _a.password;
-                    _b.label = 1;
+                    _c.label = 1;
                 case 1:
-                    _b.trys.push([1, 4, , 5]);
+                    _c.trys.push([1, 4, , 5]);
                     return [4 /*yield*/, model_user_1.default.get({ username: username })];
                 case 2:
-                    results = (_b.sent()).results;
+                    results = (_c.sent()).results;
                     user = results[0];
                     if (user) {
-                        return [2 /*return*/, res.send({
-                                status: 'error',
-                                message: '用户已存在'
-                            })];
+                        throw new Error('用户已存在');
                     }
                     // 添加新用户
                     return [4 /*yield*/, model_user_1.default.post({
@@ -121,13 +123,14 @@ function register(req, res) {
                         })];
                 case 3:
                     // 添加新用户
-                    _b.sent();
+                    _c.sent();
                     login(req, res);
                     return [3 /*break*/, 5];
                 case 4:
-                    error_2 = _b.sent();
+                    _b = _c.sent();
+                    message = _b.message;
                     res.send({
-                        error: error_2,
+                        message: message,
                         status: 'error'
                     });
                     return [3 /*break*/, 5];
