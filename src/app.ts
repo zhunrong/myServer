@@ -5,17 +5,7 @@ import config from './config'
 import router from './routes'
 const app = express()
 // 静态资源托管
-app.use(
-  '/',
-  (req, res, next) => {
-    if (req.path === '/') {
-      res.redirect('/system')
-    } else {
-      next()
-    }
-  },
-  express.static(path.resolve(__dirname, '../static/public'))
-)
+app.use('/', express.static(path.resolve(__dirname, '../static/public')))
 // 解析json请求数据
 app.use(bodyParser.json())
 // 解析urlencoded请求数据

@@ -10,14 +10,7 @@ var config_1 = __importDefault(require("./config"));
 var routes_1 = __importDefault(require("./routes"));
 var app = express_1.default();
 // 静态资源托管
-app.use('/', function (req, res, next) {
-    if (req.path === '/') {
-        res.redirect('/system');
-    }
-    else {
-        next();
-    }
-}, express_1.default.static(path_1.default.resolve(__dirname, '../static/public')));
+app.use('/', express_1.default.static(path_1.default.resolve(__dirname, '../static/public')));
 // 解析json请求数据
 app.use(body_parser_1.default.json());
 // 解析urlencoded请求数据
