@@ -14,7 +14,7 @@ const corsHandler = (req: any, res: any, next: any) => {
     //如果是同源的，则没有origin字段
     res.setHeader('Access-Control-Allow-Origin', origin)
     res.setHeader('Access-Control-Allow-Methods', 'POST,GET,PUT,DELETE')
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     res.setHeader('Access-Control-Max-Age', 604800)
     res.setHeader('Access-Control-Allow-Credentials', 'true') //允许跨域名设置cookie
   }
