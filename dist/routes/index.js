@@ -12,6 +12,7 @@ var router_authorize_1 = __importDefault(require("./router.authorize"));
 var router_explorer_1 = __importDefault(require("./router.explorer"));
 var router_article_1 = __importDefault(require("./router.article"));
 var router_user_1 = __importDefault(require("./router.user"));
+var router_mail_1 = __importDefault(require("./router.mail"));
 // CORS
 var corsHandler = function (req, res, next) {
     var origin = req.headers.origin;
@@ -31,11 +32,11 @@ var tokenChecker = express_jwt_1.default({
 }).unless({
     path: config_1.default.DO_NOT_CHECK_REQUEST_PATH
 });
-var router = express_1.default.Router();
-router.get('/express', test_1.get);
-router.post('/express', test_1.post);
-router.put('/express', test_1.put);
-router.delete('/express', test_1.del);
+var testRouter = express_1.default.Router();
+testRouter.get('/express', test_1.get);
+testRouter.post('/express', test_1.post);
+testRouter.put('/express', test_1.put);
+testRouter.delete('/express', test_1.del);
 exports.default = (function (app) {
     app.use(corsHandler);
     app.use(tokenChecker, function (error, req, res, next) {
@@ -47,10 +48,11 @@ exports.default = (function (app) {
         }
         next();
     });
-    app.use(router);
+    app.use(testRouter);
     app.use(router_yeba_1.default);
     app.use(router_authorize_1.default);
     app.use(router_explorer_1.default);
     app.use(router_article_1.default);
     app.use(router_user_1.default);
+    app.use(router_mail_1.default);
 });

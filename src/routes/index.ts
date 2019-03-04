@@ -3,10 +3,11 @@ import expressJwt from 'express-jwt'
 import config from '../config'
 import { get, post, put, del } from '../controller/test'
 import yebaRouter from './router.yeba'
-import authorize from './router.authorize'
-import explorer from './router.explorer'
-import article from './router.article'
-import user from './router.user'
+import authorizeRouter from './router.authorize'
+import explorerRouter from './router.explorer'
+import articleRouter from './router.article'
+import userRouter from './router.user'
+import mailRouter from './router.mail'
 // CORS
 const corsHandler = (req: any, res: any, next: any) => {
   const origin = req.headers.origin
@@ -28,11 +29,11 @@ const tokenChecker = expressJwt({
   path: config.DO_NOT_CHECK_REQUEST_PATH
 })
 
-const router = express.Router()
-router.get('/express', get)
-router.post('/express', post)
-router.put('/express', put)
-router.delete('/express', del)
+const testRouter = express.Router()
+testRouter.get('/express', get)
+testRouter.post('/express', post)
+testRouter.put('/express', put)
+testRouter.delete('/express', del)
 
 export default (app: any) => {
   app.use(corsHandler)
@@ -45,10 +46,11 @@ export default (app: any) => {
     }
     next()
   })
-  app.use(router)
+  app.use(testRouter)
   app.use(yebaRouter)
-  app.use(authorize)
-  app.use(explorer)
-  app.use(article)
-  app.use(user)
+  app.use(authorizeRouter)
+  app.use(explorerRouter)
+  app.use(articleRouter)
+  app.use(userRouter)
+  app.use(mailRouter)
 }
