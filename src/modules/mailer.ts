@@ -20,7 +20,7 @@ export default function(message: IMessage):Promise<any> {
     secure: true,
     auth: {
       user: 'chenzr@chd.edu.cn',
-      pass: 'xxxx'
+      pass: 'dangerous437'
     }
   })
   return transporter.sendMail({

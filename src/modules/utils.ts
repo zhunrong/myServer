@@ -29,6 +29,21 @@ export function copyValueFromObj(keys: string[], obj: any) {
   return newObj
 }
 
-export function timeFormat(time:string){
+export function timeFormat(time: string) {
   return moment(time).format('YYYY/MM/DD HH:mm:ss')
+}
+
+/**
+ * 返回随机字符
+ * @param length 字符长度
+ */
+export function randomCharacter(length: number): string {
+  const list = '0123456789abcdefghijklmnopqrstuvwxyz'
+  let str: string = ''
+  while (length > 0) {
+    const randomIndex: number = Math.floor(Math.random() * 35)
+    str += list[randomIndex]
+    length--
+  }
+  return str
 }

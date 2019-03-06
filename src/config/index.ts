@@ -3,7 +3,8 @@ const DO_NOT_CHECK_REQUEST_PATH: string[] = [
   '/login',
   '/register',
   '/yeba/visit',
-  '/yeba/rechargeOrder'
+  '/yeba/rechargeOrder',
+  '/mailVerifyCode'
 ]
 export default {
   PORT: 80,

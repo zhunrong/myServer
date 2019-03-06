@@ -39,8 +39,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var model_user_1 = __importDefault(require("../model/model.user"));
+var model_mailVerifyCode_1 = __importDefault(require("../model/model.mailVerifyCode"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var config_1 = __importDefault(require("../config"));
+var mailer_1 = __importDefault(require("../modules/mailer"));
+var utils_1 = require("../modules/utils");
 /**
  * 登录
  * @param req
@@ -140,3 +143,54 @@ function register(req, res) {
     });
 }
 exports.register = register;
+/**
+ * 验证码
+ * @param req
+ * @param res
+ */
+function mailVerifyCode(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var email, verifyCode, _a, message;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    email = req.body.email;
+                    verifyCode = utils_1.randomCharacter(8);
+                    _b.label = 1;
+                case 1:
+                    _b.trys.push([1, 4, , 5]);
+                    if (!email) {
+                        throw new Error('email不能为空');
+                    }
+                    return [4 /*yield*/, mailer_1.default({
+                            to: email,
+                            subject: '注册验证码',
+                            text: "\u9A8C\u8BC1\u7801\uFF1A" + verifyCode
+                        })];
+                case 2:
+                    _b.sent();
+                    return [4 /*yield*/, model_mailVerifyCode_1.default.post({
+                            email: email,
+                            verify_code: verifyCode
+                        })];
+                case 3:
+                    _b.sent();
+                    res.send({
+                        status: 'success',
+                        message: '验证码发送成功，去邮箱查收吧!'
+                    });
+                    return [3 /*break*/, 5];
+                case 4:
+                    _a = _b.sent();
+                    message = _a.message;
+                    res.send({
+                        status: 'error',
+                        message: message
+                    });
+                    return [3 /*break*/, 5];
+                case 5: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.mailVerifyCode = mailVerifyCode;

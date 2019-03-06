@@ -5,7 +5,8 @@ var DO_NOT_CHECK_REQUEST_PATH = [
     '/login',
     '/register',
     '/yeba/visit',
-    '/yeba/rechargeOrder'
+    '/yeba/rechargeOrder',
+    '/mailVerifyCode'
 ];
 exports.default = {
     PORT: 80,

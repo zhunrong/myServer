@@ -34,3 +34,18 @@ function timeFormat(time) {
     return moment_1.default(time).format('YYYY/MM/DD HH:mm:ss');
 }
 exports.timeFormat = timeFormat;
+/**
+ * 返回随机字符
+ * @param length 字符长度
+ */
+function randomCharacter(length) {
+    var list = '0123456789abcdefghijklmnopqrstuvwxyz';
+    var str = '';
+    while (length > 0) {
+        var randomIndex = Math.floor(Math.random() * 35);
+        str += list[randomIndex];
+        length--;
+    }
+    return str;
+}
+exports.randomCharacter = randomCharacter;
