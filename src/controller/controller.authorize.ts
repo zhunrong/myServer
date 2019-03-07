@@ -10,9 +10,9 @@ import { randomCharacter } from '../modules/utils'
  * @param res
  */
 export async function login(req: any, res: any) {
-  const { username, password } = req.body
+  const { email, password } = req.body
   try {
-    const { results }: any = await userModel.get({ username })
+    const { results }: any = await userModel.get({ email })
     const user = results[0]
     if (!user) {
       throw new Error('用户不存在')
@@ -49,18 +49,37 @@ export async function login(req: any, res: any) {
  * 注册
  * @param req
  * @param res
+ * email 邮箱
+ * password 密码
+ * verifyCode 验证码
  */
 export async function register(req: any, res: any) {
-  const { username, password } = req.body
+  const { email, verifyCode, password } = req.body
   try {
-    const { results }: any = await userModel.get({ username })
+    if (!email) {
+      throw new Error('邮箱不能为空')
+    }
+    if (!verifyCode) {
+      throw new Error('验证码不能为空')
+    }
+    if (!password) {
+      throw new Error('密码不能为空')
+    }
+    const { results: matchResults }: any = await mailVerifyCodeModel.get({
+      email,
+      verify_code: verifyCode
+    })
+    if (!matchResults.length) {
+      throw new Error('邮箱验证失败')
+    }
+    const { results }: any = await userModel.get({ email })
     const user = results[0]
     if (user) {
-      throw new Error('用户已存在')
+      throw new Error('邮箱已被注册')
     }
     // 添加新用户
     await userModel.post({
-      username,
+      email,
       password
     })
     login(req, res)

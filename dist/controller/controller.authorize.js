@@ -51,15 +51,15 @@ var utils_1 = require("../modules/utils");
  */
 function login(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, username, password, results, user, maxAge, token, _b, message;
+        var _a, email, password, results, user, maxAge, token, _b, message;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
-                    _a = req.body, username = _a.username, password = _a.password;
+                    _a = req.body, email = _a.email, password = _a.password;
                     _c.label = 1;
                 case 1:
                     _c.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, model_user_1.default.get({ username: username })];
+                    return [4 /*yield*/, model_user_1.default.get({ email: email })];
                 case 2:
                     results = (_c.sent()).results;
                     user = results[0];
@@ -101,43 +101,64 @@ exports.login = login;
  * 注册
  * @param req
  * @param res
+ * email 邮箱
+ * password 密码
+ * verifyCode 验证码
  */
 function register(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, username, password, results, user, _b, message;
+        var _a, email, verifyCode, password, matchResults, results, user, _b, message;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
-                    _a = req.body, username = _a.username, password = _a.password;
+                    _a = req.body, email = _a.email, verifyCode = _a.verifyCode, password = _a.password;
                     _c.label = 1;
                 case 1:
-                    _c.trys.push([1, 4, , 5]);
-                    return [4 /*yield*/, model_user_1.default.get({ username: username })];
+                    _c.trys.push([1, 5, , 6]);
+                    if (!email) {
+                        throw new Error('邮箱不能为空');
+                    }
+                    if (!verifyCode) {
+                        throw new Error('验证码不能为空');
+                    }
+                    if (!password) {
+                        throw new Error('密码不能为空');
+                    }
+                    return [4 /*yield*/, model_mailVerifyCode_1.default.get({
+                            email: email,
+                            verify_code: verifyCode
+                        })];
                 case 2:
+                    matchResults = (_c.sent()).results;
+                    if (!matchResults.length) {
+                        throw new Error('邮箱验证失败');
+                    }
+                    return [4 /*yield*/, model_user_1.default.get({ email: email })];
+                case 3:
                     results = (_c.sent()).results;
                     user = results[0];
                     if (user) {
-                        throw new Error('用户已存在');
+                        throw new Error('邮箱已被注册');
                     }
                     // 添加新用户
                     return [4 /*yield*/, model_user_1.default.post({
-                            username: username,
+                            email: email,
                             password: password
                         })];
-                case 3:
+                case 4:
                     // 添加新用户
                     _c.sent();
                     login(req, res);
-                    return [3 /*break*/, 5];
-                case 4:
+                    return [3 /*break*/, 6];
+                case 5:
                     _b = _c.sent();
                     message = _b.message;
                     res.send({
                         message: message,
                         status: 'error'
                     });
-                    return [3 /*break*/, 5];
-                case 5: return [2 /*return*/];
+                    return [3 /*break*/, 6];
+                case 6: return [2 /*return*/];
             }
         });
     });
