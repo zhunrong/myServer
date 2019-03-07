@@ -8,10 +8,18 @@ import { randomCharacter } from '../modules/utils'
  * 登录
  * @param req
  * @param res
+ * email 邮箱
+ * password 密码
  */
 export async function login(req: any, res: any) {
   const { email, password } = req.body
   try {
+    if (!email) {
+      throw new Error('邮箱不能为空')
+    }
+    if (!password) {
+      throw new Error('密码不能为空')
+    }
     const { results }: any = await userModel.get({ email })
     const user = results[0]
     if (!user) {
@@ -31,7 +39,6 @@ export async function login(req: any, res: any) {
     )
     res.send({
       status: 'success',
-      user,
       authorization: {
         token,
         maxAge
@@ -95,13 +102,14 @@ export async function register(req: any, res: any) {
  * 验证码
  * @param req
  * @param res
+ * email 邮箱
  */
 export async function mailVerifyCode(req: any, res: any) {
   const { email } = req.body
   const verifyCode: string = randomCharacter(8)
   try {
     if (!email) {
-      throw new Error('email不能为空')
+      throw new Error('邮箱不能为空')
     }
     await sendMail({
       to: email,

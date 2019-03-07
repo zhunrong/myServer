@@ -48,6 +48,8 @@ var utils_1 = require("../modules/utils");
  * 登录
  * @param req
  * @param res
+ * email 邮箱
+ * password 密码
  */
 function login(req, res) {
     return __awaiter(this, void 0, void 0, function () {
@@ -59,6 +61,12 @@ function login(req, res) {
                     _c.label = 1;
                 case 1:
                     _c.trys.push([1, 3, , 4]);
+                    if (!email) {
+                        throw new Error('邮箱不能为空');
+                    }
+                    if (!password) {
+                        throw new Error('密码不能为空');
+                    }
                     return [4 /*yield*/, model_user_1.default.get({ email: email })];
                 case 2:
                     results = (_c.sent()).results;
@@ -76,7 +84,6 @@ function login(req, res) {
                     }, config_1.default.TOKEN_SECRET);
                     res.send({
                         status: 'success',
-                        user: user,
                         authorization: {
                             token: token,
                             maxAge: maxAge
@@ -168,6 +175,7 @@ exports.register = register;
  * 验证码
  * @param req
  * @param res
+ * email 邮箱
  */
 function mailVerifyCode(req, res) {
     return __awaiter(this, void 0, void 0, function () {
@@ -181,7 +189,7 @@ function mailVerifyCode(req, res) {
                 case 1:
                     _b.trys.push([1, 4, , 5]);
                     if (!email) {
-                        throw new Error('email不能为空');
+                        throw new Error('邮箱不能为空');
                     }
                     return [4 /*yield*/, mailer_1.default({
                             to: email,
