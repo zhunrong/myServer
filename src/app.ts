@@ -3,6 +3,7 @@ import path from 'path'
 import bodyParser from 'body-parser'
 import config from './config'
 import router from './routes'
+
 const app = express()
 // 静态资源托管
 app.use('/', express.static(path.resolve(__dirname, '../static/public')))

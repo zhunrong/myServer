@@ -9,6 +9,9 @@ import {
   rmdirPromise,
   unlinkPromise
 } from '../modules/fsPromise'
+
+console.log(__dirname)
+
 const rootDirPath = path.resolve(__dirname, '../../static/private')
 if (!fs.existsSync(rootDirPath)) {
   fs.mkdirSync(rootDirPath)

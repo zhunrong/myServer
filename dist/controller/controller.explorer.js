@@ -43,6 +43,7 @@ var path_1 = __importDefault(require("path"));
 var fs_1 = __importDefault(require("fs"));
 var multer_1 = __importDefault(require("multer"));
 var fsPromise_1 = require("../modules/fsPromise");
+console.log(__dirname);
 var rootDirPath = path_1.default.resolve(__dirname, '../../static/private');
 if (!fs_1.default.existsSync(rootDirPath)) {
     fs_1.default.mkdirSync(rootDirPath);
