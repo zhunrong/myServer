@@ -22,7 +22,7 @@ export function objectToKeyValue(
 export function copyValueFromObj(keys: string[], obj: any) {
   const newObj: any = {}
   keys.forEach(key => {
-    if (key in obj) {
+    if (key in obj && obj[key]) {
       newObj[key] = obj[key]
     }
   })

@@ -39,8 +39,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var model_user_1 = __importDefault(require("../model/model.user"));
+var utils_1 = require("../modules/utils");
 /**
- * 获取用户信息
+ * 获取当前登录用户信息
  * @param req
  * @param res
  */
@@ -78,3 +79,43 @@ function getUserInfo(req, res) {
     });
 }
 exports.getUserInfo = getUserInfo;
+/**
+ * 更新当前登录用户信息
+ * @param req
+ * @param res
+ */
+function updateUserInfo(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var uid, data, _a, message;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    uid = req.auth.uid;
+                    _b.label = 1;
+                case 1:
+                    _b.trys.push([1, 3, , 4]);
+                    data = utils_1.copyValueFromObj(['nickname', 'avatar'], req.body);
+                    if (!data.nickname) {
+                        throw new Error('昵称不能为空');
+                    }
+                    return [4 /*yield*/, model_user_1.default.put(data, {
+                            id: uid
+                        })];
+                case 2:
+                    _b.sent();
+                    getUserInfo(req, res);
+                    return [3 /*break*/, 4];
+                case 3:
+                    _a = _b.sent();
+                    message = _a.message;
+                    res.send({
+                        status: 'error',
+                        message: message
+                    });
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.updateUserInfo = updateUserInfo;
