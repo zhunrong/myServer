@@ -60,6 +60,9 @@ function getUserInfo(req, res) {
                         })];
                 case 2:
                     results = (_b.sent()).results;
+                    if (!results.length) {
+                        throw new Error('用户不存在');
+                    }
                     res.send({
                         status: 'success',
                         user: results[0]

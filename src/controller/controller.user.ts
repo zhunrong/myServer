@@ -11,6 +11,9 @@ export async function getUserInfo(req: any, res: any) {
     const { results }: any = await userModel.get({
       id: uid
     })
+    if (!results.length) {
+      throw new Error('用户不存在')
+    }
     res.send({
       status: 'success',
       user: results[0]

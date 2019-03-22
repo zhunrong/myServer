@@ -23,7 +23,7 @@ exports.objectToKeyValue = objectToKeyValue;
 function copyValueFromObj(keys, obj) {
     var newObj = {};
     keys.forEach(function (key) {
-        if (key in obj && obj[key]) {
+        if (key in obj && obj[key] !== null && obj[key] !== undefined) {
             newObj[key] = obj[key];
         }
     });
