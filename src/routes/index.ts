@@ -8,6 +8,7 @@ import explorerRouter from './router.explorer'
 import articleRouter from './router.article'
 import userRouter from './router.user'
 import mailRouter from './router.mail'
+import toolsRouter from './router.tools'
 // CORS
 const corsHandler = (req: any, res: any, next: any) => {
   const origin = req.headers.origin
@@ -53,4 +54,5 @@ export default (app: any) => {
   app.use(articleRouter)
   app.use(userRouter)
   app.use(mailRouter)
+  app.use(toolsRouter)
 }

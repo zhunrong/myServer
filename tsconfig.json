@@ -60,5 +60,5 @@
 
     "watch": true
   },
-  "files": ["./src/app.ts","./src/types.d.ts"]
+  "files": ["./src/app.ts","./src/typings.d.ts"]
 }
