@@ -5,7 +5,7 @@ class Article extends Model {
     super(options)
     this.init()
   }
-  async init() {
+  private async init() {
     await this.query(
       `
       CREATE TABLE IF NOT EXISTS article (
@@ -20,6 +20,41 @@ class Article extends Model {
         ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
     `
     )
+  }
+  /**
+   * 获取文章列表
+   * @param uid
+   */
+  getArticles(uid: number): Promise<any> {
+    let sql = `select 
+                  id,
+                  uid,
+                  title,
+                  markdown,
+                  DATE_FORMAT(create_at,'%Y-%m-%d %h:%i:%s') as createTime,
+                  DATE_FORMAT(update_at,'%Y-%m-%d %h:%i:%s') as updateTime 
+              from ${this.table}
+              where 
+                  uid=${uid}`
+    return this.query(sql)
+  }
+  /**
+   * 获取文章详情
+   * @param uid 
+   * @param id 
+   */
+  getArticleDetail(uid: number, id: number): Promise<any> {
+    let sql = `select
+                  id,
+                  uid,
+                  title,
+                  markdown,
+                  DATE_FORMAT(create_at,'%Y-%m-%d %h:%i:%s') as createTime,
+                  DATE_FORMAT(update_at,'%Y-%m-%d %h:%i:%s') as updateTime 
+              from ${this.table}
+              where 
+                  uid=${uid} and id=${id}`
+    return this.query(sql)
   }
 }
 

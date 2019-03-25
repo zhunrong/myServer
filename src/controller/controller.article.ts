@@ -1,5 +1,4 @@
-import model from '../model/model.article'
-import config from '../config'
+import articleModel from '../model/model.article'
 import { copyValueFromObj } from '../modules/utils'
 /**
  * 获取用户的文章
@@ -7,9 +6,9 @@ import { copyValueFromObj } from '../modules/utils'
  * @param res
  */
 export async function get(req: any, res: any) {
-  const uid = req.session[config.SESSION_NAME]
+  const { uid } = req.auth
   try {
-    const { results }: any = await model.get({ uid })
+    const { results }: any = await articleModel.getArticles(uid)
     res.send({
       status: 'success',
       data: results
@@ -29,15 +28,15 @@ export async function get(req: any, res: any) {
  */
 export async function detail(req: any, res: any) {
   const { id } = req.params
-  const uid = req.session[config.SESSION_NAME]
+  const { uid } = req.auth
   try {
     const {
       results: [article]
-    }: any = await model.get({ id, uid })
+    }: any = await articleModel.getArticleDetail(uid, Number(id))
     if (article) {
       res.send({
         status: 'success',
-        ...article
+        data: article
       })
     } else {
       throw new Error('文章不存在')
@@ -56,14 +55,16 @@ export async function detail(req: any, res: any) {
  * @param res
  */
 export async function post(req: any, res: any) {
-  const uid = req.session[config.SESSION_NAME]
-  const { title = '', markdown, html } = req.body
-
+  const { uid } = req.auth
+  const { title, markdown } = req.body
   try {
-    if (title === '') {
+    if (!title) {
       throw new Error('标题不能为空')
     }
-    const { results }: any = await model.post({ uid, title, markdown, html })
+    if (!markdown) {
+      throw new Error('内容不能为空')
+    }
+    const { results }: any = await articleModel.post({ uid, title, markdown })
     const id = results.insertId
     req.params.id = id
     detail(req, res)
@@ -82,13 +83,23 @@ export async function post(req: any, res: any) {
  */
 export async function put(req: any, res: any) {
   const { id } = req.params
-  const data = copyValueFromObj(['title', 'markdown', 'html'], req.body)
+  const { uid } = req.auth
+  const data = copyValueFromObj(['title', 'markdown'], req.body)
 
   try {
     if (typeof data.title !== undefined && data.title === '') {
       throw new Error('title不能为空')
     }
-    await model.put(data, { id })
+    const {
+      results: [article]
+    } = await articleModel.get({ id })
+    if (!article) {
+      throw new Error('该文章不存在')
+    }
+    if (article.uid !== uid) {
+      throw new Error('该文章不属于当前用户')
+    }
+    await articleModel.put(data, { id })
     req.params.id = id
     detail(req, res)
   } catch ({ message }) {

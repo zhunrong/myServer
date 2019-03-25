@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -50,7 +39,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var model_article_1 = __importDefault(require("../model/model.article"));
-var config_1 = __importDefault(require("../config"));
 var utils_1 = require("../modules/utils");
 /**
  * 获取用户的文章
@@ -63,11 +51,11 @@ function get(req, res) {
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    uid = req.session[config_1.default.SESSION_NAME];
+                    uid = req.auth.uid;
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, model_article_1.default.get({ uid: uid })];
+                    return [4 /*yield*/, model_article_1.default.getArticles(uid)];
                 case 2:
                     results = (_b.sent()).results;
                     res.send({
@@ -101,15 +89,18 @@ function detail(req, res) {
             switch (_b.label) {
                 case 0:
                     id = req.params.id;
-                    uid = req.session[config_1.default.SESSION_NAME];
+                    uid = req.auth.uid;
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, model_article_1.default.get({ id: id, uid: uid })];
+                    return [4 /*yield*/, model_article_1.default.getArticleDetail(uid, Number(id))];
                 case 2:
                     article = (_b.sent()).results[0];
                     if (article) {
-                        res.send(__assign({ status: 'success' }, article));
+                        res.send({
+                            status: 'success',
+                            data: article
+                        });
                     }
                     else {
                         throw new Error('文章不存在');
@@ -136,28 +127,31 @@ exports.detail = detail;
  */
 function post(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var uid, _a, _b, title, markdown, html, results, id, _c, message;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
+        var uid, _a, title, markdown, results, id, _b, message;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
-                    uid = req.session[config_1.default.SESSION_NAME];
-                    _a = req.body, _b = _a.title, title = _b === void 0 ? '' : _b, markdown = _a.markdown, html = _a.html;
-                    _d.label = 1;
+                    uid = req.auth.uid;
+                    _a = req.body, title = _a.title, markdown = _a.markdown;
+                    _c.label = 1;
                 case 1:
-                    _d.trys.push([1, 3, , 4]);
-                    if (title === '') {
+                    _c.trys.push([1, 3, , 4]);
+                    if (!title) {
                         throw new Error('标题不能为空');
                     }
-                    return [4 /*yield*/, model_article_1.default.post({ uid: uid, title: title, markdown: markdown, html: html })];
+                    if (!markdown) {
+                        throw new Error('内容不能为空');
+                    }
+                    return [4 /*yield*/, model_article_1.default.post({ uid: uid, title: title, markdown: markdown })];
                 case 2:
-                    results = (_d.sent()).results;
+                    results = (_c.sent()).results;
                     id = results.insertId;
                     req.params.id = id;
                     detail(req, res);
                     return [3 /*break*/, 4];
                 case 3:
-                    _c = _d.sent();
-                    message = _c.message;
+                    _b = _c.sent();
+                    message = _b.message;
                     res.send({
                         message: message,
                         status: 'error'
@@ -176,33 +170,43 @@ exports.post = post;
  */
 function put(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var id, data, _a, message;
+        var id, uid, data, article, _a, message;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     id = req.params.id;
-                    data = utils_1.copyValueFromObj(['title', 'markdown', 'html'], req.body);
+                    uid = req.auth.uid;
+                    data = utils_1.copyValueFromObj(['title', 'markdown'], req.body);
                     _b.label = 1;
                 case 1:
-                    _b.trys.push([1, 3, , 4]);
+                    _b.trys.push([1, 4, , 5]);
                     if (typeof data.title !== undefined && data.title === '') {
                         throw new Error('title不能为空');
                     }
-                    return [4 /*yield*/, model_article_1.default.put(data, { id: id })];
+                    return [4 /*yield*/, model_article_1.default.get({ id: id })];
                 case 2:
+                    article = (_b.sent()).results[0];
+                    if (!article) {
+                        throw new Error('该文章不存在');
+                    }
+                    if (article.uid !== uid) {
+                        throw new Error('该文章不属于当前用户');
+                    }
+                    return [4 /*yield*/, model_article_1.default.put(data, { id: id })];
+                case 3:
                     _b.sent();
                     req.params.id = id;
                     detail(req, res);
-                    return [3 /*break*/, 4];
-                case 3:
+                    return [3 /*break*/, 5];
+                case 4:
                     _a = _b.sent();
                     message = _a.message;
                     res.send({
                         message: message,
                         status: 'error'
                     });
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    return [3 /*break*/, 5];
+                case 5: return [2 /*return*/];
             }
         });
     });

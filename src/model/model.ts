@@ -36,7 +36,7 @@ export default class Model {
    * @param count 每页的数量
    * @param page 查询页数
    */
-  public get(options?: any, count?: number, page?: number) {
+  public get(options?: any, count?: number, page?: number): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const { table } = this
       let sql = `select * from ${table}`
@@ -65,7 +65,7 @@ export default class Model {
    * 插入数据
    * @param options
    */
-  public post(options: any) {
+  public post(options: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
       if (typeof options === 'object') {
         const { table } = this
@@ -89,7 +89,7 @@ export default class Model {
    * @param updateData 要更新的字段对象
    * @param condition 条件
    */
-  public put(updateData: any, condition?: any) {
+  public put(updateData: any, condition?: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const { table } = this
       const updateString = objectToKeyValue(updateData, ',')
@@ -113,7 +113,7 @@ export default class Model {
    * 删除数据
    * @param condition 条件
    */
-  public delete(condition?: any) {
+  public delete(condition?: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const { table } = this
       let sql = `delete from ${table}`
@@ -136,7 +136,7 @@ export default class Model {
    * 根据字段名查询数量
    * @param columnName 字段名
    */
-  public count(columnName: string) {
+  public count(columnName: string): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const { table } = this
       const sql = `select count(${columnName}) from ${table}`
@@ -153,7 +153,7 @@ export default class Model {
    * 执行sql
    * @param sql
    */
-  public query(sql: string):Promise<{}> {
+  public query(sql: string): Promise<any> {
     const connection = this.connect()
     return new Promise((resolve, reject) => {
       connection.query(sql, (error, results, fields) => {

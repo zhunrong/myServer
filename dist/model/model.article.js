@@ -72,6 +72,23 @@ var Article = /** @class */ (function (_super) {
             });
         });
     };
+    /**
+     * 获取文章列表
+     * @param uid
+     */
+    Article.prototype.getArticles = function (uid) {
+        var sql = "select \n                  id,\n                  uid,\n                  title,\n                  markdown,\n                  DATE_FORMAT(create_at,'%Y-%m-%d %h:%i:%s') as createTime,\n                  DATE_FORMAT(update_at,'%Y-%m-%d %h:%i:%s') as updateTime \n              from " + this.table + "\n              where \n                  uid=" + uid;
+        return this.query(sql);
+    };
+    /**
+     * 获取文章详情
+     * @param uid
+     * @param id
+     */
+    Article.prototype.getArticleDetail = function (uid, id) {
+        var sql = "select\n                  id,\n                  uid,\n                  title,\n                  markdown,\n                  DATE_FORMAT(create_at,'%Y-%m-%d %h:%i:%s') as createTime,\n                  DATE_FORMAT(update_at,'%Y-%m-%d %h:%i:%s') as updateTime \n              from " + this.table + "\n              where \n                  uid=" + uid + " and id=" + id;
+        return this.query(sql);
+    };
     return Article;
 }(model_1.default));
 exports.default = new Article({
