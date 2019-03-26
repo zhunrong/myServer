@@ -22,17 +22,36 @@ export async function get(req: any, res: any) {
 }
 
 /**
+ * 获取所有文章
+ * @param req
+ * @param res
+ */
+export async function getAll(req: any, res: any) {
+  try {
+    const { results }: any = await articleModel.getArticles()
+    res.send({
+      status: 'success',
+      data: results
+    })
+  } catch ({ message }) {
+    res.send({
+      status: 'error',
+      message
+    })
+  }
+}
+
+/**
  * 获取文章详情
  * @param req
  * @param res
  */
 export async function detail(req: any, res: any) {
   const { id } = req.params
-  const { uid } = req.auth
   try {
     const {
       results: [article]
-    }: any = await articleModel.getArticleDetail(uid, Number(id))
+    }: any = await articleModel.getArticleDetail(Number(id))
     if (article) {
       res.send({
         status: 'success',

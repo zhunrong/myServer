@@ -78,22 +78,55 @@ function get(req, res) {
 }
 exports.get = get;
 /**
+ * 获取所有文章
+ * @param req
+ * @param res
+ */
+function getAll(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var results, _a, message;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, model_article_1.default.getArticles()];
+                case 1:
+                    results = (_b.sent()).results;
+                    res.send({
+                        status: 'success',
+                        data: results
+                    });
+                    return [3 /*break*/, 3];
+                case 2:
+                    _a = _b.sent();
+                    message = _a.message;
+                    res.send({
+                        status: 'error',
+                        message: message
+                    });
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.getAll = getAll;
+/**
  * 获取文章详情
  * @param req
  * @param res
  */
 function detail(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var id, uid, article, _a, message;
+        var id, article, _a, message;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     id = req.params.id;
-                    uid = req.auth.uid;
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, model_article_1.default.getArticleDetail(uid, Number(id))];
+                    return [4 /*yield*/, model_article_1.default.getArticleDetail(Number(id))];
                 case 2:
                     article = (_b.sent()).results[0];
                     if (article) {

@@ -6,7 +6,9 @@ exports.DO_NOT_CHECK_REQUEST_PATH = [
     '/register',
     '/yeba/visit',
     '/yeba/rechargeOrder',
-    '/mailVerifyCode'
+    '/mailVerifyCode',
+    '/allArticle',
+    /^\/article\/\d+$/
 ];
 // 腾讯云对象存储SecretId
 exports.COS_SECRET_ID = 'AKIDb7ScfYqoDTaN1TP7EAtAPSO9k9NTwFtU';

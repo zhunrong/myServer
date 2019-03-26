@@ -22,10 +22,10 @@ class Article extends Model {
     )
   }
   /**
-   * 获取文章列表
+   * 获取文章列表(某个用户)
    * @param uid
    */
-  getArticles(uid: number): Promise<any> {
+  getArticles(uid?: number): Promise<any> {
     let sql = `select 
                   id,
                   uid,
@@ -33,17 +33,18 @@ class Article extends Model {
                   markdown,
                   DATE_FORMAT(create_at,'%Y-%m-%d %h:%i:%s') as createTime,
                   DATE_FORMAT(update_at,'%Y-%m-%d %h:%i:%s') as updateTime 
-              from ${this.table}
-              where 
-                  uid=${uid}`
+              from ${this.table} `
+    if (uid) {
+      sql += `where uid=${uid}`
+    }
     return this.query(sql)
   }
   /**
    * 获取文章详情
-   * @param uid 
-   * @param id 
+   * @param uid
+   * @param id
    */
-  getArticleDetail(uid: number, id: number): Promise<any> {
+  getArticleDetail(id: number, uid?: number): Promise<any> {
     let sql = `select
                   id,
                   uid,
@@ -53,7 +54,7 @@ class Article extends Model {
                   DATE_FORMAT(update_at,'%Y-%m-%d %h:%i:%s') as updateTime 
               from ${this.table}
               where 
-                  uid=${uid} and id=${id}`
+                  id=${id}`
     return this.query(sql)
   }
 }
