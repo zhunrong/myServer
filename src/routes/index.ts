@@ -26,19 +26,8 @@ const corsHandler = (req: any, res: any, next: any) => {
 const tokenChecker = expressJwt({
   secret: config.TOKEN_SECRET,
   requestProperty: 'auth'
-}).unless((req: any) => {
-  const path: string = req.path
-  let isPass: boolean = false
-  config.DO_NOT_CHECK_REQUEST_PATH.find((item: string | RegExp) => {
-    if (typeof item === 'string' && item === path) {
-      return (isPass = true)
-    }
-    if (item instanceof RegExp && item.test(path)) {
-      return (isPass = true)
-    }
-    return false
-  })
-  return isPass
+}).unless({
+  path: config.DO_NOT_CHECK_REQUEST_PATH
 })
 
 const testRouter = express.Router()

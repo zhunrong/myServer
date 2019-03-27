@@ -101,11 +101,10 @@ export async function post(req: any, res: any) {
  * @param res response
  */
 export async function put(req: any, res: any) {
-  const { id } = req.params
-  const { uid } = req.auth
-  const data = copyValueFromObj(['title', 'markdown'], req.body)
-
   try {
+    const { id } = req.params
+    const { uid } = req.auth
+    const data = copyValueFromObj(['title', 'markdown'], req.body)
     if (typeof data.title !== undefined && data.title === '') {
       throw new Error('title不能为空')
     }

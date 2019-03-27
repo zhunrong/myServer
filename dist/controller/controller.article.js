@@ -207,17 +207,15 @@ function put(req, res) {
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
+                    _b.trys.push([0, 3, , 4]);
                     id = req.params.id;
                     uid = req.auth.uid;
                     data = utils_1.copyValueFromObj(['title', 'markdown'], req.body);
-                    _b.label = 1;
-                case 1:
-                    _b.trys.push([1, 4, , 5]);
                     if (typeof data.title !== undefined && data.title === '') {
                         throw new Error('title不能为空');
                     }
                     return [4 /*yield*/, model_article_1.default.get({ id: id })];
-                case 2:
+                case 1:
                     article = (_b.sent()).results[0];
                     if (!article) {
                         throw new Error('该文章不存在');
@@ -226,20 +224,20 @@ function put(req, res) {
                         throw new Error('该文章不属于当前用户');
                     }
                     return [4 /*yield*/, model_article_1.default.put(data, { id: id })];
-                case 3:
+                case 2:
                     _b.sent();
                     req.params.id = id;
                     detail(req, res);
-                    return [3 /*break*/, 5];
-                case 4:
+                    return [3 /*break*/, 4];
+                case 3:
                     _a = _b.sent();
                     message = _a.message;
                     res.send({
                         message: message,
                         status: 'error'
                     });
-                    return [3 /*break*/, 5];
-                case 5: return [2 /*return*/];
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
             }
         });
     });

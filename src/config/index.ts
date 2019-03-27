@@ -1,12 +1,16 @@
+import { pathFilter } from 'express-unless'
 // 不需要权限验证的请求
-export const DO_NOT_CHECK_REQUEST_PATH: (string | RegExp)[] = [
+export const DO_NOT_CHECK_REQUEST_PATH: pathFilter[] = [
   '/login',
   '/register',
   '/yeba/visit',
   '/yeba/rechargeOrder',
   '/mailVerifyCode',
   '/allArticle',
-  /^\/article\/\d+$/
+  {
+    url: '/^/article/d+$/',
+    methods: ['get']
+  }
 ]
 // 腾讯云对象存储SecretId
 export const COS_SECRET_ID: string = 'AKIDb7ScfYqoDTaN1TP7EAtAPSO9k9NTwFtU'

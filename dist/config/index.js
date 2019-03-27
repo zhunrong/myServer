@@ -8,7 +8,10 @@ exports.DO_NOT_CHECK_REQUEST_PATH = [
     '/yeba/rechargeOrder',
     '/mailVerifyCode',
     '/allArticle',
-    /^\/article\/\d+$/
+    {
+        url: '/^/article/d+$/',
+        methods: ['get']
+    }
 ];
 // 腾讯云对象存储SecretId
 exports.COS_SECRET_ID = 'AKIDb7ScfYqoDTaN1TP7EAtAPSO9k9NTwFtU';

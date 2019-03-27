@@ -30,19 +30,8 @@ var corsHandler = function (req, res, next) {
 var tokenChecker = express_jwt_1.default({
     secret: config_1.default.TOKEN_SECRET,
     requestProperty: 'auth'
-}).unless(function (req) {
-    var path = req.path;
-    var isPass = false;
-    config_1.default.DO_NOT_CHECK_REQUEST_PATH.find(function (item) {
-        if (typeof item === 'string' && item === path) {
-            return (isPass = true);
-        }
-        if (item instanceof RegExp && item.test(path)) {
-            return (isPass = true);
-        }
-        return false;
-    });
-    return isPass;
+}).unless({
+    path: config_1.default.DO_NOT_CHECK_REQUEST_PATH
 });
 var testRouter = express_1.default.Router();
 testRouter.get('/express', test_1.get);
