@@ -1,6 +1,7 @@
 import moment from 'moment'
+import mysql from 'mysql'
 /**
- * 将一个对象转化成key=value形式，并且通过seperator分隔
+ * 将一个对象转化成key=value形式，并且通过seperator分隔,value使用mysql.excape转义
  * @param obj
  * @param seperator
  */
@@ -11,7 +12,7 @@ export function objectToKeyValue(
   seperator: string = '&'
 ): string {
   const keys = Object.keys(obj)
-  return keys.map(key => `${key}='${obj[key]}'`).join(seperator)
+  return keys.map(key => `${key}=${mysql.escape(obj[key])}`).join(seperator)
 }
 
 /**

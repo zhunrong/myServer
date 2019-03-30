@@ -4,15 +4,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var moment_1 = __importDefault(require("moment"));
+var mysql_1 = __importDefault(require("mysql"));
 /**
- * 将一个对象转化成key=value形式，并且通过seperator分隔
+ * 将一个对象转化成key=value形式，并且通过seperator分隔,value使用mysql.excape转义
  * @param obj
  * @param seperator
  */
 function objectToKeyValue(obj, seperator) {
     if (seperator === void 0) { seperator = '&'; }
     var keys = Object.keys(obj);
-    return keys.map(function (key) { return key + "='" + obj[key] + "'"; }).join(seperator);
+    return keys.map(function (key) { return key + "=" + mysql_1.default.escape(obj[key]); }).join(seperator);
 }
 exports.objectToKeyValue = objectToKeyValue;
 /**

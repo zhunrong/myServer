@@ -8,8 +8,8 @@ export const DO_NOT_CHECK_REQUEST_PATH: pathFilter[] = [
   '/mailVerifyCode',
   '/allArticle',
   {
-    url: '/^/article/d+$/',
-    methods: ['get']
+    url: /^\/article\/\d+$/,
+    methods: ['GET']
   }
 ]
 // 腾讯云对象存储SecretId
