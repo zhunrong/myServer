@@ -89,7 +89,7 @@ var Article = /** @class */ (function (_super) {
      * @param id
      */
     Article.prototype.getArticleDetail = function (id, uid) {
-        var sql = "select\n                  id,\n                  uid,\n                  title,\n                  markdown,\n                  DATE_FORMAT(create_at,'%Y-%m-%d %h:%i:%s') as createTime,\n                  DATE_FORMAT(update_at,'%Y-%m-%d %h:%i:%s') as updateTime \n              from " + this.table + "\n              where \n                  id=" + id;
+        var sql = "select\n                  " + this.table + ".id as id,\n                  uid,\n                  title,\n                  markdown,\n                  DATE_FORMAT(" + this.table + ".create_at,'%Y-%m-%d %h:%i:%s') as createTime,\n                  DATE_FORMAT(" + this.table + ".update_at,'%Y-%m-%d %h:%i:%s') as updateTime,\n                  nickname,\n                  email,\n                  avatar\n              from " + this.table + ",user\n              where \n                  " + this.table + ".id=" + id + " and " + this.table + ".uid=user.id";
         return this.query(sql);
     };
     return Article;

@@ -46,15 +46,18 @@ class Article extends Model {
    */
   getArticleDetail(id: number, uid?: number): Promise<any> {
     let sql = `select
-                  id,
+                  ${this.table}.id as id,
                   uid,
                   title,
                   markdown,
-                  DATE_FORMAT(create_at,'%Y-%m-%d %h:%i:%s') as createTime,
-                  DATE_FORMAT(update_at,'%Y-%m-%d %h:%i:%s') as updateTime 
-              from ${this.table}
+                  DATE_FORMAT(${this.table}.create_at,'%Y-%m-%d %h:%i:%s') as createTime,
+                  DATE_FORMAT(${this.table}.update_at,'%Y-%m-%d %h:%i:%s') as updateTime,
+                  nickname,
+                  email,
+                  avatar
+              from ${this.table},user
               where 
-                  id=${id}`
+                  ${this.table}.id=${id} and ${this.table}.uid=user.id`
     return this.query(sql)
   }
 }
