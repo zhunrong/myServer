@@ -25,18 +25,35 @@ class Article extends Model {
    * 获取文章列表(某个用户)
    * @param uid
    */
-  getArticles(uid?: number): Promise<any> {
-    let sql = `select 
-                  id,
-                  uid,
-                  title,
-                  markdown,
-                  DATE_FORMAT(create_at,'%Y-%m-%d %h:%i:%s') as createTime,
-                  DATE_FORMAT(update_at,'%Y-%m-%d %h:%i:%s') as updateTime 
-              from ${this.table} `
-    if (uid) {
-      sql += `where uid=${uid}`
-    }
+  getArticles(
+    uid?: number,
+    page: number = 1,
+    pageSize: number = 10
+  ): Promise<any> {
+    let sql = `
+              select 
+                ${this.table}.id,
+                uid,
+                title,
+                DATE_FORMAT(${this.table}.create_at,'%Y-%m-%d %h:%i:%s') as createTime,
+                DATE_FORMAT(${this.table}.update_at,'%Y-%m-%d %h:%i:%s') as updateTime,
+                nickname,
+                avatar
+              from
+                ${this.table},user
+              where
+                uid=user.id
+              limit
+                ${pageSize}
+              offset
+                ${(page - 1) * pageSize};
+              select
+                count(id) as total,
+                ${page} as page,
+                ${pageSize} as pageSize
+              from
+                ${this.table};
+              `
     return this.query(sql)
   }
   /**
@@ -50,8 +67,12 @@ class Article extends Model {
                   uid,
                   title,
                   markdown,
-                  DATE_FORMAT(${this.table}.create_at,'%Y-%m-%d %h:%i:%s') as createTime,
-                  DATE_FORMAT(${this.table}.update_at,'%Y-%m-%d %h:%i:%s') as updateTime,
+                  DATE_FORMAT(${
+                    this.table
+                  }.create_at,'%Y-%m-%d %h:%i:%s') as createTime,
+                  DATE_FORMAT(${
+                    this.table
+                  }.update_at,'%Y-%m-%d %h:%i:%s') as updateTime,
                   nickname,
                   email,
                   avatar

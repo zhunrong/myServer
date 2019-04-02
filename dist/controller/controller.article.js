@@ -51,27 +51,25 @@ function get(req, res) {
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
+                    _b.trys.push([0, 2, , 3]);
                     uid = req.auth.uid;
-                    _b.label = 1;
-                case 1:
-                    _b.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, model_article_1.default.getArticles(uid)];
-                case 2:
+                case 1:
                     results = (_b.sent()).results;
                     res.send({
                         status: 'success',
                         data: results
                     });
-                    return [3 /*break*/, 4];
-                case 3:
+                    return [3 /*break*/, 3];
+                case 2:
                     _a = _b.sent();
                     message = _a.message;
                     res.send({
                         status: 'error',
                         message: message
                     });
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
         });
     });
@@ -84,22 +82,24 @@ exports.get = get;
  */
 function getAll(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var results, _a, message;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var _a, page, pageSize, results, _b, message;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
-                    _b.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, model_article_1.default.getArticles()];
+                    _c.trys.push([0, 2, , 3]);
+                    _a = req.query, page = _a.page, pageSize = _a.pageSize;
+                    return [4 /*yield*/, model_article_1.default.getArticles(undefined, Number(page), Number(pageSize))];
                 case 1:
-                    results = (_b.sent()).results;
+                    results = (_c.sent()).results;
                     res.send({
                         status: 'success',
-                        data: results
+                        data: results[0],
+                        meta: results[1][0]
                     });
                     return [3 /*break*/, 3];
                 case 2:
-                    _a = _b.sent();
-                    message = _a.message;
+                    _b = _c.sent();
+                    message = _b.message;
                     res.send({
                         status: 'error',
                         message: message

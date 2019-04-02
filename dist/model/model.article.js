@@ -76,11 +76,10 @@ var Article = /** @class */ (function (_super) {
      * 获取文章列表(某个用户)
      * @param uid
      */
-    Article.prototype.getArticles = function (uid) {
-        var sql = "select \n                  id,\n                  uid,\n                  title,\n                  markdown,\n                  DATE_FORMAT(create_at,'%Y-%m-%d %h:%i:%s') as createTime,\n                  DATE_FORMAT(update_at,'%Y-%m-%d %h:%i:%s') as updateTime \n              from " + this.table + " ";
-        if (uid) {
-            sql += "where uid=" + uid;
-        }
+    Article.prototype.getArticles = function (uid, page, pageSize) {
+        if (page === void 0) { page = 1; }
+        if (pageSize === void 0) { pageSize = 10; }
+        var sql = "\n              select \n                " + this.table + ".id,\n                uid,\n                title,\n                DATE_FORMAT(" + this.table + ".create_at,'%Y-%m-%d %h:%i:%s') as createTime,\n                DATE_FORMAT(" + this.table + ".update_at,'%Y-%m-%d %h:%i:%s') as updateTime,\n                nickname,\n                avatar\n              from\n                " + this.table + ",user\n              where\n                uid=user.id\n              limit\n                " + pageSize + "\n              offset\n                " + (page - 1) * pageSize + ";\n              select\n                count(id) as total,\n                " + page + " as page,\n                " + pageSize + " as pageSize\n              from\n                " + this.table + ";\n              ";
         return this.query(sql);
     };
     /**

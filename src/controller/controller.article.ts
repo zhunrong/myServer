@@ -6,8 +6,8 @@ import { copyValueFromObj } from '../modules/utils'
  * @param res
  */
 export async function get(req: any, res: any) {
-  const { uid } = req.auth
   try {
+    const { uid } = req.auth
     const { results }: any = await articleModel.getArticles(uid)
     res.send({
       status: 'success',
@@ -28,10 +28,16 @@ export async function get(req: any, res: any) {
  */
 export async function getAll(req: any, res: any) {
   try {
-    const { results }: any = await articleModel.getArticles()
+    const { page, pageSize } = req.query
+    const { results }: any = await articleModel.getArticles(
+      undefined,
+      Number(page),
+      Number(pageSize)
+    )
     res.send({
       status: 'success',
-      data: results
+      data: results[0],
+      meta: results[1][0]
     })
   } catch ({ message }) {
     res.send({
