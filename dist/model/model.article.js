@@ -88,7 +88,17 @@ var Article = /** @class */ (function (_super) {
      * @param id
      */
     Article.prototype.getArticleDetail = function (id, uid) {
-        var sql = "select\n                  " + this.table + ".id as id,\n                  uid,\n                  title,\n                  markdown,\n                  DATE_FORMAT(" + this.table + ".create_at,'%Y-%m-%d %h:%i:%s') as createTime,\n                  DATE_FORMAT(" + this.table + ".update_at,'%Y-%m-%d %h:%i:%s') as updateTime,\n                  nickname,\n                  email,\n                  avatar\n              from " + this.table + ",user\n              where \n                  " + this.table + ".id=" + id + " and " + this.table + ".uid=user.id";
+        var sql = "select\n                  " + this.table + ".id as id,\n                  uid,\n                  title,\n                  markdown,\n                  DATE_FORMAT(" + this.table + ".create_at,'%Y-%m-%d %h:%i:%s') as createTime,\n                  DATE_FORMAT(" + this.table + ".update_at,'%Y-%m-%d %h:%i:%s') as updateTime,\n                  nickname,\n                  email,\n                  avatar,\n                  COUNT(article_visit.id) as visitCount\n              from " + this.table + ",user,article_visit\n              where \n                  " + this.table + ".id=" + id + " and " + this.table + ".uid=user.id and " + this.table + ".id=article_visit.article_id";
+        return this.query(sql);
+    };
+    /**
+     * 增加一条文章的访问记录
+     * @param articleId
+     * @param userId
+     */
+    Article.prototype.addArticleVisitRecord = function (articleId, userId) {
+        if (userId === void 0) { userId = 0; }
+        var sql = "\n              insert into\n                article_visit (article_id,user_id)\n              values\n                ('" + articleId + "','" + userId + "');\n              ";
         return this.query(sql);
     };
     return Article;

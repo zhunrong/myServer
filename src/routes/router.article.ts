@@ -4,7 +4,8 @@ import {
   getAll,
   detail,
   post,
-  put
+  put,
+  addVisitRecord
 } from '../controller/controller.article'
 const router = express.Router()
 
@@ -13,4 +14,6 @@ router.get('/allArticle', getAll)
 router.get('/article/:id', detail)
 router.post('/article', post)
 router.put('/article/:id', put)
+// 添加文章访问记录
+router.post('/articleVisit',addVisitRecord)
 export default router

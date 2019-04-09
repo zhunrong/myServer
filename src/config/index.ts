@@ -10,6 +10,9 @@ export const DO_NOT_CHECK_REQUEST_PATH: pathFilter[] = [
   {
     url: /^\/article\/\d+$/,
     methods: ['GET']
+  }, {
+    url: '/articleVisit',
+    methods: ['POST','OPTIONS']
   }
 ]
 // 腾讯云对象存储SecretId

@@ -133,3 +133,23 @@ export async function put(req: any, res: any) {
     })
   }
 }
+
+/**
+ * 增加一条文章访问记录
+ * @param req 
+ * @param res 
+ */
+export async function addVisitRecord(req: any, res: any) {
+  try {
+    const { articleId, userId } = req.body
+    await articleModel.addArticleVisitRecord(articleId, userId)
+    res.send({
+      status: 'success'
+    })
+  } catch ({ message }) {
+    res.send({
+      message,
+      status: 'error'
+    })
+  }
+}

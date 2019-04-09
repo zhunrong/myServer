@@ -67,18 +67,29 @@ class Article extends Model {
                   uid,
                   title,
                   markdown,
-                  DATE_FORMAT(${
-                    this.table
-                  }.create_at,'%Y-%m-%d %h:%i:%s') as createTime,
-                  DATE_FORMAT(${
-                    this.table
-                  }.update_at,'%Y-%m-%d %h:%i:%s') as updateTime,
+                  DATE_FORMAT(${this.table}.create_at,'%Y-%m-%d %h:%i:%s') as createTime,
+                  DATE_FORMAT(${this.table}.update_at,'%Y-%m-%d %h:%i:%s') as updateTime,
                   nickname,
                   email,
-                  avatar
-              from ${this.table},user
+                  avatar,
+                  COUNT(article_visit.id) as visitCount
+              from ${this.table},user,article_visit
               where 
-                  ${this.table}.id=${id} and ${this.table}.uid=user.id`
+                  ${this.table}.id=${id} and ${this.table}.uid=user.id and ${this.table}.id=article_visit.article_id`
+    return this.query(sql)
+  }
+  /**
+   * 增加一条文章的访问记录
+   * @param articleId 
+   * @param userId 
+   */
+  addArticleVisitRecord(articleId: number, userId: number = 0) {
+    const sql = `
+              insert into
+                article_visit (article_id,user_id)
+              values
+                ('${articleId}','${userId}');
+              `
     return this.query(sql)
   }
 }

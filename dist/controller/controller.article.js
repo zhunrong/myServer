@@ -243,3 +243,37 @@ function put(req, res) {
     });
 }
 exports.put = put;
+/**
+ * 增加一条文章访问记录
+ * @param req
+ * @param res
+ */
+function addVisitRecord(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, articleId, userId, _b, message;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    _a = req.body, articleId = _a.articleId, userId = _a.userId;
+                    return [4 /*yield*/, model_article_1.default.addArticleVisitRecord(articleId, userId)];
+                case 1:
+                    _c.sent();
+                    res.send({
+                        status: 'success'
+                    });
+                    return [3 /*break*/, 3];
+                case 2:
+                    _b = _c.sent();
+                    message = _b.message;
+                    res.send({
+                        message: message,
+                        status: 'error'
+                    });
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.addVisitRecord = addVisitRecord;

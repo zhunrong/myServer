@@ -11,6 +11,9 @@ exports.DO_NOT_CHECK_REQUEST_PATH = [
     {
         url: /^\/article\/\d+$/,
         methods: ['GET']
+    }, {
+        url: '/articleVisit',
+        methods: ['POST', 'OPTIONS']
     }
 ];
 // 腾讯云对象存储SecretId
