@@ -7,4 +7,5 @@ var express_1 = __importDefault(require("express"));
 var controller_picture_1 = require("../controller/controller.picture");
 var router = express_1.default.Router();
 router.post('/picture', controller_picture_1.save);
+router.get('/picture', controller_picture_1.getPictures);
 exports.default = router;
