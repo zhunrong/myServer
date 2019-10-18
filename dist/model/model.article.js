@@ -64,7 +64,7 @@ var Article = /** @class */ (function (_super) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.query("\n      CREATE TABLE IF NOT EXISTS article (\n          id int(11) NOT NULL AUTO_INCREMENT,\n          uid int(11) NOT NULL,\n          title varchar(255) DEFAULT '',\n          markdown text,\n          html text,\n          create_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,\n          update_at timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n          PRIMARY KEY (id)\n        ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;\n    ")];
+                    case 0: return [4 /*yield*/, this.query("\n      CREATE DATABASE IF NOT EXISTS " + this.database + ";\n\n      USE " + this.database + ";\n\n      CREATE TABLE IF NOT EXISTS " + this.table + " (\n        id int(11) NOT NULL AUTO_INCREMENT,\n        uid int(11) NOT NULL,\n        title varchar(255) DEFAULT '',\n        markdown text,\n        html text,\n        create_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,\n        update_at timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n        PRIMARY KEY (id)\n      ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;\n    ", false)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];

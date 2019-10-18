@@ -1,17 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -51,39 +38,45 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var model_1 = __importDefault(require("./model"));
-var config_1 = __importDefault(require("../config"));
-var User = /** @class */ (function (_super) {
-    __extends(User, _super);
-    function User() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    User.prototype.init = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var error_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.query("\n        CREATE DATABASE IF NOT EXISTS " + this.database + ";\n\n        USE " + this.database + ";\n\n        CREATE TABLE IF NOT EXISTS " + this.table + " (\n          id int(10) unsigned NOT NULL AUTO_INCREMENT,\n          password varchar(255) NOT NULL,\n          nickname varchar(255) DEFAULT NULL,\n          avatar varchar(255) DEFAULT NULL,\n          create_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n          update_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n          email varchar(255) NOT NULL,\n          PRIMARY KEY (id)\n        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;\n      ", false)];
-                    case 1:
-                        _a.sent();
-                        return [3 /*break*/, 3];
-                    case 2:
-                        error_1 = _a.sent();
-                        console.log(error_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
+var model_userPicture_1 = __importDefault(require("../model/model.userPicture"));
+function save(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var uid, _a, directory, filename, _b, message;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    uid = req.auth.uid;
+                    _a = req.body, directory = _a.directory, filename = _a.filename;
+                    if (!directory) {
+                        throw new Error('directory不能为空');
+                    }
+                    if (!filename) {
+                        throw new Error('filename不能为空');
+                    }
+                    return [4 /*yield*/, model_userPicture_1.default.post({
+                            directory: directory,
+                            filename: filename,
+                            uid: uid
+                        })];
+                case 1:
+                    _c.sent();
+                    res.send({
+                        status: 'success',
+                        message: '保存成功'
+                    });
+                    return [3 /*break*/, 3];
+                case 2:
+                    _b = _c.sent();
+                    message = _b.message;
+                    res.send({
+                        status: 'error',
+                        message: message
+                    });
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
         });
-    };
-    return User;
-}(model_1.default));
-exports.default = new User({
-    host: config_1.default.DATABASE_HOST,
-    user: config_1.default.USER,
-    password: config_1.default.PASSWORD,
-    database: 'zr_dev',
-    table: 'user'
-});
+    });
+}
+exports.save = save;

@@ -1,7 +1,6 @@
-import express from 'express'
 import expressJwt from 'express-jwt'
 import config from '../config'
-import { get, post, put, del } from '../controller/test'
+import testRouter from './router.test'
 import yebaRouter from './router.yeba'
 import authorizeRouter from './router.authorize'
 import explorerRouter from './router.explorer'
@@ -9,6 +8,7 @@ import articleRouter from './router.article'
 import userRouter from './router.user'
 import mailRouter from './router.mail'
 import toolsRouter from './router.tools'
+import pictureRouter from './router.picture'
 // CORS
 const corsHandler = (req: any, res: any, next: any) => {
   const origin = req.headers.origin
@@ -30,12 +30,6 @@ const tokenChecker = expressJwt({
   path: config.DO_NOT_CHECK_REQUEST_PATH
 })
 
-const testRouter = express.Router()
-testRouter.get('/express', get)
-testRouter.post('/express', post)
-testRouter.put('/express', put)
-testRouter.delete('/express', del)
-
 export default (app: any) => {
   app.use(corsHandler)
   app.use(tokenChecker, (error: any, req: any, res: any, next: any) => {
@@ -55,4 +49,5 @@ export default (app: any) => {
   app.use(userRouter)
   app.use(mailRouter)
   app.use(toolsRouter)
+  app.use(pictureRouter)
 }

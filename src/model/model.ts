@@ -20,13 +20,14 @@ export default class Model {
     this.password = password
     this.database = database
     this.table = table
+    this.init()
   }
-  private connect() {
+  protected connect(useDataBase = true) {
     return mysql.createConnection({
       host: this.host,
       user: this.user,
       password: this.password,
-      database: this.database,
+      database: useDataBase ? this.database : undefined,
       multipleStatements: true
     })
   }
@@ -153,8 +154,8 @@ export default class Model {
    * 执行sql
    * @param sql
    */
-  public query(sql: string): Promise<any> {
-    const connection = this.connect()
+  public query(sql: string, useDataBase = true): Promise<any> {
+    const connection = this.connect(useDataBase)
     return new Promise((resolve, reject) => {
       connection.query(sql, (error, results, fields) => {
         if (error) {
@@ -168,4 +169,9 @@ export default class Model {
       })
     })
   }
+
+  /**
+   * 初始化
+   */
+  public init() { }
 }

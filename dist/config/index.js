@@ -24,6 +24,14 @@ exports.COS_SECRET_KEY = 'f9t7B3jHyibVGuQlz2vfHk285sTs5FDz';
 exports.COS_BUCKET = 'zr-1253381776';
 // 腾讯云对象存储region
 exports.COS_REGION = 'ap-guangzhou';
+// 腾讯云对象存储访问域名
+exports.COS_DOMAIN = 'https://zr-1253381776.cos.ap-guangzhou.myqcloud.com';
+// 腾讯云对象存储bucket(用户)
+exports.COS_BUCKET_USER = 'user-1253381776';
+// 腾讯云对象存储region(用户)
+exports.COS_REGION_USER = 'ap-guangzhou';
+// 腾讯云对象存储访问域名(用户)
+exports.COS_DOMAIN_USER = 'https://user-1253381776.cos.ap-guangzhou.myqcloud.com';
 exports.default = {
     PORT: 80,
     DATABASE_HOST: 'localhost',
@@ -37,5 +45,9 @@ exports.default = {
     COS_SECRET_ID: exports.COS_SECRET_ID,
     COS_SECRET_KEY: exports.COS_SECRET_KEY,
     COS_BUCKET: exports.COS_BUCKET,
-    COS_REGION: exports.COS_REGION
+    COS_REGION: exports.COS_REGION,
+    COS_DOMAIN: exports.COS_DOMAIN,
+    COS_BUCKET_USER: exports.COS_BUCKET_USER,
+    COS_REGION_USER: exports.COS_REGION_USER,
+    COS_DOMAIN_USER: exports.COS_DOMAIN_USER
 };

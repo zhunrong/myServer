@@ -12,7 +12,7 @@ export const DO_NOT_CHECK_REQUEST_PATH: pathFilter[] = [
     methods: ['GET']
   }, {
     url: '/articleVisit',
-    methods: ['POST','OPTIONS']
+    methods: ['POST', 'OPTIONS']
   }
 ]
 // 腾讯云对象存储SecretId
@@ -23,6 +23,15 @@ export const COS_SECRET_KEY: string = 'f9t7B3jHyibVGuQlz2vfHk285sTs5FDz'
 export const COS_BUCKET: string = 'zr-1253381776'
 // 腾讯云对象存储region
 export const COS_REGION: string = 'ap-guangzhou'
+// 腾讯云对象存储访问域名
+export const COS_DOMAIN: string = 'https://zr-1253381776.cos.ap-guangzhou.myqcloud.com'
+// 腾讯云对象存储bucket(用户)
+export const COS_BUCKET_USER: string = 'user-1253381776'
+// 腾讯云对象存储region(用户)
+export const COS_REGION_USER: string = 'ap-guangzhou'
+// 腾讯云对象存储访问域名(用户)
+export const COS_DOMAIN_USER: string = 'https://user-1253381776.cos.ap-guangzhou.myqcloud.com'
+
 export default {
   PORT: 80,
   DATABASE_HOST: 'localhost',
@@ -36,5 +45,9 @@ export default {
   COS_SECRET_ID,
   COS_SECRET_KEY,
   COS_BUCKET,
-  COS_REGION
+  COS_REGION,
+  COS_DOMAIN,
+  COS_BUCKET_USER,
+  COS_REGION_USER,
+  COS_DOMAIN_USER
 }

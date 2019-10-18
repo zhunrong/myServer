@@ -1,5 +1,6 @@
 import testModel from '../model/test'
 import { copyValueFromObj } from '../modules/utils'
+
 export async function get(req: any, res: any) {
   const { query } = req
   const condition: any = copyValueFromObj(['name', 'value'], query)

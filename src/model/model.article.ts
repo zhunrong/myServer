@@ -5,20 +5,25 @@ class Article extends Model {
     super(options)
     this.init()
   }
-  private async init() {
+  async init() {
     await this.query(
       `
-      CREATE TABLE IF NOT EXISTS article (
-          id int(11) NOT NULL AUTO_INCREMENT,
-          uid int(11) NOT NULL,
-          title varchar(255) DEFAULT '',
-          markdown text,
-          html text,
-          create_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-          update_at timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-          PRIMARY KEY (id)
-        ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
-    `
+      CREATE DATABASE IF NOT EXISTS ${this.database};
+
+      USE ${this.database};
+
+      CREATE TABLE IF NOT EXISTS ${this.table} (
+        id int(11) NOT NULL AUTO_INCREMENT,
+        uid int(11) NOT NULL,
+        title varchar(255) DEFAULT '',
+        markdown text,
+        html text,
+        create_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+        update_at timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (id)
+      ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+    `,
+      false
     )
   }
   /**

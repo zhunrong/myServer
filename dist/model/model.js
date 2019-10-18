@@ -48,13 +48,15 @@ var Model = /** @class */ (function () {
         this.password = password;
         this.database = database;
         this.table = table;
+        this.init();
     }
-    Model.prototype.connect = function () {
+    Model.prototype.connect = function (useDataBase) {
+        if (useDataBase === void 0) { useDataBase = true; }
         return mysql_1.default.createConnection({
             host: this.host,
             user: this.user,
             password: this.password,
-            database: this.database,
+            database: useDataBase ? this.database : undefined,
             multipleStatements: true
         });
     };
@@ -244,8 +246,9 @@ var Model = /** @class */ (function () {
      * 执行sql
      * @param sql
      */
-    Model.prototype.query = function (sql) {
-        var connection = this.connect();
+    Model.prototype.query = function (sql, useDataBase) {
+        if (useDataBase === void 0) { useDataBase = true; }
+        var connection = this.connect(useDataBase);
         return new Promise(function (resolve, reject) {
             connection.query(sql, function (error, results, fields) {
                 if (error) {
@@ -259,6 +262,10 @@ var Model = /** @class */ (function () {
             });
         });
     };
+    /**
+     * 初始化
+     */
+    Model.prototype.init = function () { };
     return Model;
 }());
 exports.default = Model;

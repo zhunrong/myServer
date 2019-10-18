@@ -51,6 +51,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var qcloud_cos_sts_1 = __importDefault(require("qcloud-cos-sts"));
 var index_1 = __importDefault(require("../config/index"));
+var model_user_1 = __importDefault(require("../model/model.user"));
 /**
  * 获取腾讯云对象存储上传令牌
  * @param req
@@ -58,37 +59,64 @@ var index_1 = __importDefault(require("../config/index"));
  */
 function getUploadToken(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var message;
-        return __generator(this, function (_a) {
-            try {
-                qcloud_cos_sts_1.default.getCredential({
-                    secretId: index_1.default.COS_SECRET_ID,
-                    secretKey: index_1.default.COS_SECRET_KEY,
-                    policy: qcloud_cos_sts_1.default.getPolicy([
-                        {
-                            action: 'name/cos:PutObject',
-                            bucket: index_1.default.COS_BUCKET,
-                            region: index_1.default.COS_REGION,
-                            prefix: '*'
-                        }
-                    ])
-                }, function (err, credential) {
-                    if (err)
-                        throw err;
-                    res.send({
-                        status: 'success',
-                        data: __assign({}, credential, { bucket: index_1.default.COS_BUCKET, region: index_1.default.COS_REGION })
+        var uid, type, directory_1, bucket_1, region_1, domain_1, results, _a, message;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 3, , 4]);
+                    uid = req.auth.uid;
+                    type = req.query.type;
+                    bucket_1 = index_1.default.COS_BUCKET;
+                    region_1 = index_1.default.COS_REGION;
+                    domain_1 = index_1.default.COS_DOMAIN;
+                    if (!(type === 'user')) return [3 /*break*/, 2];
+                    bucket_1 = index_1.default.COS_BUCKET_USER;
+                    region_1 = index_1.default.COS_REGION_USER;
+                    domain_1 = index_1.default.COS_DOMAIN_USER;
+                    return [4 /*yield*/, model_user_1.default.get({
+                            id: uid
+                        })];
+                case 1:
+                    results = (_b.sent()).results;
+                    if (!results[0]) {
+                        throw new Error('用户不存在');
+                    }
+                    directory_1 = results[0].email;
+                    _b.label = 2;
+                case 2:
+                    qcloud_cos_sts_1.default.getCredential({
+                        secretId: index_1.default.COS_SECRET_ID,
+                        secretKey: index_1.default.COS_SECRET_KEY,
+                        policy: qcloud_cos_sts_1.default.getPolicy([
+                            {
+                                action: 'name/cos:PutObject',
+                                bucket: bucket_1,
+                                region: region_1,
+                                prefix: directory_1 ? directory_1 + "/*" : '*'
+                            }
+                        ])
+                    }, function (err, credential) {
+                        if (err)
+                            throw err;
+                        res.send({
+                            status: 'success',
+                            data: __assign({}, credential, { bucket: bucket_1,
+                                region: region_1,
+                                directory: directory_1,
+                                domain: domain_1 })
+                        });
                     });
-                });
+                    return [3 /*break*/, 4];
+                case 3:
+                    _a = _b.sent();
+                    message = _a.message;
+                    res.send({
+                        status: 'error',
+                        message: message
+                    });
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
             }
-            catch (_b) {
-                message = _b.message;
-                res.send({
-                    status: 'error',
-                    message: message
-                });
-            }
-            return [2 /*return*/];
         });
     });
 }
