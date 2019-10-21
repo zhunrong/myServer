@@ -34,12 +34,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var model_user_1 = __importDefault(require("../model/model.user"));
 var utils_1 = require("../modules/utils");
+var service = __importStar(require("../service/service.user"));
 /**
  * 获取当前登录用户信息
  * @param req
@@ -47,36 +51,32 @@ var utils_1 = require("../modules/utils");
  */
 function getUserInfo(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var uid, results, _a, message;
+        var uid, user, _a, message;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
+                    _b.trys.push([0, 2, , 3]);
                     uid = req.auth.uid;
-                    _b.label = 1;
+                    return [4 /*yield*/, service.getUserInfo(uid)];
                 case 1:
-                    _b.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, model_user_1.default.get({
-                            id: uid
-                        })];
-                case 2:
-                    results = (_b.sent()).results;
-                    if (!results.length) {
-                        throw new Error('用户不存在');
-                    }
+                    user = _b.sent();
                     res.send({
                         status: 'success',
-                        user: results[0]
+                        user: user
                     });
-                    return [3 /*break*/, 4];
-                case 3:
+                    if (!user) {
+                        throw new Error('用户不存在');
+                    }
+                    return [3 /*break*/, 3];
+                case 2:
                     _a = _b.sent();
                     message = _a.message;
                     res.send({
                         status: 'error',
                         message: message
                     });
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
         });
     });
@@ -101,9 +101,7 @@ function updateUserInfo(req, res) {
                     if (!data.nickname) {
                         throw new Error('昵称不能为空');
                     }
-                    return [4 /*yield*/, model_user_1.default.put(data, {
-                            id: uid
-                        })];
+                    return [4 /*yield*/, service.updateUserInfo(uid, data)];
                 case 2:
                     _b.sent();
                     getUserInfo(req, res);

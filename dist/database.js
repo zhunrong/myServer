@@ -37,35 +37,40 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = __importDefault(require("express"));
-var path_1 = __importDefault(require("path"));
-var body_parser_1 = __importDefault(require("body-parser"));
+require("reflect-metadata");
+var typeorm_1 = require("typeorm");
+var entity_test_1 = __importDefault(require("./entity/entity.test"));
+var entity_user_1 = __importDefault(require("./entity/entity.user"));
 var config_1 = __importDefault(require("./config"));
-var routes_1 = __importDefault(require("./routes"));
-var database_1 = __importDefault(require("./database"));
-(function () { return __awaiter(_this, void 0, void 0, function () {
-    var app;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, database_1.default()];
-            case 1:
-                _a.sent();
-                app = express_1.default();
-                // 静态资源托管
-                app.use('/', express_1.default.static(path_1.default.resolve(__dirname, '../static/public')));
-                // 解析json请求数据
-                app.use(body_parser_1.default.json());
-                // 解析urlencoded请求数据
-                app.use(body_parser_1.default.urlencoded({
-                    extended: true
-                }));
-                routes_1.default(app);
-                app.listen(config_1.default.PORT, function () {
-                    console.log('server is running');
-                });
-                return [2 /*return*/];
-        }
+function default_1() {
+    return __awaiter(this, void 0, void 0, function () {
+        var error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    console.log('Connecting to MYSQL...');
+                    return [4 /*yield*/, typeorm_1.createConnection({
+                            type: 'mysql',
+                            host: config_1.default.DATABASE_HOST,
+                            port: 3306,
+                            username: config_1.default.USER,
+                            password: config_1.default.PASSWORD,
+                            database: 'zr_dev',
+                            entities: [entity_test_1.default, entity_user_1.default],
+                            synchronize: true
+                        })];
+                case 1:
+                    _a.sent();
+                    console.log('MYSQL connected successfully!');
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_1 = _a.sent();
+                    throw error_1;
+                case 3: return [2 /*return*/];
+            }
+        });
     });
-}); })();
+}
+exports.default = default_1;

@@ -34,38 +34,42 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = __importDefault(require("express"));
-var path_1 = __importDefault(require("path"));
-var body_parser_1 = __importDefault(require("body-parser"));
-var config_1 = __importDefault(require("./config"));
-var routes_1 = __importDefault(require("./routes"));
-var database_1 = __importDefault(require("./database"));
-(function () { return __awaiter(_this, void 0, void 0, function () {
-    var app;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, database_1.default()];
-            case 1:
-                _a.sent();
-                app = express_1.default();
-                // 静态资源托管
-                app.use('/', express_1.default.static(path_1.default.resolve(__dirname, '../static/public')));
-                // 解析json请求数据
-                app.use(body_parser_1.default.json());
-                // 解析urlencoded请求数据
-                app.use(body_parser_1.default.urlencoded({
-                    extended: true
-                }));
-                routes_1.default(app);
-                app.listen(config_1.default.PORT, function () {
-                    console.log('server is running');
-                });
-                return [2 /*return*/];
-        }
+var typeorm_1 = require("typeorm");
+var entity_user_1 = require("../entity/entity.user");
+function getUsers() {
+    return __awaiter(this, void 0, void 0, function () {
+        var repository, list;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    repository = typeorm_1.getRepository(entity_user_1.User);
+                    return [4 /*yield*/, repository.find()];
+                case 1:
+                    list = _a.sent();
+                    console.log(list);
+                    return [2 /*return*/];
+            }
+        });
     });
-}); })();
+}
+exports.getUsers = getUsers;
+/**
+ * 获取用户信息
+ * @param id string
+ */
+function getUserInfo(id) {
+    var repository = typeorm_1.getRepository(entity_user_1.User);
+    return repository.findOne(id);
+}
+exports.getUserInfo = getUserInfo;
+/**
+ * 更新用户信息
+ * @param id
+ * @param info
+ */
+function updateUserInfo(id, info) {
+    var repository = typeorm_1.getRepository(entity_user_1.User);
+    return repository.update(id, info);
+}
+exports.updateUserInfo = updateUserInfo;
