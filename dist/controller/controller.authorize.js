@@ -37,9 +37,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var model_user_1 = __importDefault(require("../model/model.user"));
 var model_mailVerifyCode_1 = __importDefault(require("../model/model.mailVerifyCode"));
+var userService = __importStar(require("../service/service.user"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var config_1 = __importDefault(require("../config"));
 var mailer_1 = __importDefault(require("../modules/mailer"));
@@ -53,7 +60,7 @@ var utils_1 = require("../modules/utils");
  */
 function login(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, email, password, results, user, maxAge, token, _b, message;
+        var _a, email, password, user, maxAge, token, _b, message;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -67,10 +74,9 @@ function login(req, res) {
                     if (!password) {
                         throw new Error('密码不能为空');
                     }
-                    return [4 /*yield*/, model_user_1.default.get({ email: email })];
+                    return [4 /*yield*/, userService.getUserByEmail(email)];
                 case 2:
-                    results = (_c.sent()).results;
-                    user = results[0];
+                    user = _c.sent();
                     if (!user) {
                         throw new Error('用户不存在');
                     }
@@ -114,7 +120,7 @@ exports.login = login;
  */
 function register(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, email, verifyCode, password, matchResults, results, user, _b, message;
+        var _a, email, verifyCode, password, matchResults, user, _b, message;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -140,15 +146,14 @@ function register(req, res) {
                     if (!matchResults.length) {
                         throw new Error('邮箱验证失败');
                     }
-                    return [4 /*yield*/, model_user_1.default.get({ email: email })];
+                    return [4 /*yield*/, userService.getUserByEmail(email)];
                 case 3:
-                    results = (_c.sent()).results;
-                    user = results[0];
+                    user = _c.sent();
                     if (user) {
                         throw new Error('邮箱已被注册');
                     }
                     // 添加新用户
-                    return [4 /*yield*/, model_user_1.default.post({
+                    return [4 /*yield*/, userService.addUser({
                             email: email,
                             password: password
                         })];
@@ -191,16 +196,16 @@ function mailVerifyCode(req, res) {
                     if (!email) {
                         throw new Error('邮箱不能为空');
                     }
+                    return [4 /*yield*/, model_mailVerifyCode_1.default.post({
+                            email: email,
+                            verify_code: verifyCode
+                        })];
+                case 2:
+                    _b.sent();
                     return [4 /*yield*/, mailer_1.default({
                             to: email,
                             subject: '注册验证码',
                             text: "\u9A8C\u8BC1\u7801\uFF1A" + verifyCode
-                        })];
-                case 2:
-                    _b.sent();
-                    return [4 /*yield*/, model_mailVerifyCode_1.default.post({
-                            email: email,
-                            verify_code: verifyCode
                         })];
                 case 3:
                     _b.sent();

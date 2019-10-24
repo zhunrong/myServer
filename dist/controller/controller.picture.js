@@ -48,9 +48,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var model_userPicture_1 = __importDefault(require("../model/model.userPicture"));
 var index_1 = __importDefault(require("../config/index"));
+var userPictureService = __importStar(require("../service/service.userPicture"));
 function save(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var uid, _a, directory, filename, _b, message;
@@ -66,10 +74,10 @@ function save(req, res) {
                     if (!filename) {
                         throw new Error('filename不能为空');
                     }
-                    return [4 /*yield*/, model_userPicture_1.default.post({
+                    return [4 /*yield*/, userPictureService.save({
+                            uid: uid,
                             directory: directory,
-                            filename: filename,
-                            uid: uid
+                            filename: filename
                         })];
                 case 1:
                     _c.sent();

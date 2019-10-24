@@ -55,14 +55,23 @@ function getUsers() {
 }
 exports.getUsers = getUsers;
 /**
- * 获取用户信息
+ * 根据id获取用户
  * @param id string
  */
-function getUserInfo(id) {
+function getUserById(id) {
     var repository = typeorm_1.getRepository(entity_user_1.User);
     return repository.findOne(id);
 }
-exports.getUserInfo = getUserInfo;
+exports.getUserById = getUserById;
+/**
+ * 根据email获取用户
+ * @param email string
+ */
+function getUserByEmail(email) {
+    var repository = typeorm_1.getRepository(entity_user_1.User);
+    return repository.findOne({ email: email });
+}
+exports.getUserByEmail = getUserByEmail;
 /**
  * 更新用户信息
  * @param id
@@ -73,3 +82,18 @@ function updateUserInfo(id, info) {
     return repository.update(id, info);
 }
 exports.updateUserInfo = updateUserInfo;
+/**
+ * 新增用户
+ * @param info
+ */
+function addUser(info) {
+    var nickname = info.nickname, avatar = info.avatar, password = info.password, email = info.email;
+    var repository = typeorm_1.getRepository(entity_user_1.User);
+    var user = new entity_user_1.User();
+    user.email = email;
+    user.password = password;
+    user.avatar = avatar || '';
+    user.nickname = nickname || email;
+    return repository.save(user);
+}
+exports.addUser = addUser;

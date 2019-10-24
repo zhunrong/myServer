@@ -57,7 +57,7 @@ function getUserInfo(req, res) {
                 case 0:
                     _b.trys.push([0, 2, , 3]);
                     uid = req.auth.uid;
-                    return [4 /*yield*/, service.getUserInfo(uid)];
+                    return [4 /*yield*/, service.getUserById(uid)];
                 case 1:
                     user = _b.sent();
                     res.send({

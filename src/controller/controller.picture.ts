@@ -1,5 +1,6 @@
 import pictureModel from '../model/model.userPicture'
 import config from '../config/index'
+import * as userPictureService from '../service/service.userPicture'
 
 export async function save(req: any, res: any) {
   try {
@@ -11,10 +12,10 @@ export async function save(req: any, res: any) {
     if (!filename) {
       throw new Error('filename不能为空')
     }
-    await pictureModel.post({
+    await userPictureService.save({
+      uid,
       directory,
-      filename,
-      uid
+      filename
     })
     res.send({
       status: 'success',

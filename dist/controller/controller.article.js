@@ -34,12 +34,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var model_article_1 = __importDefault(require("../model/model.article"));
 var utils_1 = require("../modules/utils");
+var articleService = __importStar(require("../service/service.article"));
 /**
  * 获取用户的文章
  * @param req
@@ -47,18 +51,18 @@ var utils_1 = require("../modules/utils");
  */
 function get(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var uid, results, _a, message;
+        var uid, articles, _a, message;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _b.trys.push([0, 2, , 3]);
                     uid = req.auth.uid;
-                    return [4 /*yield*/, model_article_1.default.getArticles(uid)];
+                    return [4 /*yield*/, articleService.getArticles({ uid: uid })];
                 case 1:
-                    results = (_b.sent()).results;
+                    articles = _b.sent();
                     res.send({
                         status: 'success',
-                        data: results
+                        data: articles
                     });
                     return [3 /*break*/, 3];
                 case 2:
@@ -82,19 +86,19 @@ exports.get = get;
  */
 function getAll(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, page, pageSize, results, _b, message;
+        var _a, page, pageSize, articles, _b, message;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
                     _a = req.query, page = _a.page, pageSize = _a.pageSize;
-                    return [4 /*yield*/, model_article_1.default.getArticles(undefined, Number(page), Number(pageSize))];
+                    return [4 /*yield*/, articleService.getArticles()];
                 case 1:
-                    results = (_c.sent()).results;
+                    articles = _c.sent();
                     res.send({
                         status: 'success',
-                        data: results[0],
-                        meta: results[1][0]
+                        data: articles,
+                        meta: {}
                     });
                     return [3 /*break*/, 3];
                 case 2:
@@ -126,18 +130,16 @@ function detail(req, res) {
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, model_article_1.default.getArticleDetail(Number(id))];
+                    return [4 /*yield*/, articleService.getArticleById(id)];
                 case 2:
-                    article = (_b.sent()).results[0];
-                    if (article) {
-                        res.send({
-                            status: 'success',
-                            data: article
-                        });
-                    }
-                    else {
+                    article = _b.sent();
+                    if (!article) {
                         throw new Error('文章不存在');
                     }
+                    res.send({
+                        status: 'success',
+                        data: article
+                    });
                     return [3 /*break*/, 4];
                 case 3:
                     _a = _b.sent();
@@ -160,7 +162,7 @@ exports.detail = detail;
  */
 function post(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var uid, _a, title, markdown, results, id, _b, message;
+        var uid, _a, title, markdown, article, id, _b, message;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -175,10 +177,10 @@ function post(req, res) {
                     if (!markdown) {
                         throw new Error('内容不能为空');
                     }
-                    return [4 /*yield*/, model_article_1.default.post({ uid: uid, title: title, markdown: markdown })];
+                    return [4 /*yield*/, articleService.addArticle({ uid: uid, title: title, markdown: markdown })];
                 case 2:
-                    results = (_c.sent()).results;
-                    id = results.insertId;
+                    article = _c.sent();
+                    id = article.id;
                     req.params.id = id;
                     detail(req, res);
                     return [3 /*break*/, 4];
@@ -214,16 +216,16 @@ function put(req, res) {
                     if (typeof data.title !== undefined && data.title === '') {
                         throw new Error('title不能为空');
                     }
-                    return [4 /*yield*/, model_article_1.default.get({ id: id })];
+                    return [4 /*yield*/, articleService.getArticleById(id)];
                 case 1:
-                    article = (_b.sent()).results[0];
+                    article = _b.sent();
                     if (!article) {
                         throw new Error('该文章不存在');
                     }
                     if (article.uid !== uid) {
                         throw new Error('该文章不属于当前用户');
                     }
-                    return [4 /*yield*/, model_article_1.default.put(data, { id: id })];
+                    return [4 /*yield*/, articleService.editArticle(id, data)];
                 case 2:
                     _b.sent();
                     req.params.id = id;
@@ -256,7 +258,10 @@ function addVisitRecord(req, res) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
                     _a = req.body, articleId = _a.articleId, userId = _a.userId;
-                    return [4 /*yield*/, model_article_1.default.addArticleVisitRecord(articleId, userId)];
+                    return [4 /*yield*/, articleService.addArticleVisit({
+                            articleId: articleId,
+                            userId: userId
+                        })];
                 case 1:
                     _c.sent();
                     res.send({

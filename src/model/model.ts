@@ -77,9 +77,13 @@ export default class Model {
                      (${keys.join(',')})
                      values
                      (${values.join(',')})`
-        const { results, connection, fields }: any = await this.query(sql)
-        resolve({ results, fields })
-        connection.end()
+        try {
+          const { results, connection, fields }: any = await this.query(sql)
+          resolve({ results, fields })
+          connection.end()
+        } catch (error) {
+          reject(error)
+        }
       } else {
         reject('typeof options !== object')
       }

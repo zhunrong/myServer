@@ -3,12 +3,13 @@ import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateCol
 @Entity({
   name: 'user',
   engine: 'InnoDB',
-  database: 'zr_dev'
+  database: 'zr_dev',
+  synchronize: true
 })
 export class User {
-  @PrimaryGeneratedColumn({
-    name: 'id',
-    type: 'uuid'
+
+  @PrimaryGeneratedColumn('uuid', {
+    name: 'id'
   })
   id!: string
 
@@ -16,28 +17,31 @@ export class User {
     name: 'password',
     nullable: false,
     type: 'varchar',
-    length: 255
+    length: 40
   })
   password!: string
 
   @Column({
     name: 'nickname',
     type: 'varchar',
-    length: 255
+    nullable: true,
+    length: 20
   })
   nickname!: string
 
   @Column({
     name: 'avatar',
     type: 'varchar',
-    length: 255
+    nullable: true,
+    length: 100
   })
   avatar!: string
 
   @Column({
     name: 'email',
     type: 'varchar',
-    length: 255
+    nullable: false,
+    length: 20
   })
   email!: string
 

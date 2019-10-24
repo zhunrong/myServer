@@ -6,25 +6,25 @@ class Article extends Model {
     this.init()
   }
   async init() {
-    await this.query(
-      `
-      CREATE DATABASE IF NOT EXISTS ${this.database};
+    // await this.query(
+    //   `
+    //   CREATE DATABASE IF NOT EXISTS ${this.database};
 
-      USE ${this.database};
+    //   USE ${this.database};
 
-      CREATE TABLE IF NOT EXISTS ${this.table} (
-        id int(11) NOT NULL AUTO_INCREMENT,
-        uid int(11) NOT NULL,
-        title varchar(255) DEFAULT '',
-        markdown text,
-        html text,
-        create_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-        update_at timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        PRIMARY KEY (id)
-      ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
-    `,
-      false
-    )
+    //   CREATE TABLE IF NOT EXISTS ${this.table} (
+    //     id int(11) NOT NULL AUTO_INCREMENT,
+    //     uid int(11) NOT NULL,
+    //     title varchar(255) DEFAULT '',
+    //     markdown text,
+    //     html text,
+    //     create_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    //     update_at timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    //     PRIMARY KEY (id)
+    //   ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+    // `,
+    //   false
+    // )
   }
   /**
    * 获取文章列表(某个用户)
@@ -66,7 +66,7 @@ class Article extends Model {
    * @param uid
    * @param id
    */
-  getArticleDetail(id: number, uid?: number): Promise<any> {
+  getArticleDetail(id: string, uid?: number): Promise<any> {
     let sql = `select
                   ${this.table}.id as id,
                   uid,
@@ -80,7 +80,7 @@ class Article extends Model {
                   COUNT(article_visit.id) as visitCount
               from ${this.table},user,article_visit
               where 
-                  ${this.table}.id=${id} and ${this.table}.uid=user.id and ${this.table}.id=article_visit.article_id`
+                  ${this.table}.id='${id}' and ${this.table}.uid=user.id and ${this.table}.id=article_visit.article_id`
     return this.query(sql)
   }
   /**

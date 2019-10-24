@@ -48,10 +48,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var qcloud_cos_sts_1 = __importDefault(require("qcloud-cos-sts"));
 var index_1 = __importDefault(require("../config/index"));
-var model_user_1 = __importDefault(require("../model/model.user"));
+var userService = __importStar(require("../service/service.user"));
 /**
  * 获取腾讯云对象存储上传令牌
  * @param req
@@ -59,7 +66,7 @@ var model_user_1 = __importDefault(require("../model/model.user"));
  */
 function getUploadToken(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var uid, type, directory_1, bucket_1, region_1, domain_1, results, _a, message;
+        var uid, type, directory_1, bucket_1, region_1, domain_1, user, _a, message;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -73,15 +80,13 @@ function getUploadToken(req, res) {
                     bucket_1 = index_1.default.COS_BUCKET_USER;
                     region_1 = index_1.default.COS_REGION_USER;
                     domain_1 = index_1.default.COS_DOMAIN_USER;
-                    return [4 /*yield*/, model_user_1.default.get({
-                            id: uid
-                        })];
+                    return [4 /*yield*/, userService.getUserById(uid)];
                 case 1:
-                    results = (_b.sent()).results;
-                    if (!results[0]) {
+                    user = _b.sent();
+                    if (!user) {
                         throw new Error('用户不存在');
                     }
-                    directory_1 = results[0].email;
+                    directory_1 = user.email;
                     _b.label = 2;
                 case 2:
                     qcloud_cos_sts_1.default.getCredential({

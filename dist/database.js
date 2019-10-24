@@ -42,6 +42,10 @@ require("reflect-metadata");
 var typeorm_1 = require("typeorm");
 var entity_test_1 = __importDefault(require("./entity/entity.test"));
 var entity_user_1 = __importDefault(require("./entity/entity.user"));
+var entity_mailVerifyCode_1 = __importDefault(require("./entity/entity.mailVerifyCode"));
+var entity_article_1 = __importDefault(require("./entity/entity.article"));
+var entity_articleVisit_1 = __importDefault(require("./entity/entity.articleVisit"));
+var entity_userPicture_1 = __importDefault(require("./entity/entity.userPicture"));
 var config_1 = __importDefault(require("./config"));
 function default_1() {
     return __awaiter(this, void 0, void 0, function () {
@@ -58,7 +62,7 @@ function default_1() {
                             username: config_1.default.USER,
                             password: config_1.default.PASSWORD,
                             database: 'zr_dev',
-                            entities: [entity_test_1.default, entity_user_1.default],
+                            entities: [entity_test_1.default, entity_mailVerifyCode_1.default, entity_user_1.default, entity_article_1.default, entity_userPicture_1.default, entity_articleVisit_1.default],
                             synchronize: true
                         })];
                 case 1:

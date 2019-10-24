@@ -46,10 +46,15 @@ var config_1 = __importDefault(require("./config"));
 var routes_1 = __importDefault(require("./routes"));
 var database_1 = __importDefault(require("./database"));
 (function () { return __awaiter(_this, void 0, void 0, function () {
-    var app;
+    var app, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, database_1.default()];
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, database_1.default()
+                    // const articles = await getArticles()
+                    // console.log(articles)
+                ];
             case 1:
                 _a.sent();
                 app = express_1.default();
@@ -65,7 +70,11 @@ var database_1 = __importDefault(require("./database"));
                 app.listen(config_1.default.PORT, function () {
                     console.log('server is running');
                 });
-                return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _a.sent();
+                throw error_1;
+            case 3: return [2 /*return*/];
         }
     });
 }); })();

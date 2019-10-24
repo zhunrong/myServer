@@ -1,5 +1,6 @@
-import articleModel from '../model/model.article'
 import { copyValueFromObj } from '../modules/utils'
+import * as articleService from '../service/service.article'
+
 /**
  * 获取用户的文章
  * @param req
@@ -8,10 +9,10 @@ import { copyValueFromObj } from '../modules/utils'
 export async function get(req: any, res: any) {
   try {
     const { uid } = req.auth
-    const { results }: any = await articleModel.getArticles(uid)
+    const articles = await articleService.getArticles({uid})
     res.send({
       status: 'success',
-      data: results
+      data: articles
     })
   } catch ({ message }) {
     res.send({
@@ -29,15 +30,11 @@ export async function get(req: any, res: any) {
 export async function getAll(req: any, res: any) {
   try {
     const { page, pageSize } = req.query
-    const { results }: any = await articleModel.getArticles(
-      undefined,
-      Number(page),
-      Number(pageSize)
-    )
+    const articles = await articleService.getArticles()
     res.send({
       status: 'success',
-      data: results[0],
-      meta: results[1][0]
+      data: articles,
+      meta: {}
     })
   } catch ({ message }) {
     res.send({
@@ -55,17 +52,14 @@ export async function getAll(req: any, res: any) {
 export async function detail(req: any, res: any) {
   const { id } = req.params
   try {
-    const {
-      results: [article]
-    }: any = await articleModel.getArticleDetail(Number(id))
-    if (article) {
-      res.send({
-        status: 'success',
-        data: article
-      })
-    } else {
+    const article = await articleService.getArticleById(id)
+    if (!article) {
       throw new Error('文章不存在')
     }
+    res.send({
+      status: 'success',
+      data: article
+    })
   } catch ({ message }) {
     res.send({
       status: 'error',
@@ -89,8 +83,8 @@ export async function post(req: any, res: any) {
     if (!markdown) {
       throw new Error('内容不能为空')
     }
-    const { results }: any = await articleModel.post({ uid, title, markdown })
-    const id = results.insertId
+    const article = await articleService.addArticle({ uid, title, markdown })
+    const id = article.id
     req.params.id = id
     detail(req, res)
   } catch ({ message }) {
@@ -114,16 +108,14 @@ export async function put(req: any, res: any) {
     if (typeof data.title !== undefined && data.title === '') {
       throw new Error('title不能为空')
     }
-    const {
-      results: [article]
-    } = await articleModel.get({ id })
+    const article = await articleService.getArticleById(id)
     if (!article) {
       throw new Error('该文章不存在')
     }
     if (article.uid !== uid) {
       throw new Error('该文章不属于当前用户')
     }
-    await articleModel.put(data, { id })
+    await articleService.editArticle(id, data)
     req.params.id = id
     detail(req, res)
   } catch ({ message }) {
@@ -142,7 +134,10 @@ export async function put(req: any, res: any) {
 export async function addVisitRecord(req: any, res: any) {
   try {
     const { articleId, userId } = req.body
-    await articleModel.addArticleVisitRecord(articleId, userId)
+    await articleService.addArticleVisit({
+      articleId,
+      userId
+    })
     res.send({
       status: 'success'
     })

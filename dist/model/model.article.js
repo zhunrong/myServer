@@ -63,12 +63,7 @@ var Article = /** @class */ (function (_super) {
     Article.prototype.init = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.query("\n      CREATE DATABASE IF NOT EXISTS " + this.database + ";\n\n      USE " + this.database + ";\n\n      CREATE TABLE IF NOT EXISTS " + this.table + " (\n        id int(11) NOT NULL AUTO_INCREMENT,\n        uid int(11) NOT NULL,\n        title varchar(255) DEFAULT '',\n        markdown text,\n        html text,\n        create_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,\n        update_at timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n        PRIMARY KEY (id)\n      ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;\n    ", false)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
+                return [2 /*return*/];
             });
         });
     };
@@ -88,7 +83,7 @@ var Article = /** @class */ (function (_super) {
      * @param id
      */
     Article.prototype.getArticleDetail = function (id, uid) {
-        var sql = "select\n                  " + this.table + ".id as id,\n                  uid,\n                  title,\n                  markdown,\n                  DATE_FORMAT(" + this.table + ".create_at,'%Y-%m-%d %h:%i:%s') as createTime,\n                  DATE_FORMAT(" + this.table + ".update_at,'%Y-%m-%d %h:%i:%s') as updateTime,\n                  nickname,\n                  email,\n                  avatar,\n                  COUNT(article_visit.id) as visitCount\n              from " + this.table + ",user,article_visit\n              where \n                  " + this.table + ".id=" + id + " and " + this.table + ".uid=user.id and " + this.table + ".id=article_visit.article_id";
+        var sql = "select\n                  " + this.table + ".id as id,\n                  uid,\n                  title,\n                  markdown,\n                  DATE_FORMAT(" + this.table + ".create_at,'%Y-%m-%d %h:%i:%s') as createTime,\n                  DATE_FORMAT(" + this.table + ".update_at,'%Y-%m-%d %h:%i:%s') as updateTime,\n                  nickname,\n                  email,\n                  avatar,\n                  COUNT(article_visit.id) as visitCount\n              from " + this.table + ",user,article_visit\n              where \n                  " + this.table + ".id='" + id + "' and " + this.table + ".uid=user.id and " + this.table + ".id=article_visit.article_id";
         return this.query(sql);
     };
     /**

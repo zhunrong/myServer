@@ -112,25 +112,33 @@ var Model = /** @class */ (function () {
     Model.prototype.post = function (options) {
         var _this = this;
         return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-            var table, keys, values, sql, _a, results, connection, fields;
+            var table, keys, values, sql, _a, results, connection, fields, error_1;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        if (!(typeof options === 'object')) return [3 /*break*/, 2];
+                        if (!(typeof options === 'object')) return [3 /*break*/, 5];
                         table = this.table;
                         keys = Object.keys(options);
                         values = keys.map(function (key) { return "'" + options[key] + "'"; });
                         sql = "insert into " + table + " \n                     (" + keys.join(',') + ")\n                     values\n                     (" + values.join(',') + ")";
-                        return [4 /*yield*/, this.query(sql)];
+                        _b.label = 1;
                     case 1:
+                        _b.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.query(sql)];
+                    case 2:
                         _a = _b.sent(), results = _a.results, connection = _a.connection, fields = _a.fields;
                         resolve({ results: results, fields: fields });
                         connection.end();
-                        return [3 /*break*/, 3];
-                    case 2:
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_1 = _b.sent();
+                        reject(error_1);
+                        return [3 /*break*/, 4];
+                    case 4: return [3 /*break*/, 6];
+                    case 5:
                         reject('typeof options !== object');
-                        _b.label = 3;
-                    case 3: return [2 /*return*/];
+                        _b.label = 6;
+                    case 6: return [2 /*return*/];
                 }
             });
         }); });

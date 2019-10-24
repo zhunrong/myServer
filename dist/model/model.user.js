@@ -60,21 +60,8 @@ var User = /** @class */ (function (_super) {
     }
     User.prototype.init = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var error_1;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.query("\n        CREATE DATABASE IF NOT EXISTS " + this.database + ";\n\n        USE " + this.database + ";\n\n        CREATE TABLE IF NOT EXISTS " + this.table + " (\n          id int(10) unsigned NOT NULL AUTO_INCREMENT,\n          password varchar(255) NOT NULL,\n          nickname varchar(255) DEFAULT NULL,\n          avatar varchar(255) DEFAULT NULL,\n          create_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,\n          update_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n          email varchar(255) NOT NULL,\n          PRIMARY KEY (id)\n        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;\n      ", false)];
-                    case 1:
-                        _a.sent();
-                        return [3 /*break*/, 3];
-                    case 2:
-                        error_1 = _a.sent();
-                        console.log(error_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
+                return [2 /*return*/];
             });
         });
     };

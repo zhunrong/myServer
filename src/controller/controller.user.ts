@@ -9,7 +9,7 @@ import * as service from '../service/service.user'
 export async function getUserInfo(req: any, res: any) {
   try {
     const { uid } = req.auth
-    const user = await service.getUserInfo(uid)
+    const user = await service.getUserById(uid)
     res.send({
       status: 'success',
       user

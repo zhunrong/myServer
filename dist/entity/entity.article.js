@@ -10,72 +10,58 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var typeorm_1 = require("typeorm");
-var User = /** @class */ (function () {
-    function User() {
+var Article = /** @class */ (function () {
+    function Article() {
     }
     __decorate([
         typeorm_1.PrimaryGeneratedColumn('uuid', {
-            name: 'id'
+            name: 'id',
         }),
         __metadata("design:type", String)
-    ], User.prototype, "id", void 0);
+    ], Article.prototype, "id", void 0);
     __decorate([
         typeorm_1.Column({
-            name: 'password',
-            nullable: false,
+            name: 'uid',
             type: 'varchar',
-            length: 40
+            nullable: false
         }),
         __metadata("design:type", String)
-    ], User.prototype, "password", void 0);
+    ], Article.prototype, "uid", void 0);
     __decorate([
         typeorm_1.Column({
-            name: 'nickname',
+            name: 'title',
             type: 'varchar',
-            nullable: true,
-            length: 20
+            length: 50
         }),
         __metadata("design:type", String)
-    ], User.prototype, "nickname", void 0);
+    ], Article.prototype, "title", void 0);
     __decorate([
         typeorm_1.Column({
-            name: 'avatar',
-            type: 'varchar',
-            nullable: true,
-            length: 100
+            name: 'markdown',
+            type: 'text'
         }),
         __metadata("design:type", String)
-    ], User.prototype, "avatar", void 0);
-    __decorate([
-        typeorm_1.Column({
-            name: 'email',
-            type: 'varchar',
-            nullable: false,
-            length: 20
-        }),
-        __metadata("design:type", String)
-    ], User.prototype, "email", void 0);
+    ], Article.prototype, "markdown", void 0);
     __decorate([
         typeorm_1.CreateDateColumn({
             name: 'create_at'
         }),
         __metadata("design:type", Date)
-    ], User.prototype, "createAt", void 0);
+    ], Article.prototype, "createAt", void 0);
     __decorate([
         typeorm_1.UpdateDateColumn({
             name: 'update_at'
         }),
         __metadata("design:type", Date)
-    ], User.prototype, "updateAt", void 0);
-    User = __decorate([
+    ], Article.prototype, "updateAt", void 0);
+    Article = __decorate([
         typeorm_1.Entity({
-            name: 'user',
-            engine: 'InnoDB',
+            name: 'article',
             database: 'zr_dev',
+            engine: 'InnoDB',
             synchronize: true
         })
-    ], User);
-    return User;
+    ], Article);
+    return Article;
 }());
-exports.User = User;
-exports.default = User;
+exports.default = Article;

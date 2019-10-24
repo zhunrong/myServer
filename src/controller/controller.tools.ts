@@ -1,6 +1,6 @@
 import STS from 'qcloud-cos-sts'
 import config from '../config/index'
-import userModel from '../model/model.user'
+import * as userService from '../service/service.user'
 
 /**
  * 获取腾讯云对象存储上传令牌
@@ -19,13 +19,11 @@ export async function getUploadToken(req: any, res: any) {
       bucket = config.COS_BUCKET_USER
       region = config.COS_REGION_USER
       domain = config.COS_DOMAIN_USER
-      const { results } = await userModel.get({
-        id: uid
-      })
-      if (!results[0]) {
+      const user = await userService.getUserById(uid)
+      if (!user) {
         throw new Error('用户不存在')
       }
-      directory = results[0].email
+      directory = user.email
     }
     STS.getCredential(
       {

@@ -1,9 +1,10 @@
-import userModel from '../model/model.user'
 import mailVerifyCodeModel from '../model/model.mailVerifyCode'
+import * as userService from '../service/service.user'
 import jwt from 'jsonwebtoken'
 import config from '../config'
 import sendMail from '../modules/mailer'
 import { randomCharacter } from '../modules/utils'
+
 /**
  * 登录
  * @param req
@@ -20,8 +21,7 @@ export async function login(req: any, res: any) {
     if (!password) {
       throw new Error('密码不能为空')
     }
-    const { results }: any = await userModel.get({ email })
-    const user = results[0]
+    const user = await userService.getUserByEmail(email)
     if (!user) {
       throw new Error('用户不存在')
     }
@@ -79,13 +79,12 @@ export async function register(req: any, res: any) {
     if (!matchResults.length) {
       throw new Error('邮箱验证失败')
     }
-    const { results }: any = await userModel.get({ email })
-    const user = results[0]
+    const user = await userService.getUserByEmail(email)
     if (user) {
       throw new Error('邮箱已被注册')
     }
     // 添加新用户
-    await userModel.post({
+    await userService.addUser({
       email,
       password
     })
@@ -111,14 +110,14 @@ export async function mailVerifyCode(req: any, res: any) {
     if (!email) {
       throw new Error('邮箱不能为空')
     }
+    await mailVerifyCodeModel.post({
+      email,
+      verify_code: verifyCode
+    })
     await sendMail({
       to: email,
       subject: '注册验证码',
       text: `验证码：${verifyCode}`
-    })
-    await mailVerifyCodeModel.post({
-      email,
-      verify_code: verifyCode
     })
     res.send({
       status: 'success',
