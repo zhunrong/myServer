@@ -34,39 +34,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 var typeorm_1 = require("typeorm");
-var entity_test_1 = __importDefault(require("./entity/entity.test"));
-var entity_user_1 = __importDefault(require("./entity/entity.user"));
-var entity_mailVerifyCode_1 = __importDefault(require("./entity/entity.mailVerifyCode"));
-var entity_article_1 = __importDefault(require("./entity/entity.article"));
-var entity_articleVisit_1 = __importDefault(require("./entity/entity.articleVisit"));
-var entity_userPicture_1 = __importDefault(require("./entity/entity.userPicture"));
-var config_1 = __importDefault(require("./config"));
 function default_1() {
     return __awaiter(this, void 0, void 0, function () {
-        var error_1;
+        var connection, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
                     console.log('Connecting to MYSQL...');
-                    return [4 /*yield*/, typeorm_1.createConnection({
-                            type: 'mysql',
-                            host: config_1.default.DATABASE_HOST,
-                            port: 3306,
-                            username: config_1.default.USER,
-                            password: config_1.default.PASSWORD,
-                            database: 'zr_dev',
-                            entities: [entity_test_1.default, entity_mailVerifyCode_1.default, entity_user_1.default, entity_article_1.default, entity_userPicture_1.default, entity_articleVisit_1.default],
-                            synchronize: true
-                        })];
+                    return [4 /*yield*/, typeorm_1.createConnection()];
                 case 1:
-                    _a.sent();
+                    connection = _a.sent();
                     console.log('MYSQL connected successfully!');
                     return [3 /*break*/, 3];
                 case 2:

@@ -32,12 +32,10 @@ export async function save(req: any, res: any) {
 export async function getPictures(req: any, res: any) {
   try {
     const { uid } = req.auth
-    const { results } = await pictureModel.get({
-      uid
-    })
+    const pictures = await userPictureService.getPicturesByUserId(uid)
     res.send({
       status: 'success',
-      data: results.map((item: any) => {
+      data: pictures.map(item => {
         return {
           ...item,
           url: `${config.COS_DOMAIN_USER}/${item.directory}/${item.filename}`

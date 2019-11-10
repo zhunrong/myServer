@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var typeorm_1 = require("typeorm");
 var entity_mailVerifyCode_1 = __importDefault(require("../entity/entity.mailVerifyCode"));
-function getCodes() {
+function getCodes(params) {
     var repository = typeorm_1.getRepository(entity_mailVerifyCode_1.default);
-    return repository.find();
+    return repository.find(params);
 }
 exports.getCodes = getCodes;
 function addOne(params) {

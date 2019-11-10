@@ -52,8 +52,8 @@ var database_1 = __importDefault(require("./database"));
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 return [4 /*yield*/, database_1.default()
-                    // const articles = await getArticles()
-                    // console.log(articles)
+                    // const article = await getArticleById('7075e57e-cb0f-4578-94c7-1eed675ee032')
+                    // console.log(article)
                 ];
             case 1:
                 _a.sent();

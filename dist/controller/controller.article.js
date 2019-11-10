@@ -86,24 +86,31 @@ exports.get = get;
  */
 function getAll(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, page, pageSize, articles, _b, message;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var page, pageSize, articles, _a, message;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
-                    _c.trys.push([0, 2, , 3]);
-                    _a = req.query, page = _a.page, pageSize = _a.pageSize;
-                    return [4 /*yield*/, articleService.getArticles()];
+                    _b.trys.push([0, 2, , 3]);
+                    page = parseInt(req.query.page);
+                    pageSize = parseInt(req.query.pageSize);
+                    return [4 /*yield*/, articleService.getArticles({
+                            pageSize: pageSize,
+                            page: page
+                        })];
                 case 1:
-                    articles = _c.sent();
+                    articles = _b.sent();
                     res.send({
                         status: 'success',
                         data: articles,
-                        meta: {}
+                        meta: {
+                            pageSize: pageSize,
+                            page: page
+                        }
                     });
                     return [3 /*break*/, 3];
                 case 2:
-                    _b = _c.sent();
-                    message = _b.message;
+                    _a = _b.sent();
+                    message = _a.message;
                     res.send({
                         status: 'error',
                         message: message
@@ -138,7 +145,7 @@ function detail(req, res) {
                     }
                     res.send({
                         status: 'success',
-                        data: article
+                        data: article,
                     });
                     return [3 /*break*/, 4];
                 case 3:

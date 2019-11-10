@@ -11,16 +11,7 @@ import config from './config'
 export default async function () {
   try {
     console.log('Connecting to MYSQL...')
-    await createConnection({
-      type: 'mysql',
-      host: config.DATABASE_HOST,
-      port: 3306,
-      username: config.USER,
-      password: config.PASSWORD,
-      database: 'zr_dev',
-      entities: [Test, MailVerifyCode, User, Article, UserPicture, ArticleVisit],
-      synchronize: true
-    })
+    const connection = await createConnection()
     console.log('MYSQL connected successfully!')
   } catch (error) {
     throw error

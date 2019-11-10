@@ -43,7 +43,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = require("../modules/utils");
-var service = __importStar(require("../service/service.user"));
+var userService = __importStar(require("../service/service.user"));
 /**
  * 获取当前登录用户信息
  * @param req
@@ -57,16 +57,16 @@ function getUserInfo(req, res) {
                 case 0:
                     _b.trys.push([0, 2, , 3]);
                     uid = req.auth.uid;
-                    return [4 /*yield*/, service.getUserById(uid)];
+                    return [4 /*yield*/, userService.getUserById(uid)];
                 case 1:
                     user = _b.sent();
+                    if (!user) {
+                        throw new Error('用户不存在');
+                    }
                     res.send({
                         status: 'success',
                         user: user
                     });
-                    if (!user) {
-                        throw new Error('用户不存在');
-                    }
                     return [3 /*break*/, 3];
                 case 2:
                     _a = _b.sent();
@@ -101,7 +101,7 @@ function updateUserInfo(req, res) {
                     if (!data.nickname) {
                         throw new Error('昵称不能为空');
                     }
-                    return [4 /*yield*/, service.updateUserInfo(uid, data)];
+                    return [4 /*yield*/, userService.updateUserInfo(uid, data)];
                 case 2:
                     _b.sent();
                     getUserInfo(req, res);

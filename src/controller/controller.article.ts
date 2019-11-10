@@ -9,7 +9,7 @@ import * as articleService from '../service/service.article'
 export async function get(req: any, res: any) {
   try {
     const { uid } = req.auth
-    const articles = await articleService.getArticles({uid})
+    const articles = await articleService.getArticles({ uid })
     res.send({
       status: 'success',
       data: articles
@@ -29,12 +29,19 @@ export async function get(req: any, res: any) {
  */
 export async function getAll(req: any, res: any) {
   try {
-    const { page, pageSize } = req.query
-    const articles = await articleService.getArticles()
+    const page = parseInt(req.query.page)
+    const pageSize = parseInt(req.query.pageSize)
+    const articles = await articleService.getArticles({
+      pageSize,
+      page
+    })
     res.send({
       status: 'success',
       data: articles,
-      meta: {}
+      meta: {
+        pageSize,
+        page
+      }
     })
   } catch ({ message }) {
     res.send({
@@ -58,7 +65,7 @@ export async function detail(req: any, res: any) {
     }
     res.send({
       status: 'success',
-      data: article
+      data: article,
     })
   } catch ({ message }) {
     res.send({

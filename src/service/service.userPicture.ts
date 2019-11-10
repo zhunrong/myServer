@@ -20,3 +20,10 @@ export function save(params: ISave) {
   userPicture.filename = filename
   return repository.save(userPicture)
 }
+
+export function getPicturesByUserId(uid: string) {
+  const repository = getRepository(UserPicture)
+  return repository.find({
+    uid
+  })
+}

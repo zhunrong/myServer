@@ -1,5 +1,5 @@
 import { copyValueFromObj } from '../modules/utils'
-import * as service from '../service/service.user'
+import * as userService from '../service/service.user'
 
 /**
  * 获取当前登录用户信息
@@ -9,14 +9,14 @@ import * as service from '../service/service.user'
 export async function getUserInfo(req: any, res: any) {
   try {
     const { uid } = req.auth
-    const user = await service.getUserById(uid)
+    const user = await userService.getUserById(uid)
+    if (!user) {
+      throw new Error('用户不存在')
+    }
     res.send({
       status: 'success',
       user
     })
-    if (!user) {
-      throw new Error('用户不存在')
-    }
   } catch ({ message }) {
     res.send({
       status: 'error',
@@ -37,7 +37,7 @@ export async function updateUserInfo(req: any, res: any) {
     if (!data.nickname) {
       throw new Error('昵称不能为空')
     }
-    await service.updateUserInfo(uid, data)
+    await userService.updateUserInfo(uid, data)
     getUserInfo(req, res)
   } catch ({ message }) {
     res.send({

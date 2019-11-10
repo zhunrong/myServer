@@ -56,7 +56,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var model_userPicture_1 = __importDefault(require("../model/model.userPicture"));
 var index_1 = __importDefault(require("../config/index"));
 var userPictureService = __importStar(require("../service/service.userPicture"));
 function save(req, res) {
@@ -102,20 +101,18 @@ function save(req, res) {
 exports.save = save;
 function getPictures(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var uid, results, _a, message;
+        var uid, pictures, _a, message;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _b.trys.push([0, 2, , 3]);
                     uid = req.auth.uid;
-                    return [4 /*yield*/, model_userPicture_1.default.get({
-                            uid: uid
-                        })];
+                    return [4 /*yield*/, userPictureService.getPicturesByUserId(uid)];
                 case 1:
-                    results = (_b.sent()).results;
+                    pictures = _b.sent();
                     res.send({
                         status: 'success',
-                        data: results.map(function (item) {
+                        data: pictures.map(function (item) {
                             return __assign({}, item, { url: index_1.default.COS_DOMAIN_USER + "/" + item.directory + "/" + item.filename });
                         })
                     });

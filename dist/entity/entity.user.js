@@ -12,6 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var typeorm_1 = require("typeorm");
 var User = /** @class */ (function () {
     function User() {
+        /**
+         * 用户角色
+         * 0 -> 管理员
+         * 1 -> 普通用户
+         */
+        this.role = 1;
     }
     __decorate([
         typeorm_1.PrimaryGeneratedColumn('uuid', {
@@ -56,6 +62,16 @@ var User = /** @class */ (function () {
         __metadata("design:type", String)
     ], User.prototype, "email", void 0);
     __decorate([
+        typeorm_1.Column({
+            name: 'role',
+            type: 'int',
+            comment: '用户角色',
+            nullable: false,
+            default: 1
+        }),
+        __metadata("design:type", Number)
+    ], User.prototype, "role", void 0);
+    __decorate([
         typeorm_1.CreateDateColumn({
             name: 'create_at'
         }),
@@ -71,8 +87,7 @@ var User = /** @class */ (function () {
         typeorm_1.Entity({
             name: 'user',
             engine: 'InnoDB',
-            database: 'zr_dev',
-            synchronize: true
+            database: 'zr_dev'
         })
     ], User);
     return User;

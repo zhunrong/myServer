@@ -20,3 +20,10 @@ function save(params) {
     return repository.save(userPicture);
 }
 exports.save = save;
+function getPicturesByUserId(uid) {
+    var repository = typeorm_1.getRepository(entity_userPicture_1.default);
+    return repository.find({
+        uid: uid
+    });
+}
+exports.getPicturesByUserId = getPicturesByUserId;

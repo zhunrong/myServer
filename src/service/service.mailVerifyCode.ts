@@ -1,9 +1,13 @@
 import { getRepository } from 'typeorm'
 import MailVerifyCode from '../entity/entity.mailVerifyCode'
 
-export function getCodes() {
+interface IGet {
+  email?: string
+  code?: string
+}
+export function getCodes(params: IGet) {
   const repository = getRepository(MailVerifyCode)
-  return repository.find()
+  return repository.find(params)
 }
 
 export interface IAddOne {

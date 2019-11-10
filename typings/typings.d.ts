@@ -1,3 +1,9 @@
+/**
+ * 邮件服务
+ */
+declare module 'nodemailer' {
+  export function createTransport(transport: any, defaults?: any): any
+}
 
 /**
  * 腾讯云存储sdk

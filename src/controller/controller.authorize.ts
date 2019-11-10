@@ -1,5 +1,5 @@
-import mailVerifyCodeModel from '../model/model.mailVerifyCode'
 import * as userService from '../service/service.user'
+import * as mailVerifyCodeService from '../service/service.mailVerifyCode'
 import jwt from 'jsonwebtoken'
 import config from '../config'
 import sendMail from '../modules/mailer'
@@ -72,11 +72,11 @@ export async function register(req: any, res: any) {
     if (!password) {
       throw new Error('密码不能为空')
     }
-    const { results: matchResults }: any = await mailVerifyCodeModel.get({
+    const codes = await mailVerifyCodeService.getCodes({
       email,
-      verify_code: verifyCode
+      code: verifyCode
     })
-    if (!matchResults.length) {
+    if (!codes.length) {
       throw new Error('邮箱验证失败')
     }
     const user = await userService.getUserByEmail(email)
@@ -105,14 +105,14 @@ export async function register(req: any, res: any) {
  */
 export async function mailVerifyCode(req: any, res: any) {
   const { email } = req.body
-  const verifyCode: string = randomCharacter(8)
+  const verifyCode: string = randomCharacter(4)
   try {
     if (!email) {
       throw new Error('邮箱不能为空')
     }
-    await mailVerifyCodeModel.post({
+    await mailVerifyCodeService.addOne({
       email,
-      verify_code: verifyCode
+      code: verifyCode
     })
     await sendMail({
       to: email,

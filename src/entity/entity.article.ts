@@ -1,10 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, JoinColumn } from 'typeorm'
+import ArticleVisit from './entity.articleVisit'
 
 @Entity({
   name: 'article',
   database: 'zr_dev',
-  engine: 'InnoDB',
-  synchronize: true
+  engine: 'InnoDB'
 })
 class Article {
 

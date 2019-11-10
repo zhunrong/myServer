@@ -7,10 +7,12 @@
     "compile": "tsc",
     "server": "nodemon dist/app.js",
     "start": "node script.js",
+    "ts-node": "ts-node ./src/app.ts",
     "pm2:start": "pm2 start dist/app.js",
     "pm2:status": "pm2 status",
     "pm2:restart": "pm2 restart dist/app.js",
-    "pm2:stop": "pm2 stop dist/app.js"
+    "pm2:stop": "pm2 stop dist/app.js",
+    "sync": "typeorm schema:sync"
   },
   "repository": {
     "type": "git",
@@ -51,6 +53,7 @@
     "@types/multer": "^1.3.7",
     "@types/mysql": "^2.15.5",
     "@types/node": "^12.11.1",
+    "@types/nodemailer": "^6.2.2",
     "awesome-typescript-loader": "^5.2.1",
     "nodemon": "^1.18.10",
     "ts-loader": "^5.2.2",

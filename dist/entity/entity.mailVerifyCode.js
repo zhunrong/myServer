@@ -47,8 +47,7 @@ var MailVerifyCode = /** @class */ (function () {
         typeorm_1.Entity({
             name: 'mail_verify_code',
             database: 'zr_dev',
-            engine: 'InnoDB',
-            synchronize: true
+            engine: 'InnoDB'
         })
     ], MailVerifyCode);
     return MailVerifyCode;

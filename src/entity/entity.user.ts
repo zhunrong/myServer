@@ -3,8 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateCol
 @Entity({
   name: 'user',
   engine: 'InnoDB',
-  database: 'zr_dev',
-  synchronize: true
+  database: 'zr_dev'
 })
 export class User {
 
@@ -44,6 +43,20 @@ export class User {
     length: 20
   })
   email!: string
+
+  /**
+   * 用户角色
+   * 0 -> 管理员
+   * 1 -> 普通用户
+   */
+  @Column({
+    name: 'role',
+    type: 'int',
+    comment: '用户角色',
+    nullable: false,
+    default: 1
+  })
+  role: number = 1
 
   @CreateDateColumn({
     name: 'create_at'

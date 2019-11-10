@@ -1,13 +1,27 @@
-import { getRepository } from 'typeorm'
+import { getRepository, createQueryBuilder } from 'typeorm'
 import Article from '../entity/entity.article'
+import User from '../entity/entity.user'
 import ArticleVisit from '../entity/entity.articleVisit'
 
 interface IGetArticles {
   uid?: string
+  pageSize?: number
+  page?: number
 }
-export function getArticles(params?: IGetArticles) {
+export function getArticles(params: IGetArticles = {}) {
+  const { pageSize = 2, page = 1 } = params
   const repository = getRepository(Article)
-  return repository.find(params)
+  return repository.
+    createQueryBuilder('article').
+    leftJoinAndSelect(User, 'user', 'article.uid = user.id').
+    select('article.id', 'id').
+    addSelect('article.title', 'title').
+    addSelect('article.uid', 'uid').
+    addSelect('DATE_FORMAT(article.update_at,"%Y-%m-%d %h:%i:%s")', 'updateTime').
+    addSelect('user.avatar', 'avatar').
+    offset((page - 1) * pageSize).
+    limit(pageSize).
+    getRawMany()
 }
 
 interface IAddArticle {
@@ -33,9 +47,25 @@ export function addArticle(params: IAddArticle) {
  * 根据id获取文章详情
  * @param id 
  */
-export function getArticleById(id: string) {
+export async function getArticleById(id: string) {
   const repository = getRepository(Article)
-  return repository.findOne(id)
+  const [article] = await repository.query(`
+    select uid,
+           article.id as id,
+           title,
+           markdown,
+           DATE_FORMAT(article.create_at,'%Y-%m-%d %h:%i:%s') as createTime,
+           DATE_FORMAT(article.update_at,'%Y-%m-%d %h:%i:%s') as updateTime,
+           nickname,
+           email,
+           avatar,
+           COUNT(*) as visitCount
+    from article,article_visit,user
+    where article_visit.article_id = article.id and article.id = '${id}' and user.id = article.uid`)
+  return article ? {
+    ...article,
+    visitCount: Number(article.visitCount)
+  } : null
 }
 
 interface IEditArticle {
@@ -63,4 +93,21 @@ export function addArticleVisit(params: IAddVisit) {
   visit.articleId = articleId
   visit.userId = userId || ''
   return repository.save(visit)
+}
+
+export function query(id: string) {
+  const repository = getRepository(ArticleVisit)
+  return repository.query(`
+    select uid,
+           article.id as id,
+           title,
+           markdown,
+           DATE_FORMAT(article.create_at,'%Y-%m-%d %h:%i:%s') as createTime,
+           DATE_FORMAT(article.update_at,'%Y-%m-%d %h:%i:%s') as updateTime,
+           nickname,
+           email,
+           avatar,
+           COUNT(article_visit.id) as visitCount
+    from article,article_visit,user
+    where article_visit.article_id = article.id and article.id = '${id}' and user.id = article.uid`)
 }

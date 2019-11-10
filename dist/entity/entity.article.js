@@ -58,8 +58,7 @@ var Article = /** @class */ (function () {
         typeorm_1.Entity({
             name: 'article',
             database: 'zr_dev',
-            engine: 'InnoDB',
-            synchronize: true
+            engine: 'InnoDB'
         })
     ], Article);
     return Article;

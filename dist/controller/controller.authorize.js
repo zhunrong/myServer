@@ -34,9 +34,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -44,9 +41,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var model_mailVerifyCode_1 = __importDefault(require("../model/model.mailVerifyCode"));
 var userService = __importStar(require("../service/service.user"));
+var mailVerifyCodeService = __importStar(require("../service/service.mailVerifyCode"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var config_1 = __importDefault(require("../config"));
 var mailer_1 = __importDefault(require("../modules/mailer"));
@@ -120,7 +120,7 @@ exports.login = login;
  */
 function register(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, email, verifyCode, password, matchResults, user, _b, message;
+        var _a, email, verifyCode, password, codes, user, _b, message;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -137,13 +137,13 @@ function register(req, res) {
                     if (!password) {
                         throw new Error('密码不能为空');
                     }
-                    return [4 /*yield*/, model_mailVerifyCode_1.default.get({
+                    return [4 /*yield*/, mailVerifyCodeService.getCodes({
                             email: email,
-                            verify_code: verifyCode
+                            code: verifyCode
                         })];
                 case 2:
-                    matchResults = (_c.sent()).results;
-                    if (!matchResults.length) {
+                    codes = _c.sent();
+                    if (!codes.length) {
                         throw new Error('邮箱验证失败');
                     }
                     return [4 /*yield*/, userService.getUserByEmail(email)];
@@ -189,16 +189,16 @@ function mailVerifyCode(req, res) {
             switch (_b.label) {
                 case 0:
                     email = req.body.email;
-                    verifyCode = utils_1.randomCharacter(8);
+                    verifyCode = utils_1.randomCharacter(4);
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 4, , 5]);
                     if (!email) {
                         throw new Error('邮箱不能为空');
                     }
-                    return [4 /*yield*/, model_mailVerifyCode_1.default.post({
+                    return [4 /*yield*/, mailVerifyCodeService.addOne({
                             email: email,
-                            verify_code: verifyCode
+                            code: verifyCode
                         })];
                 case 2:
                     _b.sent();

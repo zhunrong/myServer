@@ -4,15 +4,15 @@ import bodyParser from 'body-parser'
 import config from './config'
 import router from './routes'
 import initMysql from './database'
-import { getArticles } from './service/service.article'
+import { getArticleById } from './service/service.article'
 
 (async () => {
 
   try {
     await initMysql()
 
-    // const articles = await getArticles()
-    // console.log(articles)
+    // const article = await getArticleById('7075e57e-cb0f-4578-94c7-1eed675ee032')
+    // console.log(article)
 
     const app = express()
     // 静态资源托管
