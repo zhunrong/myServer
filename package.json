@@ -4,10 +4,10 @@
   "description": "",
   "main": "dist/app.js",
   "scripts": {
+    "start": "npm run dev",
     "compile": "tsc",
-    "server": "nodemon dist/app.js",
-    "start": "node script.js",
-    "ts-node": "ts-node ./src/app.ts",
+    "server": "node dist/app.js",
+    "dev": "ts-node dev.ts",
     "pm2:start": "pm2 start dist/app.js",
     "pm2:status": "pm2 status",
     "pm2:restart": "pm2 restart dist/app.js",
@@ -55,7 +55,6 @@
     "@types/node": "^12.11.1",
     "@types/nodemailer": "^6.2.2",
     "awesome-typescript-loader": "^5.2.1",
-    "nodemon": "^1.18.10",
     "ts-loader": "^5.2.2",
     "ts-node": "^7.0.1",
     "typescript": "^3.1.3"

@@ -1,13 +1,3 @@
-/**
- * 邮件服务
- */
-declare module 'nodemailer' {
-  export function createTransport(transport: any, defaults?: any): any
-}
-
-/**
- * 腾讯云存储sdk
- */
 declare module 'qcloud-cos-sts' {
   interface IOptions {
     secretId: string
