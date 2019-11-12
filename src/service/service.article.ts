@@ -59,9 +59,12 @@ export async function getArticleById(id: string) {
            nickname,
            email,
            avatar,
-           COUNT(*) as visitCount
-    from article,article_visit,user
-    where article_visit.article_id = article.id and article.id = '${id}' and user.id = article.uid`)
+           COUNT(article_visit.id) as visitCount
+    from article
+    left join article_visit on article.id = article_visit.article_id
+    left join user on user.id = article.uid
+    where article.id = '${id}'
+    group by article.id`)
   return article ? {
     ...article,
     visitCount: Number(article.visitCount)

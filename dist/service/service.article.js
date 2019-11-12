@@ -95,7 +95,7 @@ function getArticleById(id) {
             switch (_a.label) {
                 case 0:
                     repository = typeorm_1.getRepository(entity_article_1.default);
-                    return [4 /*yield*/, repository.query("\n    select uid,\n           article.id as id,\n           title,\n           markdown,\n           DATE_FORMAT(article.create_at,'%Y-%m-%d %h:%i:%s') as createTime,\n           DATE_FORMAT(article.update_at,'%Y-%m-%d %h:%i:%s') as updateTime,\n           nickname,\n           email,\n           avatar,\n           COUNT(*) as visitCount\n    from article,article_visit,user\n    where article_visit.article_id = article.id and article.id = '" + id + "' and user.id = article.uid")];
+                    return [4 /*yield*/, repository.query("\n    select uid,\n           article.id as id,\n           title,\n           markdown,\n           DATE_FORMAT(article.create_at,'%Y-%m-%d %h:%i:%s') as createTime,\n           DATE_FORMAT(article.update_at,'%Y-%m-%d %h:%i:%s') as updateTime,\n           nickname,\n           email,\n           avatar,\n           COUNT(article_visit.id) as visitCount\n    from article\n    left join article_visit on article.id = article_visit.article_id\n    left join user on user.id = article.uid\n    where article.id = '" + id + "'\n    group by article.id")];
                 case 1:
                     article = (_a.sent())[0];
                     return [2 /*return*/, article ? __assign({}, article, { visitCount: Number(article.visitCount) }) : null];

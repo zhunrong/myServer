@@ -27,12 +27,12 @@ const compileProcess = spawn('tsc', [], {
 })
 compileProcess.stdout.on('data', chunk => {
   const feedback = chunk.toString() as string
-  console.log(feedback)
+  process.stdout.write(feedback)
   if /* 编译完成 */ (feedback.includes('Watching for file changes')) {
     restart()
   }
 })
 compileProcess.stderr.on('data', chunk => {
-  console.error(chunk.toString())
+  process.stderr.write(chunk.toString())
 })
 
