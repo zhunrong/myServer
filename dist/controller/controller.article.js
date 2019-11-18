@@ -86,11 +86,11 @@ exports.get = get;
  */
 function getAll(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var page, pageSize, articles, _a, message;
+        var page, pageSize, articles, total, _a, message;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _b.trys.push([0, 2, , 3]);
+                    _b.trys.push([0, 3, , 4]);
                     page = parseInt(req.query.page);
                     pageSize = parseInt(req.query.pageSize);
                     return [4 /*yield*/, articleService.getArticles({
@@ -99,24 +99,28 @@ function getAll(req, res) {
                         })];
                 case 1:
                     articles = _b.sent();
+                    return [4 /*yield*/, articleService.getArticleCount()];
+                case 2:
+                    total = _b.sent();
                     res.send({
                         status: 'success',
                         data: articles,
                         meta: {
                             pageSize: pageSize,
-                            page: page
+                            page: page,
+                            pageCount: Math.ceil(total / pageSize)
                         }
                     });
-                    return [3 /*break*/, 3];
-                case 2:
+                    return [3 /*break*/, 4];
+                case 3:
                     _a = _b.sent();
                     message = _a.message;
                     res.send({
                         status: 'error',
                         message: message
                     });
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
             }
         });
     });

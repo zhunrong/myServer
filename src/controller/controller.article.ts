@@ -35,12 +35,14 @@ export async function getAll(req: any, res: any) {
       pageSize,
       page
     })
+    const total = await articleService.getArticleCount()
     res.send({
       status: 'success',
       data: articles,
       meta: {
         pageSize,
-        page
+        page,
+        pageCount: Math.ceil(total / pageSize)
       }
     })
   } catch ({ message }) {

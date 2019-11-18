@@ -8,6 +8,10 @@ interface IGetArticles {
   pageSize?: number
   page?: number
 }
+/**
+ * 获取文章
+ * @param params 
+ */
 export function getArticles(params: IGetArticles = {}) {
   const { pageSize = 2, page = 1 } = params
   const repository = getRepository(Article)
@@ -17,11 +21,20 @@ export function getArticles(params: IGetArticles = {}) {
     select('article.id', 'id').
     addSelect('article.title', 'title').
     addSelect('article.uid', 'uid').
-    addSelect('DATE_FORMAT(article.update_at,"%Y-%m-%d %h:%i:%s")', 'updateTime').
+    addSelect('DATE_FORMAT(article.update_at,"%Y-%m-%d %H:%i:%s")', 'updateTime').
     addSelect('user.avatar', 'avatar').
+    orderBy('article.update_at', 'DESC').
     offset((page - 1) * pageSize).
     limit(pageSize).
     getRawMany()
+}
+
+/**
+ * 获取文章总数
+ */
+export function getArticleCount() {
+  const repository = getRepository(Article)
+  return repository.count()
 }
 
 interface IAddArticle {

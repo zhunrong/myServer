@@ -53,6 +53,10 @@ var typeorm_1 = require("typeorm");
 var entity_article_1 = __importDefault(require("../entity/entity.article"));
 var entity_user_1 = __importDefault(require("../entity/entity.user"));
 var entity_articleVisit_1 = __importDefault(require("../entity/entity.articleVisit"));
+/**
+ * 获取文章
+ * @param params
+ */
 function getArticles(params) {
     if (params === void 0) { params = {}; }
     var _a = params.pageSize, pageSize = _a === void 0 ? 2 : _a, _b = params.page, page = _b === void 0 ? 1 : _b;
@@ -63,13 +67,22 @@ function getArticles(params) {
         select('article.id', 'id').
         addSelect('article.title', 'title').
         addSelect('article.uid', 'uid').
-        addSelect('DATE_FORMAT(article.update_at,"%Y-%m-%d %h:%i:%s")', 'updateTime').
+        addSelect('DATE_FORMAT(article.update_at,"%Y-%m-%d %H:%i:%s")', 'updateTime').
         addSelect('user.avatar', 'avatar').
+        orderBy('article.update_at', 'DESC').
         offset((page - 1) * pageSize).
         limit(pageSize).
         getRawMany();
 }
 exports.getArticles = getArticles;
+/**
+ * 获取文章总数
+ */
+function getArticleCount() {
+    var repository = typeorm_1.getRepository(entity_article_1.default);
+    return repository.count();
+}
+exports.getArticleCount = getArticleCount;
 /**
  * 新增文章
  * @param params
