@@ -11,10 +11,11 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -111,7 +112,7 @@ function getArticleById(id) {
                     return [4 /*yield*/, repository.query("\n    select uid,\n           article.id as id,\n           title,\n           markdown,\n           DATE_FORMAT(article.create_at,'%Y-%m-%d %h:%i:%s') as createTime,\n           DATE_FORMAT(article.update_at,'%Y-%m-%d %h:%i:%s') as updateTime,\n           nickname,\n           email,\n           avatar,\n           COUNT(article_visit.id) as visitCount\n    from article\n    left join article_visit on article.id = article_visit.article_id\n    left join user on user.id = article.uid\n    where article.id = '" + id + "'\n    group by article.id")];
                 case 1:
                     article = (_a.sent())[0];
-                    return [2 /*return*/, article ? __assign({}, article, { visitCount: Number(article.visitCount) }) : null];
+                    return [2 /*return*/, article ? __assign(__assign({}, article), { visitCount: Number(article.visitCount) }) : null];
             }
         });
     });
