@@ -9,10 +9,22 @@ import * as articleService from '../service/service.article'
 export async function get(req: any, res: any) {
   try {
     const { uid } = req.auth
-    const articles = await articleService.getArticles({ uid })
+    const page = parseInt(req.query.page)
+    const pageSize = parseInt(req.query.pageSize)
+    const articles = await articleService.getArticles({
+      uid,
+      page,
+      pageSize
+    })
+    const total = await articleService.getArticleCount(uid)
     res.send({
       status: 'success',
-      data: articles
+      data: articles,
+      meta: {
+        pageSize,
+        page,
+        pageCount: Math.ceil(total / pageSize)
+      }
     })
   } catch ({ message }) {
     res.send({

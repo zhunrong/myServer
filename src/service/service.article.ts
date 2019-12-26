@@ -13,16 +13,22 @@ interface IGetArticles {
  * @param params 
  */
 export function getArticles(params: IGetArticles = {}) {
-  const { pageSize = 2, page = 1 } = params
+  const { pageSize = 2, page = 1, uid } = params
   const repository = getRepository(Article)
-  return repository.
+  const queryBuilder = repository.
     createQueryBuilder('article').
     leftJoinAndSelect(User, 'user', 'article.uid = user.id').
     select('article.id', 'id').
     addSelect('article.title', 'title').
     addSelect('article.uid', 'uid').
     addSelect('DATE_FORMAT(article.update_at,"%Y-%m-%d %H:%i:%s")', 'updateTime').
-    addSelect('user.avatar', 'avatar').
+    addSelect('user.avatar', 'avatar')
+  if (uid) {
+    queryBuilder.where('article.uid = :uid', {
+      uid: uid || '*'
+    })
+  }
+  return queryBuilder.
     orderBy('article.update_at', 'DESC').
     offset((page - 1) * pageSize).
     limit(pageSize).
@@ -32,9 +38,11 @@ export function getArticles(params: IGetArticles = {}) {
 /**
  * 获取文章总数
  */
-export function getArticleCount() {
+export function getArticleCount(uid?: string) {
   const repository = getRepository(Article)
-  return repository.count()
+  return repository.count({
+    uid
+  })
 }
 
 interface IAddArticle {

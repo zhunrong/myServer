@@ -60,16 +60,22 @@ var entity_articleVisit_1 = __importDefault(require("../entity/entity.articleVis
  */
 function getArticles(params) {
     if (params === void 0) { params = {}; }
-    var _a = params.pageSize, pageSize = _a === void 0 ? 2 : _a, _b = params.page, page = _b === void 0 ? 1 : _b;
+    var _a = params.pageSize, pageSize = _a === void 0 ? 2 : _a, _b = params.page, page = _b === void 0 ? 1 : _b, uid = params.uid;
     var repository = typeorm_1.getRepository(entity_article_1.default);
-    return repository.
+    var queryBuilder = repository.
         createQueryBuilder('article').
         leftJoinAndSelect(entity_user_1.default, 'user', 'article.uid = user.id').
         select('article.id', 'id').
         addSelect('article.title', 'title').
         addSelect('article.uid', 'uid').
         addSelect('DATE_FORMAT(article.update_at,"%Y-%m-%d %H:%i:%s")', 'updateTime').
-        addSelect('user.avatar', 'avatar').
+        addSelect('user.avatar', 'avatar');
+    if (uid) {
+        queryBuilder.where('article.uid = :uid', {
+            uid: uid || '*'
+        });
+    }
+    return queryBuilder.
         orderBy('article.update_at', 'DESC').
         offset((page - 1) * pageSize).
         limit(pageSize).
@@ -79,9 +85,11 @@ exports.getArticles = getArticles;
 /**
  * 获取文章总数
  */
-function getArticleCount() {
+function getArticleCount(uid) {
     var repository = typeorm_1.getRepository(entity_article_1.default);
-    return repository.count();
+    return repository.count({
+        uid: uid
+    });
 }
 exports.getArticleCount = getArticleCount;
 /**

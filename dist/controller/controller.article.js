@@ -52,29 +52,43 @@ var articleService = __importStar(require("../service/service.article"));
  */
 function get(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var uid, articles, _a, message;
+        var uid, page, pageSize, articles, total, _a, message;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _b.trys.push([0, 2, , 3]);
+                    _b.trys.push([0, 3, , 4]);
                     uid = req.auth.uid;
-                    return [4 /*yield*/, articleService.getArticles({ uid: uid })];
+                    page = parseInt(req.query.page);
+                    pageSize = parseInt(req.query.pageSize);
+                    return [4 /*yield*/, articleService.getArticles({
+                            uid: uid,
+                            page: page,
+                            pageSize: pageSize
+                        })];
                 case 1:
                     articles = _b.sent();
+                    return [4 /*yield*/, articleService.getArticleCount(uid)];
+                case 2:
+                    total = _b.sent();
                     res.send({
                         status: 'success',
-                        data: articles
+                        data: articles,
+                        meta: {
+                            pageSize: pageSize,
+                            page: page,
+                            pageCount: Math.ceil(total / pageSize)
+                        }
                     });
-                    return [3 /*break*/, 3];
-                case 2:
+                    return [3 /*break*/, 4];
+                case 3:
                     _a = _b.sent();
                     message = _a.message;
                     res.send({
                         status: 'error',
                         message: message
                     });
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
             }
         });
     });
