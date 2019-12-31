@@ -31,7 +31,7 @@ var Article = /** @class */ (function () {
         typeorm_1.Column({
             name: 'title',
             type: 'varchar',
-            length: 50
+            length: 255
         }),
         __metadata("design:type", String)
     ], Article.prototype, "title", void 0);
@@ -42,6 +42,16 @@ var Article = /** @class */ (function () {
         }),
         __metadata("design:type", String)
     ], Article.prototype, "markdown", void 0);
+    __decorate([
+        typeorm_1.Column({
+            name: 'public',
+            type: 'int',
+            nullable: false,
+            default: 1,
+            comment: '文章是否公开'
+        }),
+        __metadata("design:type", Number)
+    ], Article.prototype, "public", void 0);
     __decorate([
         typeorm_1.CreateDateColumn({
             name: 'create_at'

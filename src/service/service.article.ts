@@ -7,13 +7,14 @@ interface IGetArticles {
   uid?: string
   pageSize?: number
   page?: number
+  public?: number
 }
 /**
  * 获取文章
  * @param params 
  */
 export function getArticles(params: IGetArticles = {}) {
-  const { pageSize = 2, page = 1, uid } = params
+  const { pageSize = 2, page = 1, uid, public: publicStatus } = params
   const repository = getRepository(Article)
   const queryBuilder = repository.
     createQueryBuilder('article').
@@ -21,11 +22,17 @@ export function getArticles(params: IGetArticles = {}) {
     select('article.id', 'id').
     addSelect('article.title', 'title').
     addSelect('article.uid', 'uid').
+    addSelect('article.public', 'public').
     addSelect('DATE_FORMAT(article.update_at,"%Y-%m-%d %H:%i:%s")', 'updateTime').
     addSelect('user.avatar', 'avatar')
-  if (uid) {
+  if (uid !== undefined) {
     queryBuilder.where('article.uid = :uid', {
-      uid: uid || '*'
+      uid
+    })
+  }
+  if (publicStatus !== undefined) {
+    queryBuilder.andWhere('article.public = :public', {
+      public: publicStatus
     })
   }
   return queryBuilder.
@@ -80,6 +87,7 @@ export async function getArticleById(id: string) {
            nickname,
            email,
            avatar,
+           public,
            COUNT(article_visit.id) as visitCount
     from article
     left join article_visit on article.id = article_visit.article_id
@@ -95,6 +103,7 @@ export async function getArticleById(id: string) {
 interface IEditArticle {
   title?: string
   markdown?: string
+  public?: number
 }
 /**
  * 根据id编辑文章
@@ -110,6 +119,10 @@ interface IAddVisit {
   articleId: string
   userId?: string
 }
+/**
+ * 添加文章访问记录
+ * @param params 
+ */
 export function addArticleVisit(params: IAddVisit) {
   const repository = getRepository(ArticleVisit)
   const { articleId, userId } = params
@@ -117,6 +130,15 @@ export function addArticleVisit(params: IAddVisit) {
   visit.articleId = articleId
   visit.userId = userId || ''
   return repository.save(visit)
+}
+
+/**
+ * 删除文章
+ * @param ids 
+ */
+export function deleteArticle(ids: string[]) {
+  const repository = getRepository(Article)
+  return repository.delete(ids)
 }
 
 export function query(id: string) {

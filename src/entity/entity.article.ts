@@ -23,7 +23,7 @@ class Article {
   @Column({
     name: 'title',
     type: 'varchar',
-    length: 50
+    length: 255
   })
   title!: string
 
@@ -32,6 +32,15 @@ class Article {
     type: 'text'
   })
   markdown!: string
+
+  @Column({
+    name: 'public',
+    type: 'int',
+    nullable: false,
+    default: 1,
+    comment: '文章是否公开'
+  })
+  public!: number
 
   @CreateDateColumn({
     name: 'create_at'

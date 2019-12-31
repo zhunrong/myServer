@@ -1,4 +1,5 @@
 import testModel from '../model/test'
+import * as testService from '../service/service.test'
 import { copyValueFromObj } from '../modules/utils'
 
 export async function get(req: any, res: any) {

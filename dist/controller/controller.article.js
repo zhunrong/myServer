@@ -76,7 +76,8 @@ function get(req, res) {
                         meta: {
                             pageSize: pageSize,
                             page: page,
-                            pageCount: Math.ceil(total / pageSize)
+                            pageCount: Math.ceil(total / pageSize),
+                            total: total
                         }
                     });
                     return [3 /*break*/, 4];
@@ -110,7 +111,8 @@ function getAll(req, res) {
                     pageSize = parseInt(req.query.pageSize);
                     return [4 /*yield*/, articleService.getArticles({
                             pageSize: pageSize,
-                            page: page
+                            page: page,
+                            public: 1
                         })];
                 case 1:
                     articles = _b.sent();
@@ -123,7 +125,8 @@ function getAll(req, res) {
                         meta: {
                             pageSize: pageSize,
                             page: page,
-                            pageCount: Math.ceil(total / pageSize)
+                            pageCount: Math.ceil(total / pageSize),
+                            total: total
                         }
                     });
                     return [3 /*break*/, 4];
@@ -161,6 +164,10 @@ function detail(req, res) {
                     article = _b.sent();
                     if (!article) {
                         throw new Error('文章不存在');
+                    }
+                    // 文章未公开
+                    if (article.public !== 1 && (req.auth ? req.auth.uid !== article.uid : true)) {
+                        throw new Error('没有访问权限');
                     }
                     res.send({
                         status: 'success',
@@ -225,6 +232,61 @@ function post(req, res) {
 }
 exports.post = post;
 /**
+ * 删除文章
+ * @param req
+ * @param res
+ */
+function deleteArticle(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var uid, ids, index, flag, article, _a, message;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    uid = req.auth.uid;
+                    ids = req.body.ids;
+                    _b.label = 1;
+                case 1:
+                    _b.trys.push([1, 6, , 7]);
+                    index = 0;
+                    flag = false;
+                    _b.label = 2;
+                case 2:
+                    if (!(index < ids.length)) return [3 /*break*/, 4];
+                    return [4 /*yield*/, articleService.getArticleById(ids[index])];
+                case 3:
+                    article = _b.sent();
+                    if (article.uid !== uid) {
+                        flag = true;
+                        return [3 /*break*/, 4];
+                    }
+                    index++;
+                    return [3 /*break*/, 2];
+                case 4:
+                    if (flag) {
+                        throw new Error('文章不属于该用户');
+                    }
+                    return [4 /*yield*/, articleService.deleteArticle(ids)];
+                case 5:
+                    _b.sent();
+                    res.send({
+                        status: 'success'
+                    });
+                    return [3 /*break*/, 7];
+                case 6:
+                    _a = _b.sent();
+                    message = _a.message;
+                    res.send({
+                        message: message,
+                        status: 'error'
+                    });
+                    return [3 /*break*/, 7];
+                case 7: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.deleteArticle = deleteArticle;
+/**
  * 编辑文章
  * @param req request
  * @param res response
@@ -238,7 +300,7 @@ function put(req, res) {
                     _b.trys.push([0, 3, , 4]);
                     id = req.params.id;
                     uid = req.auth.uid;
-                    data = utils_1.copyValueFromObj(['title', 'markdown'], req.body);
+                    data = utils_1.copyValueFromObj(['title', 'markdown', 'public'], req.body);
                     if (typeof data.title !== undefined && data.title === '') {
                         throw new Error('title不能为空');
                     }

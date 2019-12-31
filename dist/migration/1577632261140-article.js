@@ -36,44 +36,37 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var typeorm_1 = require("typeorm");
-var entity_test_1 = require("../entity/entity.test");
-function get() {
-    return __awaiter(this, void 0, void 0, function () {
-        var repository, list;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    repository = typeorm_1.getRepository(entity_test_1.Test);
-                    return [4 /*yield*/, repository.find()];
-                case 1:
-                    list = _a.sent();
-                    console.log(list);
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.get = get;
 /**
- * test 插入数据
- * @param params.name string
+ * 涉及表: article
+ * 1.新增public字段
  */
-function post(params) {
-    return __awaiter(this, void 0, void 0, function () {
-        var repository, test;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    repository = typeorm_1.getRepository(entity_test_1.Test);
-                    test = new entity_test_1.Test();
-                    test.name = params.name;
-                    return [4 /*yield*/, repository.save(test)];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
+var article1577632261140 = /** @class */ (function () {
+    function article1577632261140() {
+    }
+    article1577632261140.prototype.up = function (queryRunner) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, queryRunner.query('ALTER TABLE article ADD public INT NOT NULL DEFAULT 1;')];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
         });
-    });
-}
-exports.post = post;
+    };
+    article1577632261140.prototype.down = function (queryRunner) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, queryRunner.query('ALTER TABLE article DROP public;')];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    return article1577632261140;
+}());
+exports.article1577632261140 = article1577632261140;

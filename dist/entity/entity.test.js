@@ -28,7 +28,9 @@ var Test = /** @class */ (function () {
         __metadata("design:type", Number)
     ], Test.prototype, "age", void 0);
     Test = __decorate([
-        typeorm_1.Entity()
+        typeorm_1.Entity({
+            name: 'test'
+        })
     ], Test);
     return Test;
 }());

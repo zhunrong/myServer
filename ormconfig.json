@@ -6,8 +6,12 @@
     "username": "zr_dev",
     "password": "YZ4371716",
     "database": "zr_dev",
-    "entities": [
-      "./dist/entity/*.js"
-    ]
+    "entities": ["./dist/entity/*.js"],
+    "migrations": ["./dist/migration/*.js"],
+    "synchronize": false,
+    "migrationsRun": false,
+    "cli": {
+      "migrationsDir": "./src/migration"
+    }
   }
 ]

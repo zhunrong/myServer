@@ -60,7 +60,7 @@ var entity_articleVisit_1 = __importDefault(require("../entity/entity.articleVis
  */
 function getArticles(params) {
     if (params === void 0) { params = {}; }
-    var _a = params.pageSize, pageSize = _a === void 0 ? 2 : _a, _b = params.page, page = _b === void 0 ? 1 : _b, uid = params.uid;
+    var _a = params.pageSize, pageSize = _a === void 0 ? 2 : _a, _b = params.page, page = _b === void 0 ? 1 : _b, uid = params.uid, publicStatus = params.public;
     var repository = typeorm_1.getRepository(entity_article_1.default);
     var queryBuilder = repository.
         createQueryBuilder('article').
@@ -68,11 +68,17 @@ function getArticles(params) {
         select('article.id', 'id').
         addSelect('article.title', 'title').
         addSelect('article.uid', 'uid').
+        addSelect('article.public', 'public').
         addSelect('DATE_FORMAT(article.update_at,"%Y-%m-%d %H:%i:%s")', 'updateTime').
         addSelect('user.avatar', 'avatar');
-    if (uid) {
+    if (uid !== undefined) {
         queryBuilder.where('article.uid = :uid', {
-            uid: uid || '*'
+            uid: uid
+        });
+    }
+    if (publicStatus !== undefined) {
+        queryBuilder.andWhere('article.public = :public', {
+            public: publicStatus
         });
     }
     return queryBuilder.
@@ -117,7 +123,7 @@ function getArticleById(id) {
             switch (_a.label) {
                 case 0:
                     repository = typeorm_1.getRepository(entity_article_1.default);
-                    return [4 /*yield*/, repository.query("\n    select uid,\n           article.id as id,\n           title,\n           markdown,\n           DATE_FORMAT(article.create_at,'%Y-%m-%d %h:%i:%s') as createTime,\n           DATE_FORMAT(article.update_at,'%Y-%m-%d %h:%i:%s') as updateTime,\n           nickname,\n           email,\n           avatar,\n           COUNT(article_visit.id) as visitCount\n    from article\n    left join article_visit on article.id = article_visit.article_id\n    left join user on user.id = article.uid\n    where article.id = '" + id + "'\n    group by article.id")];
+                    return [4 /*yield*/, repository.query("\n    select uid,\n           article.id as id,\n           title,\n           markdown,\n           DATE_FORMAT(article.create_at,'%Y-%m-%d %h:%i:%s') as createTime,\n           DATE_FORMAT(article.update_at,'%Y-%m-%d %h:%i:%s') as updateTime,\n           nickname,\n           email,\n           avatar,\n           public,\n           COUNT(article_visit.id) as visitCount\n    from article\n    left join article_visit on article.id = article_visit.article_id\n    left join user on user.id = article.uid\n    where article.id = '" + id + "'\n    group by article.id")];
                 case 1:
                     article = (_a.sent())[0];
                     return [2 /*return*/, article ? __assign(__assign({}, article), { visitCount: Number(article.visitCount) }) : null];
@@ -136,6 +142,10 @@ function editArticle(id, params) {
     return repository.update(id, params);
 }
 exports.editArticle = editArticle;
+/**
+ * 添加文章访问记录
+ * @param params
+ */
 function addArticleVisit(params) {
     var repository = typeorm_1.getRepository(entity_articleVisit_1.default);
     var articleId = params.articleId, userId = params.userId;
@@ -145,6 +155,15 @@ function addArticleVisit(params) {
     return repository.save(visit);
 }
 exports.addArticleVisit = addArticleVisit;
+/**
+ * 删除文章
+ * @param ids
+ */
+function deleteArticle(ids) {
+    var repository = typeorm_1.getRepository(entity_article_1.default);
+    return repository.delete(ids);
+}
+exports.deleteArticle = deleteArticle;
 function query(id) {
     var repository = typeorm_1.getRepository(entity_articleVisit_1.default);
     return repository.query("\n    select uid,\n           article.id as id,\n           title,\n           markdown,\n           DATE_FORMAT(article.create_at,'%Y-%m-%d %h:%i:%s') as createTime,\n           DATE_FORMAT(article.update_at,'%Y-%m-%d %h:%i:%s') as updateTime,\n           nickname,\n           email,\n           avatar,\n           COUNT(article_visit.id) as visitCount\n    from article,article_visit,user\n    where article_visit.article_id = article.id and article.id = '" + id + "' and user.id = article.uid");
