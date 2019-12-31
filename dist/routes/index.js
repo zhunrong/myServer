@@ -37,6 +37,10 @@ exports.default = (function (app) {
     app.use(corsHandler);
     app.use(tokenChecker, function (error, req, res, next) {
         if (error) {
+            // 获取文章详情token可有可无
+            if (/^\/article\/\S+$/.test(req.path)) {
+                return next();
+            }
             return res.status(401).send({
                 status: 'error',
                 message: error.message

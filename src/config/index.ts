@@ -8,9 +8,6 @@ export const DO_NOT_CHECK_REQUEST_PATH: pathFilter[] = [
   '/mailVerifyCode',
   '/allArticle',
   {
-    url: /^\/article\/\S+$/,
-    methods: ['GET']
-  }, {
     url: '/articleVisit',
     methods: ['POST', 'OPTIONS']
   }
