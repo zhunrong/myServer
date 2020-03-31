@@ -41,17 +41,34 @@ var path = require("path");
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, runMigration()];
+            case 0: return [4 /*yield*/, syncSchema()];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, runServer()];
+                return [4 /*yield*/, runMigration()];
             case 2:
+                _a.sent();
+                return [4 /*yield*/, runServer()];
+            case 3:
                 _a.sent();
                 return [2 /*return*/];
         }
     });
 }); })();
 var cwd = path.resolve(__dirname, '../');
+function syncSchema() {
+    return new Promise(function (resolve, reject) {
+        var child = child_process_1.spawn('typeorm', ['schema:sync'], {
+            cwd: cwd,
+            shell: true
+        });
+        child.stdout.pipe(process.stdout);
+        child.stderr.pipe(process.stderr);
+        child.on('close', function (code, signal) {
+            console.log("--\u6570\u636E\u5E93\u540C\u6B65--close--code:[" + code + "]--signal:[" + signal + "]");
+            resolve();
+        });
+    });
+}
 function runMigration() {
     return new Promise(function (resolve, reject) {
         var child = child_process_1.spawn('typeorm', ['migration:run'], {

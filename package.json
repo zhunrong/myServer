@@ -1,6 +1,6 @@
 {
   "name": "node",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "",
   "main": "dist/app.js",
   "scripts": {
@@ -20,12 +20,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://git.coding.net/zr_coding/node.git"
+    "url": "git@github.com:zhunrong/node-server.git"
   },
   "keywords": [
     "node",
     "server",
-    "javascript"
+    "typescript"
   ],
   "author": "chenzr@chd.edu.cn",
   "license": "ISC",
