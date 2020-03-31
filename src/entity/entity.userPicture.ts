@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeor
 @Entity({
   name: 'user_pictures',
   engine: 'InnoDB',
-  database: 'zr_dev'
+  database: 'website'
 })
 class UserPicture {
 

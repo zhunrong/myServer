@@ -3,7 +3,7 @@ import ArticleVisit from './entity.articleVisit'
 
 @Entity({
   name: 'article',
-  database: 'zr_dev',
+  database: 'website',
   engine: 'InnoDB'
 })
 class Article {

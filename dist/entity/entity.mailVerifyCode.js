@@ -46,7 +46,7 @@ var MailVerifyCode = /** @class */ (function () {
     MailVerifyCode = __decorate([
         typeorm_1.Entity({
             name: 'mail_verify_code',
-            database: 'zr_dev',
+            database: 'website',
             engine: 'InnoDB'
         })
     ], MailVerifyCode);

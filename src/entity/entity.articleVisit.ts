@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeor
 
 @Entity({
   name: 'article_visit',
-  database: 'zr_dev',
+  database: 'website',
   engine: 'InnoDB'
 })
 class ArticleVisit {

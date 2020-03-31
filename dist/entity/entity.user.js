@@ -87,7 +87,7 @@ var User = /** @class */ (function () {
         typeorm_1.Entity({
             name: 'user',
             engine: 'InnoDB',
-            database: 'zr_dev'
+            database: 'website'
         })
     ], User);
     return User;

@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeor
 
 @Entity({
   name: 'mail_verify_code',
-  database: 'zr_dev',
+  database: 'website',
   engine: 'InnoDB'
 })
 class MailVerifyCode {

@@ -54,7 +54,7 @@ var UserPicture = /** @class */ (function () {
         typeorm_1.Entity({
             name: 'user_pictures',
             engine: 'InnoDB',
-            database: 'zr_dev'
+            database: 'website'
         })
     ], UserPicture);
     return UserPicture;

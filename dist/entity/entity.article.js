@@ -67,7 +67,7 @@ var Article = /** @class */ (function () {
     Article = __decorate([
         typeorm_1.Entity({
             name: 'article',
-            database: 'zr_dev',
+            database: 'website',
             engine: 'InnoDB'
         })
     ], Article);

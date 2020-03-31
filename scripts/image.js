@@ -35,38 +35,59 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * 涉及表: article
- * 1.新增public字段
- */
-var article1577632261140 = /** @class */ (function () {
-    function article1577632261140() {
-    }
-    article1577632261140.prototype.up = function (queryRunner) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, queryRunner.query('ALTER TABLE article ADD public INT NOT NULL DEFAULT 1;')];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
+exports.__esModule = true;
+var child_process_1 = require("child_process");
+var version = require('../package.json').version;
+var imageName = "image:" + version;
+(function () {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, removeOldImage()];
+                case 1:
+                    _a.sent();
+                    return [4 /*yield*/, buildImage()];
+                case 2:
+                    _a.sent();
+                    return [4 /*yield*/, saveImage()];
+                case 3:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
         });
-    };
-    article1577632261140.prototype.down = function (queryRunner) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, queryRunner.query('ALTER TABLE article DROP public;')];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
+    });
+})();
+function buildImage() {
+    return new Promise(function (resolve, reject) {
+        var buildProcess = child_process_1.spawn('docker', ['build', '-t', imageName, '.']);
+        buildProcess.stdout.pipe(process.stdout);
+        buildProcess.on('close', function (code, signal) {
+            console.log("--\u6784\u5EFA\u955C\u50CF--close--code:[" + code + "]--signal:[" + signal + "]");
+            resolve();
         });
-    };
-    return article1577632261140;
-}());
-exports.article1577632261140 = article1577632261140;
+    });
+}
+function saveImage() {
+    return new Promise(function (resolve, reject) {
+        var saveProcess = child_process_1.spawn('docker', ['save', '-o', "./image_" + version + ".tar", imageName]);
+        saveProcess.stdout.pipe(process.stdout);
+        saveProcess.stderr.pipe(process.stderr);
+        saveProcess.on('close', function (code, signal) {
+            console.log("--\u4FDD\u5B58\u955C\u50CF--close--code:[" + code + "]--signal:[" + signal + "]");
+            resolve();
+        });
+    });
+}
+function removeOldImage() {
+    return new Promise(function (resolve, reject) {
+        var removeProcess = child_process_1.spawn('docker', ['rmi', imageName]);
+        removeProcess.stdout.pipe(process.stdout);
+        removeProcess.stderr.pipe(process.stderr);
+        removeProcess.on('close', function (code, signal) {
+            console.log('已删除旧镜像');
+            console.log('code:', code);
+            console.log('signal:', signal);
+            resolve();
+        });
+    });
+}

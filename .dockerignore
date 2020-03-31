@@ -1,0 +1,10 @@
+.*
+src/
+typings/
+mysql/
+*.ts
+package-lock.json
+tsconfig.json
+LICENSE
+Dockerfile
+*.tar

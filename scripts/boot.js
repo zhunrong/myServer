@@ -35,38 +35,48 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * 涉及表: article
- * 1.修改article.title字段长度由50至255
- */
-var article1577769652483 = /** @class */ (function () {
-    function article1577769652483() {
-    }
-    article1577769652483.prototype.up = function (queryRunner) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, queryRunner.query('ALTER TABLE article MODIFY title VARCHAR(255) NOT NULL;')];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
+exports.__esModule = true;
+var child_process_1 = require("child_process");
+var path = require("path");
+(function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, runMigration()];
+            case 1:
+                _a.sent();
+                return [4 /*yield*/, runServer()];
+            case 2:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); })();
+var cwd = path.resolve(__dirname, '../');
+function runMigration() {
+    return new Promise(function (resolve, reject) {
+        var child = child_process_1.spawn('typeorm', ['migration:run'], {
+            cwd: cwd,
+            shell: true
         });
-    };
-    article1577769652483.prototype.down = function (queryRunner) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, queryRunner.query('ALTER TABLE article MODIFY title VARCHAR(50) NOT NULL;')];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
+        child.stdout.pipe(process.stdout);
+        child.stderr.pipe(process.stderr);
+        child.on('close', function (code, signal) {
+            console.log("--\u6570\u636E\u5E93\u8FC1\u79FB--close--code:[" + code + "]--signal:[" + signal + "]");
+            resolve();
         });
-    };
-    return article1577769652483;
-}());
-exports.article1577769652483 = article1577769652483;
+    });
+}
+function runServer() {
+    return new Promise(function (resolve, reject) {
+        var child = child_process_1.spawn('node', ['dist/app.js'], {
+            cwd: cwd,
+            shell: true
+        });
+        child.stdout.pipe(process.stdout);
+        child.stderr.pipe(process.stderr);
+        child.on('close', function (code, signal) {
+            console.log("--\u670D\u52A1--close--code:[" + code + "]--signal:[" + signal + "]");
+            resolve();
+        });
+    });
+}

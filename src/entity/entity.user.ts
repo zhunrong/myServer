@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateCol
 @Entity({
   name: 'user',
   engine: 'InnoDB',
-  database: 'zr_dev'
+  database: 'website'
 })
 export class User {
 

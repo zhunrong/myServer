@@ -30,3 +30,5 @@ node_modules
 private
 # 静态资源目录
 # public
+
+*.tar
