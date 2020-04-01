@@ -3,21 +3,31 @@ services:
   mysql:
     image: mysql:5.7
     container_name: mysql
-    ports: 
-      - 3306:3306
+    networks: 
+      - node-server
     volumes: 
-      - /var/lib/mysql:/var/lib/mysql
+      - C:\ProgramData\container_mysql5.7\:/var/lib/mysql
     environment: 
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: developer
       MYSQL_PASSWORD: 123456
       MYSQL_DATABASE: website
     restart: always
+    ports: 
+      - 3306:3306
   server:
-    image: image:1.0.5
+    image: image:1.0.6
     container_name: server
+    networks: 
+      - node-server
     depends_on:
       - mysql
+    environment:
+      DBHOST: mysql
+      DBPORT: 3306
+    restart: always
     ports: 
       - 80:80
-    restart: always
+networks: 
+  node-server:
+    driver: bridge
