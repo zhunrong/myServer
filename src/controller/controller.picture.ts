@@ -1,4 +1,3 @@
-import pictureModel from '../model/model.userPicture'
 import config from '../config/index'
 import * as userPictureService from '../service/service.userPicture'
 

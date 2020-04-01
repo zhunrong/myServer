@@ -1,10 +1,10 @@
 module.exports = [
   {
     "type": "mysql",
-    "host": process.env.DBHOST || 'localhost',
-    "port": process.env.DBPORT || 3306,
-    "username": "developer",
-    "password": "123456",
+    "host": process.env.MYSQL_HOST || 'localhost',
+    "port": process.env.MYSQL_PORT || 3306,
+    "username": process.env.MYSQL_USER || "developer",
+    "password": process.env.MYSQL_PASSWORD || "123456",
     "database": "website",
     "entities": ["./dist/entity/*.js"],
     "migrations": ["./dist/migration/*.js"],

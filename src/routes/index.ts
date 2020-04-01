@@ -1,7 +1,6 @@
 import expressJwt from 'express-jwt'
 import config from '../config'
 import testRouter from './router.test'
-import yebaRouter from './router.yeba'
 import authorizeRouter from './router.authorize'
 import explorerRouter from './router.explorer'
 import articleRouter from './router.article'
@@ -46,7 +45,6 @@ export default (app: any) => {
     next()
   })
   app.use(testRouter)
-  app.use(yebaRouter)
   app.use(authorizeRouter)
   app.use(explorerRouter)
   app.use(articleRouter)

@@ -1,4 +1,7 @@
 version: '3'
+networks: 
+  node-server:
+    driver: bridge
 services:
   mysql:
     image: mysql:5.7
@@ -6,7 +9,7 @@ services:
     networks: 
       - node-server
     volumes: 
-      - C:\ProgramData\container_mysql5.7\:/var/lib/mysql
+      - /var/lib/mysql:/var/lib/mysql
     environment: 
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: developer
@@ -23,11 +26,11 @@ services:
     depends_on:
       - mysql
     environment:
-      DBHOST: mysql
-      DBPORT: 3306
+      PORT: 80
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: developer
+      MYSQL_PASSWORD: 123456
     restart: always
     ports: 
       - 80:80
-networks: 
-  node-server:
-    driver: bridge

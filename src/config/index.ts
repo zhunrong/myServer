@@ -30,10 +30,6 @@ export const COS_REGION_USER: string = 'ap-guangzhou'
 export const COS_DOMAIN_USER: string = 'https://user-1253381776.cos.ap-guangzhou.myqcloud.com'
 
 export default {
-  PORT: 80,
-  DATABASE_HOST: 'localhost',
-  USER: 'zr_dev',
-  PASSWORD: 'YZ4371716',
   SESSION_DATABASE: 'session_db',
   SESSION_NAME: 'uid',
   TOKEN_SECRET: 'dangerous',

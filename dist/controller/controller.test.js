@@ -35,146 +35,35 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var test_1 = __importDefault(require("../model/test"));
-var utils_1 = require("../modules/utils");
 function get(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var query, condition, page, count, _a, results, total, error_1;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    query = req.query;
-                    condition = utils_1.copyValueFromObj(['name', 'value'], query);
-                    page = query.page ? +query.page : 1;
-                    count = query.count ? +query.count : undefined;
-                    _b.label = 1;
-                case 1:
-                    _b.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, Promise.all([
-                            test_1.default.get(condition, count, page),
-                            test_1.default.count('id')
-                        ])];
-                case 2:
-                    _a = _b.sent(), results = _a[0].results, total = _a[1].count;
-                    res.send({
-                        status: 'success',
-                        data: results,
-                        meta: {
-                            page: page,
-                            count: count,
-                            total: total
-                        }
-                    });
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_1 = _b.sent();
-                    res.send({
-                        status: 'error',
-                        error: error_1
-                    });
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
-            }
+        return __generator(this, function (_a) {
+            return [2 /*return*/];
         });
     });
 }
 exports.get = get;
 function post(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var body, results, error_2;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    body = req.body;
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, test_1.default.post(body)];
-                case 2:
-                    results = (_a.sent()).results;
-                    res.send({
-                        status: 'success',
-                        data: results
-                    });
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_2 = _a.sent();
-                    res.send({
-                        status: 'error',
-                        error: error_2
-                    });
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
-            }
+            return [2 /*return*/];
         });
     });
 }
 exports.post = post;
 function put(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var body, updateData, condition, results, error_3;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    body = req.body;
-                    updateData = utils_1.copyValueFromObj(['name', 'value'], body);
-                    condition = utils_1.copyValueFromObj(['id'], body);
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, test_1.default.put(updateData, condition)];
-                case 2:
-                    results = (_a.sent()).results;
-                    res.send({
-                        status: 'success',
-                        data: results
-                    });
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_3 = _a.sent();
-                    res.send({
-                        status: 'error',
-                        error: error_3
-                    });
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
-            }
+            return [2 /*return*/];
         });
     });
 }
 exports.put = put;
 function del(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var body, condition, results, error_4;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    body = req.body;
-                    condition = utils_1.copyValueFromObj(['id'], body);
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, test_1.default.delete(condition)];
-                case 2:
-                    results = (_a.sent()).results;
-                    res.send({
-                        status: 'success',
-                        data: results
-                    });
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_4 = _a.sent();
-                    res.send({
-                        status: 'error',
-                        error: error_4
-                    });
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
-            }
+            return [2 /*return*/];
         });
     });
 }

@@ -30,10 +30,6 @@ exports.COS_REGION_USER = 'ap-guangzhou';
 // 腾讯云对象存储访问域名(用户)
 exports.COS_DOMAIN_USER = 'https://user-1253381776.cos.ap-guangzhou.myqcloud.com';
 exports.default = {
-    PORT: 80,
-    DATABASE_HOST: 'localhost',
-    USER: 'zr_dev',
-    PASSWORD: 'YZ4371716',
     SESSION_DATABASE: 'session_db',
     SESSION_NAME: 'uid',
     TOKEN_SECRET: 'dangerous',

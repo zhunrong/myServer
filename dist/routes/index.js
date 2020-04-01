@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_jwt_1 = __importDefault(require("express-jwt"));
 var config_1 = __importDefault(require("../config"));
 var router_test_1 = __importDefault(require("./router.test"));
-var router_yeba_1 = __importDefault(require("./router.yeba"));
 var router_authorize_1 = __importDefault(require("./router.authorize"));
 var router_explorer_1 = __importDefault(require("./router.explorer"));
 var router_article_1 = __importDefault(require("./router.article"));
@@ -49,7 +48,6 @@ exports.default = (function (app) {
         next();
     });
     app.use(router_test_1.default);
-    app.use(router_yeba_1.default);
     app.use(router_authorize_1.default);
     app.use(router_explorer_1.default);
     app.use(router_article_1.default);

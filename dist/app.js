@@ -42,7 +42,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var path_1 = __importDefault(require("path"));
 var body_parser_1 = __importDefault(require("body-parser"));
-var config_1 = __importDefault(require("./config"));
 var routes_1 = __importDefault(require("./routes"));
 var database_1 = __importDefault(require("./database"));
 (function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -64,7 +63,7 @@ var database_1 = __importDefault(require("./database"));
                     extended: true
                 }));
                 routes_1.default(app);
-                app.listen(config_1.default.PORT, function () {
+                app.listen(process.env.PORT || 80, function () {
                     console.log('server is running');
                 });
                 return [3 /*break*/, 3];

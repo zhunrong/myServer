@@ -1,7 +1,6 @@
 import express from 'express'
 import path from 'path'
 import bodyParser from 'body-parser'
-import config from './config'
 import router from './routes'
 import initMysql from './database'
 
@@ -24,7 +23,7 @@ import initMysql from './database'
 
     router(app)
 
-    app.listen(config.PORT, () => {
+    app.listen(process.env.PORT || 80, () => {
       console.log('server is running')
     })
   } catch (error) {
