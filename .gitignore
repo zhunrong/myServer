@@ -32,4 +32,5 @@ private
 # public
 
 *.tar
+.env
 package-lock.json
