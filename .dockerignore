@@ -1,4 +1,6 @@
-.*
+.vscode
+.gitignore
+.dockerignore
 src/
 typings/
 mysql/

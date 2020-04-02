@@ -1,4 +1,9 @@
 import { pathFilter } from 'express-unless'
+import path from 'path'
+import dotenv from 'dotenv'
+dotenv.config({
+  path: path.resolve(__dirname, '../../.env')
+})
 // 不需要权限验证的请求
 export const DO_NOT_CHECK_REQUEST_PATH: pathFilter[] = [
   '/login',
@@ -13,26 +18,26 @@ export const DO_NOT_CHECK_REQUEST_PATH: pathFilter[] = [
   }
 ]
 // 腾讯云对象存储SecretId
-export const COS_SECRET_ID: string = 'AKIDb7ScfYqoDTaN1TP7EAtAPSO9k9NTwFtU'
+export const COS_SECRET_ID: string = process.env.COS_SECRET_ID || ''
 // 腾讯云对象存储SecretKey
-export const COS_SECRET_KEY: string = 'f9t7B3jHyibVGuQlz2vfHk285sTs5FDz'
+export const COS_SECRET_KEY: string = process.env.COS_SECRET_KEY || ''
 // 腾讯云对象存储bucket
-export const COS_BUCKET: string = 'zr-1253381776'
+export const COS_BUCKET: string = process.env.COS_BUCKET || ''
 // 腾讯云对象存储region
-export const COS_REGION: string = 'ap-guangzhou'
+export const COS_REGION: string = process.env.COS_REGION || ''
 // 腾讯云对象存储访问域名
-export const COS_DOMAIN: string = 'https://zr-1253381776.cos.ap-guangzhou.myqcloud.com'
+export const COS_DOMAIN: string = process.env.COS_DOMAIN || ''
 // 腾讯云对象存储bucket(用户)
-export const COS_BUCKET_USER: string = 'user-1253381776'
+export const COS_BUCKET_USER: string = process.env.COS_BUCKET_USER || ''
 // 腾讯云对象存储region(用户)
-export const COS_REGION_USER: string = 'ap-guangzhou'
+export const COS_REGION_USER: string = process.env.COS_REGION_USER || ''
 // 腾讯云对象存储访问域名(用户)
-export const COS_DOMAIN_USER: string = 'https://user-1253381776.cos.ap-guangzhou.myqcloud.com'
+export const COS_DOMAIN_USER: string = process.env.COS_DOMAIN_USER || ''
 
 export default {
-  SESSION_DATABASE: 'session_db',
-  SESSION_NAME: 'uid',
-  TOKEN_SECRET: 'dangerous',
+  SESSION_DATABASE: process.env.SESSION_DATABASE || '',
+  SESSION_NAME: process.env.SESSION_NAME || '',
+  TOKEN_SECRET: process.env.TOKEN_SECRET || '',
   TOKEN_MAX_AGE: 60 * 60 * 24, // second
   DO_NOT_CHECK_REQUEST_PATH,
   COS_SECRET_ID,
