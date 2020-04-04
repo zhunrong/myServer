@@ -33,4 +33,5 @@ private
 
 *.tar
 .env
+.vscode
 package-lock.json
