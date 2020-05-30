@@ -71,7 +71,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUploadToken = void 0;
 var qcloud_cos_sts_1 = __importDefault(require("qcloud-cos-sts"));
-var index_1 = __importDefault(require("../config/index"));
+var config = __importStar(require("../config/index"));
 var userService = __importStar(require("../service/service.user"));
 /**
  * 获取腾讯云对象存储上传令牌
@@ -87,13 +87,13 @@ function getUploadToken(req, res) {
                     _b.trys.push([0, 3, , 4]);
                     uid = req.auth.uid;
                     type = req.query.type;
-                    bucket_1 = index_1.default.COS_BUCKET;
-                    region_1 = index_1.default.COS_REGION;
-                    domain_1 = index_1.default.COS_DOMAIN;
+                    bucket_1 = config.COS_BUCKET;
+                    region_1 = config.COS_REGION;
+                    domain_1 = config.COS_DOMAIN;
                     if (!(type === 'user')) return [3 /*break*/, 2];
-                    bucket_1 = index_1.default.COS_BUCKET_USER;
-                    region_1 = index_1.default.COS_REGION_USER;
-                    domain_1 = index_1.default.COS_DOMAIN_USER;
+                    bucket_1 = config.COS_BUCKET_USER;
+                    region_1 = config.COS_REGION_USER;
+                    domain_1 = config.COS_DOMAIN_USER;
                     return [4 /*yield*/, userService.getUserById(uid)];
                 case 1:
                     user = _b.sent();
@@ -104,8 +104,8 @@ function getUploadToken(req, res) {
                     _b.label = 2;
                 case 2:
                     qcloud_cos_sts_1.default.getCredential({
-                        secretId: index_1.default.COS_SECRET_ID,
-                        secretKey: index_1.default.COS_SECRET_KEY,
+                        secretId: config.COS_SECRET_ID,
+                        secretKey: config.COS_SECRET_KEY,
                         policy: qcloud_cos_sts_1.default.getPolicy([
                             {
                                 action: 'name/cos:PutObject',

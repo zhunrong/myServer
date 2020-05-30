@@ -61,8 +61,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.mailVerifyCode = exports.register = exports.login = void 0;
 var userService = __importStar(require("../service/service.user"));
 var mailVerifyCodeService = __importStar(require("../service/service.mailVerifyCode"));
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-var config_1 = __importDefault(require("../config"));
 var mailer_1 = __importDefault(require("../modules/mailer"));
 var utils_1 = require("../modules/utils");
 /**
@@ -72,58 +70,49 @@ var utils_1 = require("../modules/utils");
  * email 邮箱
  * password 密码
  */
-function login(req, res) {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, email, password, user, maxAge, token, _b, message;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    _a = req.body, email = _a.email, password = _a.password;
-                    _c.label = 1;
-                case 1:
-                    _c.trys.push([1, 3, , 4]);
-                    if (!email) {
-                        throw new Error('邮箱不能为空');
-                    }
-                    if (!password) {
-                        throw new Error('密码不能为空');
-                    }
-                    return [4 /*yield*/, userService.getUserByEmail(email)];
-                case 2:
-                    user = _c.sent();
-                    if (!user) {
-                        throw new Error('用户不存在');
-                    }
-                    if (user.password !== password) {
-                        throw new Error('密码不正确');
-                    }
-                    maxAge = config_1.default.TOKEN_MAX_AGE;
-                    token = jsonwebtoken_1.default.sign({
-                        uid: user.id,
-                        exp: Math.floor(Date.now() / 1000) + maxAge
-                    }, config_1.default.TOKEN_SECRET);
-                    res.send({
-                        status: 'success',
-                        authorization: {
-                            token: token,
-                            maxAge: maxAge
-                        }
-                    });
-                    return [3 /*break*/, 4];
-                case 3:
-                    _b = _c.sent();
-                    message = _b.message;
-                    res.send({
-                        message: message,
-                        status: 'error'
-                    });
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
-            }
-        });
+exports.login = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, email, password, user, _b, message;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                _a = req.body, email = _a.email, password = _a.password;
+                _c.label = 1;
+            case 1:
+                _c.trys.push([1, 3, , 4]);
+                if (!email) {
+                    throw new Error('邮箱不能为空');
+                }
+                if (!password) {
+                    throw new Error('密码不能为空');
+                }
+                return [4 /*yield*/, userService.getUserByEmail(email)];
+            case 2:
+                user = _c.sent();
+                if (!user) {
+                    throw new Error('用户不存在');
+                }
+                if (user.password !== password) {
+                    throw new Error('密码不正确');
+                }
+                if (req.session) {
+                    req.session.uid = user.id;
+                }
+                res.send({
+                    status: 'success',
+                });
+                return [3 /*break*/, 4];
+            case 3:
+                _b = _c.sent();
+                message = _b.message;
+                res.send({
+                    message: message,
+                    status: 'error'
+                });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
     });
-}
-exports.login = login;
+}); };
 /**
  * 注册
  * @param req
@@ -132,64 +121,61 @@ exports.login = login;
  * password 密码
  * verifyCode 验证码
  */
-function register(req, res) {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, email, verifyCode, password, codes, user, _b, message;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    _a = req.body, email = _a.email, verifyCode = _a.verifyCode, password = _a.password;
-                    _c.label = 1;
-                case 1:
-                    _c.trys.push([1, 5, , 6]);
-                    if (!email) {
-                        throw new Error('邮箱不能为空');
-                    }
-                    if (!verifyCode) {
-                        throw new Error('验证码不能为空');
-                    }
-                    if (!password) {
-                        throw new Error('密码不能为空');
-                    }
-                    return [4 /*yield*/, mailVerifyCodeService.getCodes({
-                            email: email,
-                            code: verifyCode
-                        })];
-                case 2:
-                    codes = _c.sent();
-                    if (!codes.length) {
-                        throw new Error('邮箱验证失败');
-                    }
-                    return [4 /*yield*/, userService.getUserByEmail(email)];
-                case 3:
-                    user = _c.sent();
-                    if (user) {
-                        throw new Error('邮箱已被注册');
-                    }
-                    // 添加新用户
-                    return [4 /*yield*/, userService.addUser({
-                            email: email,
-                            password: password
-                        })];
-                case 4:
-                    // 添加新用户
-                    _c.sent();
-                    login(req, res);
-                    return [3 /*break*/, 6];
-                case 5:
-                    _b = _c.sent();
-                    message = _b.message;
-                    res.send({
-                        message: message,
-                        status: 'error'
-                    });
-                    return [3 /*break*/, 6];
-                case 6: return [2 /*return*/];
-            }
-        });
+exports.register = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, email, verifyCode, password, codes, user, _b, message;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                _a = req.body, email = _a.email, verifyCode = _a.verifyCode, password = _a.password;
+                _c.label = 1;
+            case 1:
+                _c.trys.push([1, 5, , 6]);
+                if (!email) {
+                    throw new Error('邮箱不能为空');
+                }
+                if (!verifyCode) {
+                    throw new Error('验证码不能为空');
+                }
+                if (!password) {
+                    throw new Error('密码不能为空');
+                }
+                return [4 /*yield*/, mailVerifyCodeService.getCodes({
+                        email: email,
+                        code: verifyCode
+                    })];
+            case 2:
+                codes = _c.sent();
+                if (!codes.length) {
+                    throw new Error('邮箱验证失败');
+                }
+                return [4 /*yield*/, userService.getUserByEmail(email)];
+            case 3:
+                user = _c.sent();
+                if (user) {
+                    throw new Error('邮箱已被注册');
+                }
+                // 添加新用户
+                return [4 /*yield*/, userService.addUser({
+                        email: email,
+                        password: password
+                    })];
+            case 4:
+                // 添加新用户
+                _c.sent();
+                exports.login(req, res, next);
+                return [3 /*break*/, 6];
+            case 5:
+                _b = _c.sent();
+                message = _b.message;
+                res.send({
+                    message: message,
+                    status: 'error'
+                });
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
+        }
     });
-}
-exports.register = register;
+}); };
 /**
  * 验证码
  * @param req

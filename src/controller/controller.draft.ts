@@ -3,12 +3,13 @@ import { RequestHandler } from 'express'
 
 /**
  * 创建草稿
- * @param req 
- * @param res 
+ * @param req
+ * @param res
  */
 export const createDraft: RequestHandler = async (req, res) => {
   try {
-    const uid = req.auth.uid
+    const uid = req.session?.uid
+    if (!uid) throw new Error('未登录')
     const { html = '', raw = '', title = '' } = req.body
     const draft = await draftService.createDraft({
       title,
@@ -30,12 +31,13 @@ export const createDraft: RequestHandler = async (req, res) => {
 
 /**
  * 删除草稿
- * @param req 
- * @param res 
+ * @param req
+ * @param res
  */
 export const deleteDraft: RequestHandler = async (req, res) => {
   try {
-    const uid = req.auth.uid
+    const uid = req.session?.uid
+    if (!uid) throw new Error('未登录')
     const { id } = req.body
     if (!id) throw new Error('id不能为空')
     const draft = await draftService.getDraftById(id, uid)
@@ -55,12 +57,13 @@ export const deleteDraft: RequestHandler = async (req, res) => {
 
 /**
  * 更新草稿
- * @param req 
- * @param res 
+ * @param req
+ * @param res
  */
 export const updateDraft: RequestHandler = async (req, res) => {
   try {
-    const { uid } = req.auth
+    const uid = req.session?.uid
+    if (!uid) throw new Error('未登录')
     const { id = '', html, raw, title } = req.body
     const result = await draftService.updateDraft({
       uid, id, title, html, raw
@@ -80,7 +83,8 @@ export const updateDraft: RequestHandler = async (req, res) => {
 
 export const getDraft: RequestHandler = async (req, res) => {
   try {
-    const { uid } = req.auth
+    const uid = req.session?.uid
+    if (!uid) throw new Error('未登录')
     const { id } = req.params
     const draft = await draftService.getDraftById(id, uid)
     if (!draft) throw new Error('草稿不存在')

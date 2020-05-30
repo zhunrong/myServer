@@ -1,10 +1,30 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_jwt_1 = __importDefault(require("express-jwt"));
-var config_1 = __importDefault(require("../config"));
+var cookie_session_1 = __importDefault(require("cookie-session"));
+var express_unless_1 = __importDefault(require("express-unless"));
+var config = __importStar(require("../config"));
 var router_test_1 = __importDefault(require("./router.test"));
 var router_authorize_1 = __importDefault(require("./router.authorize"));
 var router_explorer_1 = __importDefault(require("./router.explorer"));
@@ -27,27 +47,30 @@ var corsHandler = function (req, res, next) {
     }
     next();
 };
-var tokenChecker = express_jwt_1.default({
-    secret: config_1.default.TOKEN_SECRET,
-    requestProperty: 'auth'
-}).unless({
-    path: config_1.default.DO_NOT_CHECK_REQUEST_PATH
+var cookieHandler = cookie_session_1.default({
+    name: 'uid',
+    secret: config.COOKIE_SECRET,
+    maxAge: config.COOKIE_MAX_AGE
+});
+var cookieChecker = function (req, res, next) {
+    var _a;
+    var uid = (_a = req.session) === null || _a === void 0 ? void 0 : _a.uid;
+    if (uid) {
+        return next();
+    }
+    res.status(401).send({
+        status: 'error',
+        message: '未登录'
+    });
+};
+cookieChecker.unless = express_unless_1.default;
+var cookieCheckerUnless = cookieChecker.unless({
+    path: config.DO_NOT_CHECK_REQUEST_PATH
 });
 exports.default = (function (app) {
     app.use(corsHandler);
-    app.use(tokenChecker, function (error, req, res, next) {
-        if (error) {
-            // 获取文章详情token可有可无
-            if (/^\/article\/\S+$/.test(req.path)) {
-                return next();
-            }
-            return res.status(401).send({
-                status: 'error',
-                message: error.message
-            });
-        }
-        next();
-    });
+    app.use(cookieHandler);
+    app.use(cookieCheckerUnless);
     app.use(router_test_1.default);
     app.use(router_authorize_1.default);
     app.use(router_explorer_1.default);

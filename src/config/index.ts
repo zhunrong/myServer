@@ -4,7 +4,10 @@ import dotenv from 'dotenv'
 dotenv.config({
   path: path.resolve(__dirname, '../../.env')
 })
-// 不需要权限验证的请求
+
+/**
+ * 不需要权限验证的请求
+ */
 export const DO_NOT_CHECK_REQUEST_PATH: pathFilter[] = [
   '/login',
   '/register',
@@ -17,35 +20,44 @@ export const DO_NOT_CHECK_REQUEST_PATH: pathFilter[] = [
     methods: ['POST', 'OPTIONS']
   }
 ]
-// 腾讯云对象存储SecretId
-export const COS_SECRET_ID: string = process.env.COS_SECRET_ID || ''
-// 腾讯云对象存储SecretKey
-export const COS_SECRET_KEY: string = process.env.COS_SECRET_KEY || ''
-// 腾讯云对象存储bucket
-export const COS_BUCKET: string = process.env.COS_BUCKET || ''
-// 腾讯云对象存储region
-export const COS_REGION: string = process.env.COS_REGION || ''
-// 腾讯云对象存储访问域名
-export const COS_DOMAIN: string = process.env.COS_DOMAIN || ''
-// 腾讯云对象存储bucket(用户)
-export const COS_BUCKET_USER: string = process.env.COS_BUCKET_USER || ''
-// 腾讯云对象存储region(用户)
-export const COS_REGION_USER: string = process.env.COS_REGION_USER || ''
-// 腾讯云对象存储访问域名(用户)
-export const COS_DOMAIN_USER: string = process.env.COS_DOMAIN_USER || ''
 
-export default {
-  SESSION_DATABASE: process.env.SESSION_DATABASE || '',
-  SESSION_NAME: process.env.SESSION_NAME || '',
-  TOKEN_SECRET: process.env.TOKEN_SECRET || '',
-  TOKEN_MAX_AGE: 60 * 60 * 24, // second
-  DO_NOT_CHECK_REQUEST_PATH,
-  COS_SECRET_ID,
-  COS_SECRET_KEY,
-  COS_BUCKET,
-  COS_REGION,
-  COS_DOMAIN,
-  COS_BUCKET_USER,
-  COS_REGION_USER,
-  COS_DOMAIN_USER
-}
+/**
+ * 腾讯云对象存储SecretId
+ */
+export const COS_SECRET_ID = process.env.COS_SECRET_ID || ''
+/**
+ * 腾讯云对象存储SecretKey
+ */
+export const COS_SECRET_KEY = process.env.COS_SECRET_KEY || ''
+/**
+ * 腾讯云对象存储bucket
+ */
+export const COS_BUCKET = process.env.COS_BUCKET || ''
+/**
+ * 腾讯云对象存储region
+ */
+export const COS_REGION = process.env.COS_REGION || ''
+/**
+ * 腾讯云对象存储访问域名
+ */
+export const COS_DOMAIN = process.env.COS_DOMAIN || ''
+/**
+ * 腾讯云对象存储bucket(用户)
+ */
+export const COS_BUCKET_USER = process.env.COS_BUCKET_USER || ''
+/**
+ * 腾讯云对象存储region(用户)
+ */
+export const COS_REGION_USER = process.env.COS_REGION_USER || ''
+/**
+ * 腾讯云对象存储访问域名(用户)
+ */
+export const COS_DOMAIN_USER = process.env.COS_DOMAIN_USER || ''
+/**
+ * cookie secret
+ */
+export const COOKIE_SECRET = process.env.COOKIE_SECRET || ''
+/**
+ * cookie有效期 12h
+ */
+export const COOKIE_MAX_AGE = 12 * 60 * 60 * 1000

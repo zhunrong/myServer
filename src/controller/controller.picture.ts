@@ -1,4 +1,4 @@
-import config from '../config/index'
+import * as config from '../config/index'
 import * as userPictureService from '../service/service.userPicture'
 
 export async function save(req: any, res: any) {

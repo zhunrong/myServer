@@ -64,11 +64,14 @@ var draftService = __importStar(require("../service/service.draft"));
  */
 exports.createDraft = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var uid, _a, _b, html, _c, raw, _d, title, draft, _e, message;
-    return __generator(this, function (_f) {
-        switch (_f.label) {
+    var _f;
+    return __generator(this, function (_g) {
+        switch (_g.label) {
             case 0:
-                _f.trys.push([0, 2, , 3]);
-                uid = req.auth.uid;
+                _g.trys.push([0, 2, , 3]);
+                uid = (_f = req.session) === null || _f === void 0 ? void 0 : _f.uid;
+                if (!uid)
+                    throw new Error('未登录');
                 _a = req.body, _b = _a.html, html = _b === void 0 ? '' : _b, _c = _a.raw, raw = _c === void 0 ? '' : _c, _d = _a.title, title = _d === void 0 ? '' : _d;
                 return [4 /*yield*/, draftService.createDraft({
                         title: title,
@@ -77,14 +80,14 @@ exports.createDraft = function (req, res) { return __awaiter(void 0, void 0, voi
                         raw: raw
                     })];
             case 1:
-                draft = _f.sent();
+                draft = _g.sent();
                 res.send({
                     status: 'success',
                     data: draft,
                 });
                 return [3 /*break*/, 3];
             case 2:
-                _e = _f.sent();
+                _e = _g.sent();
                 message = _e.message;
                 res.send({
                     status: 'error',
@@ -102,29 +105,32 @@ exports.createDraft = function (req, res) { return __awaiter(void 0, void 0, voi
  */
 exports.deleteDraft = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var uid, id, draft, _a, message;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
-                _b.trys.push([0, 3, , 4]);
-                uid = req.auth.uid;
+                _c.trys.push([0, 3, , 4]);
+                uid = (_b = req.session) === null || _b === void 0 ? void 0 : _b.uid;
+                if (!uid)
+                    throw new Error('未登录');
                 id = req.body.id;
                 if (!id)
                     throw new Error('id不能为空');
                 return [4 /*yield*/, draftService.getDraftById(id, uid)];
             case 1:
-                draft = _b.sent();
+                draft = _c.sent();
                 if (!draft)
                     throw new Error('草稿不存在');
                 return [4 /*yield*/, draftService.deleteDraftById(id)];
             case 2:
-                _b.sent();
+                _c.sent();
                 res.send({
                     status: 'success',
                     data: draft
                 });
                 return [3 /*break*/, 4];
             case 3:
-                _a = _b.sent();
+                _a = _c.sent();
                 message = _a.message;
                 res.send({
                     status: 'error',
@@ -142,17 +148,20 @@ exports.deleteDraft = function (req, res) { return __awaiter(void 0, void 0, voi
  */
 exports.updateDraft = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var uid, _a, _b, id, html, raw, title, result, _c, message;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
+    var _d;
+    return __generator(this, function (_e) {
+        switch (_e.label) {
             case 0:
-                _d.trys.push([0, 2, , 3]);
-                uid = req.auth.uid;
+                _e.trys.push([0, 2, , 3]);
+                uid = (_d = req.session) === null || _d === void 0 ? void 0 : _d.uid;
+                if (!uid)
+                    throw new Error('未登录');
                 _a = req.body, _b = _a.id, id = _b === void 0 ? '' : _b, html = _a.html, raw = _a.raw, title = _a.title;
                 return [4 /*yield*/, draftService.updateDraft({
                         uid: uid, id: id, title: title, html: html, raw: raw
                     })];
             case 1:
-                result = _d.sent();
+                result = _e.sent();
                 if (!result.affected)
                     throw new Error(result.raw.message);
                 res.send({
@@ -160,7 +169,7 @@ exports.updateDraft = function (req, res) { return __awaiter(void 0, void 0, voi
                 });
                 return [3 /*break*/, 3];
             case 2:
-                _c = _d.sent();
+                _c = _e.sent();
                 message = _c.message;
                 res.send({
                     status: 'error',
@@ -173,15 +182,18 @@ exports.updateDraft = function (req, res) { return __awaiter(void 0, void 0, voi
 }); };
 exports.getDraft = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var uid, id, draft, _a, message;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
-                _b.trys.push([0, 2, , 3]);
-                uid = req.auth.uid;
+                _c.trys.push([0, 2, , 3]);
+                uid = (_b = req.session) === null || _b === void 0 ? void 0 : _b.uid;
+                if (!uid)
+                    throw new Error('未登录');
                 id = req.params.id;
                 return [4 /*yield*/, draftService.getDraftById(id, uid)];
             case 1:
-                draft = _b.sent();
+                draft = _c.sent();
                 if (!draft)
                     throw new Error('草稿不存在');
                 res.send({
@@ -190,7 +202,7 @@ exports.getDraft = function (req, res) { return __awaiter(void 0, void 0, void 0
                 });
                 return [3 /*break*/, 3];
             case 2:
-                _a = _b.sent();
+                _a = _c.sent();
                 message = _a.message;
                 res.send({
                     status: 'error',

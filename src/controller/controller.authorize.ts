@@ -1,9 +1,8 @@
 import * as userService from '../service/service.user'
 import * as mailVerifyCodeService from '../service/service.mailVerifyCode'
-import jwt from 'jsonwebtoken'
-import config from '../config'
 import sendMail from '../modules/mailer'
 import { randomCharacter } from '../modules/utils'
+import { RequestHandler } from 'express'
 
 /**
  * 登录
@@ -12,7 +11,7 @@ import { randomCharacter } from '../modules/utils'
  * email 邮箱
  * password 密码
  */
-export async function login(req: any, res: any) {
+export const login: RequestHandler = async (req, res) => {
   const { email, password } = req.body
   try {
     if (!email) {
@@ -28,21 +27,11 @@ export async function login(req: any, res: any) {
     if (user.password !== password) {
       throw new Error('密码不正确')
     }
-    // 生成token
-    const maxAge: number = config.TOKEN_MAX_AGE
-    const token: string = jwt.sign(
-      {
-        uid: user.id,
-        exp: Math.floor(Date.now() / 1000) + maxAge
-      },
-      config.TOKEN_SECRET
-    )
+    if (req.session) {
+      req.session.uid = user.id
+    }
     res.send({
       status: 'success',
-      authorization: {
-        token,
-        maxAge
-      }
     })
   } catch ({ message }) {
     res.send({
@@ -60,7 +49,7 @@ export async function login(req: any, res: any) {
  * password 密码
  * verifyCode 验证码
  */
-export async function register(req: any, res: any) {
+export const register: RequestHandler = async (req, res, next) => {
   const { email, verifyCode, password } = req.body
   try {
     if (!email) {
@@ -88,7 +77,7 @@ export async function register(req: any, res: any) {
       email,
       password
     })
-    login(req, res)
+    login(req, res, next)
   } catch ({ message }) {
     res.send({
       message,

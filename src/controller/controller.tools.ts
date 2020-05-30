@@ -1,5 +1,5 @@
 import STS from 'qcloud-cos-sts'
-import config from '../config/index'
+import * as config from '../config/index'
 import * as userService from '../service/service.user'
 
 /**
