@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.COS_DOMAIN_USER = exports.COS_REGION_USER = exports.COS_BUCKET_USER = exports.COS_DOMAIN = exports.COS_REGION = exports.COS_BUCKET = exports.COS_SECRET_KEY = exports.COS_SECRET_ID = exports.DO_NOT_CHECK_REQUEST_PATH = void 0;
 var path_1 = __importDefault(require("path"));
 var dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config({

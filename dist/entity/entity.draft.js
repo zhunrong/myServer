@@ -9,89 +9,72 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
 var typeorm_1 = require("typeorm");
-var User = /** @class */ (function () {
-    function User() {
-        /**
-         * 用户角色
-         * 0 -> 管理员
-         * 1 -> 普通用户
-         */
-        this.role = 1;
+/**
+ * 草稿箱
+ */
+var Draft = /** @class */ (function () {
+    function Draft() {
     }
     __decorate([
         typeorm_1.PrimaryGeneratedColumn('uuid', {
-            name: 'id'
+            name: 'id',
         }),
         __metadata("design:type", String)
-    ], User.prototype, "id", void 0);
+    ], Draft.prototype, "id", void 0);
     __decorate([
         typeorm_1.Column({
-            name: 'password',
-            nullable: false,
+            name: 'uid',
             type: 'varchar',
-            length: 40
+            nullable: false
         }),
         __metadata("design:type", String)
-    ], User.prototype, "password", void 0);
+    ], Draft.prototype, "uid", void 0);
     __decorate([
         typeorm_1.Column({
-            name: 'nickname',
+            name: 'title',
             type: 'varchar',
-            nullable: true,
-            length: 20
+            length: 255
         }),
         __metadata("design:type", String)
-    ], User.prototype, "nickname", void 0);
+    ], Draft.prototype, "title", void 0);
     __decorate([
         typeorm_1.Column({
-            name: 'avatar',
-            type: 'varchar',
-            nullable: true,
-            length: 100
+            name: 'html',
+            type: 'text'
         }),
         __metadata("design:type", String)
-    ], User.prototype, "avatar", void 0);
+    ], Draft.prototype, "html", void 0);
     __decorate([
         typeorm_1.Column({
-            name: 'email',
-            type: 'varchar',
-            nullable: false,
-            length: 20
+            name: 'raw',
+            type: 'text'
         }),
         __metadata("design:type", String)
-    ], User.prototype, "email", void 0);
-    __decorate([
-        typeorm_1.Column({
-            name: 'role',
-            type: 'int',
-            comment: '用户角色',
-            nullable: false,
-            default: 1
-        }),
-        __metadata("design:type", Number)
-    ], User.prototype, "role", void 0);
+    ], Draft.prototype, "raw", void 0);
     __decorate([
         typeorm_1.CreateDateColumn({
             name: 'create_at'
         }),
-        __metadata("design:type", Date)
-    ], User.prototype, "createAt", void 0);
+        __metadata("design:type", Date
+        /**
+         * 更新时间
+         */
+        )
+    ], Draft.prototype, "createAt", void 0);
     __decorate([
         typeorm_1.UpdateDateColumn({
             name: 'update_at'
         }),
         __metadata("design:type", Date)
-    ], User.prototype, "updateAt", void 0);
-    User = __decorate([
+    ], Draft.prototype, "updateAt", void 0);
+    Draft = __decorate([
         typeorm_1.Entity({
-            name: 'user',
-            engine: 'InnoDB',
-            database: 'website'
+            name: 'draft',
+            database: 'website',
+            engine: 'InnoDB'
         })
-    ], User);
-    return User;
+    ], Draft);
+    return Draft;
 }());
-exports.User = User;
-exports.default = User;
+exports.default = Draft;

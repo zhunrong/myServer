@@ -13,6 +13,7 @@ var router_user_1 = __importDefault(require("./router.user"));
 var router_mail_1 = __importDefault(require("./router.mail"));
 var router_tools_1 = __importDefault(require("./router.tools"));
 var router_picture_1 = __importDefault(require("./router.picture"));
+var router_draft_1 = __importDefault(require("./router.draft"));
 // CORS
 var corsHandler = function (req, res, next) {
     var origin = req.headers.origin;
@@ -55,4 +56,5 @@ exports.default = (function (app) {
     app.use(router_mail_1.default);
     app.use(router_tools_1.default);
     app.use(router_picture_1.default);
+    app.use(router_draft_1.default);
 });
