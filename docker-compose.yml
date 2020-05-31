@@ -33,4 +33,4 @@ services:
       MYSQL_PASSWORD: 123456
     restart: always
     ports:
-      - 80:80
+      - 8888:80

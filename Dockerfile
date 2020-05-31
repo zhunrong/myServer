@@ -4,4 +4,4 @@ COPY . /home/node/
 
 WORKDIR /home/node/
 
-CMD ["npm","run","server"]
+CMD ["npm","run","start"]

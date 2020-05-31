@@ -35,3 +35,4 @@ private
 .env
 .vscode
 package-lock.json
+dist

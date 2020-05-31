@@ -21,7 +21,8 @@ import initMysql from './database';
 
   router(app);
 
-  app.listen(process.env.PORT || 80, () => {
-    console.log('server is running');
+  const port = process.env.PORT || 80;
+  app.listen(port, () => {
+    console.log(`Server is running at: http://localhost:${port}`);
   });
 })();
