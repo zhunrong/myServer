@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteDraftById = exports.getDraftById = exports.updateDraft = exports.createDraft = void 0;
+exports.deleteDraftById = exports.getDraftsByUid = exports.getDraftById = exports.updateDraft = exports.createDraft = void 0;
 var entity_draft_1 = __importDefault(require("../entity/entity.draft"));
 var typeorm_1 = require("typeorm");
 /**
@@ -48,6 +48,17 @@ function getDraftById(id, uid) {
     return repository.findOne({ id: id, uid: uid });
 }
 exports.getDraftById = getDraftById;
+/**
+ * 获取用户的草稿列表
+ * @param uid
+ */
+function getDraftsByUid(uid) {
+    var repository = typeorm_1.getRepository(entity_draft_1.default);
+    return repository.find({
+        uid: uid
+    });
+}
+exports.getDraftsByUid = getDraftsByUid;
 /**
  * 根据id删除草稿
  * @param id

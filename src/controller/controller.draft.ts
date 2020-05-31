@@ -81,6 +81,11 @@ export const updateDraft: RequestHandler = async (req, res) => {
   }
 }
 
+/**
+ * 获取一篇草稿
+ * @param req
+ * @param res
+ */
 export const getDraft: RequestHandler = async (req, res) => {
   try {
     const uid = req.session?.uid
@@ -91,6 +96,27 @@ export const getDraft: RequestHandler = async (req, res) => {
     res.send({
       status: 'success',
       data: draft
+    })
+  } catch ({ message }) {
+    res.send({
+      status: 'error',
+      message
+    })
+  }
+}
+
+/**
+ * 获取草稿列表
+ * @param req
+ * @param res
+ */
+export const getDraftList: RequestHandler = async (req, res) => {
+  try {
+    const { uid } = req.session!
+    const drafts = await draftService.getDraftsByUid(uid)
+    res.send({
+      status: 'success',
+      data: drafts
     })
   } catch ({ message }) {
     res.send({

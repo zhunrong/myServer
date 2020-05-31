@@ -5,6 +5,7 @@ var controller_draft_1 = require("../controller/controller.draft");
 var router = express_1.Router();
 router.post('/draft/create', controller_draft_1.createDraft);
 router.post('/draft/delete', controller_draft_1.deleteDraft);
+router.get('/draft/list', controller_draft_1.getDraftList);
 router.get('/draft/:id', controller_draft_1.getDraft);
 router.post('/draft/update', controller_draft_1.updateDraft);
 exports.default = router;

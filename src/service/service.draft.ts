@@ -9,7 +9,7 @@ interface CreateDraftParams {
 }
 /**
  * 创建一篇草稿
- * @param params 
+ * @param params
  */
 export function createDraft(params: CreateDraftParams) {
   const repository = getRepository(Draft)
@@ -27,7 +27,7 @@ interface UpdateDraftParams extends CreateDraftParams {
 }
 /**
  * 更新草稿
- * @param params 
+ * @param params
  */
 export function updateDraft(params: UpdateDraftParams) {
   const { uid, id, html, title, raw } = params
@@ -44,7 +44,7 @@ export function updateDraft(params: UpdateDraftParams) {
 
 /**
  * 根据id获取草稿
- * @param id 
+ * @param id
  * @param uid
  */
 export function getDraftById(id: string, uid?: string) {
@@ -53,8 +53,19 @@ export function getDraftById(id: string, uid?: string) {
 }
 
 /**
+ * 获取用户的草稿列表
+ * @param uid
+ */
+export function getDraftsByUid(uid: string) {
+  const repository = getRepository(Draft)
+  return repository.find({
+    uid
+  })
+}
+
+/**
  * 根据id删除草稿
- * @param id 
+ * @param id
  */
 export function deleteDraftById(id: string) {
   const repository = getRepository(Draft)

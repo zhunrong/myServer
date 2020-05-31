@@ -55,7 +55,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDraft = exports.updateDraft = exports.deleteDraft = exports.createDraft = void 0;
+exports.getDraftList = exports.getDraft = exports.updateDraft = exports.deleteDraft = exports.createDraft = void 0;
 var draftService = __importStar(require("../service/service.draft"));
 /**
  * 创建草稿
@@ -180,6 +180,11 @@ exports.updateDraft = function (req, res) { return __awaiter(void 0, void 0, voi
         }
     });
 }); };
+/**
+ * 获取一篇草稿
+ * @param req
+ * @param res
+ */
 exports.getDraft = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var uid, id, draft, _a, message;
     var _b;
@@ -203,6 +208,38 @@ exports.getDraft = function (req, res) { return __awaiter(void 0, void 0, void 0
                 return [3 /*break*/, 3];
             case 2:
                 _a = _c.sent();
+                message = _a.message;
+                res.send({
+                    status: 'error',
+                    message: message
+                });
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+/**
+ * 获取草稿列表
+ * @param req
+ * @param res
+ */
+exports.getDraftList = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var uid, drafts, _a, message;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                uid = req.session.uid;
+                return [4 /*yield*/, draftService.getDraftsByUid(uid)];
+            case 1:
+                drafts = _b.sent();
+                res.send({
+                    status: 'success',
+                    data: drafts
+                });
+                return [3 /*break*/, 3];
+            case 2:
+                _a = _b.sent();
                 message = _a.message;
                 res.send({
                     status: 'error',
