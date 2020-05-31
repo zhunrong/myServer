@@ -42,6 +42,29 @@ export const login: RequestHandler = async (req, res) => {
 }
 
 /**
+ * 注销登录
+ * @param req
+ * @param res
+ */
+export const logout: RequestHandler = async (req, res) => {
+  try {
+    if(req.session) {
+      req.session.uid = ''
+      req.sessionOptions.maxAge = -1
+    }
+    res.send({
+      status: 'success',
+      message: '注销成功'
+    })
+  } catch ({ message }) {
+    res.send({
+      status: 'error',
+      message
+    })
+  }
+}
+
+/**
  * 注册
  * @param req
  * @param res

@@ -58,7 +58,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mailVerifyCode = exports.register = exports.login = void 0;
+exports.mailVerifyCode = exports.register = exports.logout = exports.login = void 0;
 var userService = __importStar(require("../service/service.user"));
 var mailVerifyCodeService = __importStar(require("../service/service.mailVerifyCode"));
 var mailer_1 = __importDefault(require("../modules/mailer"));
@@ -111,6 +111,34 @@ exports.login = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
+    });
+}); };
+/**
+ * 注销登录
+ * @param req
+ * @param res
+ */
+exports.logout = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var message;
+    return __generator(this, function (_a) {
+        try {
+            if (req.session) {
+                req.session.uid = '';
+                req.sessionOptions.maxAge = -1;
+            }
+            res.send({
+                status: 'success',
+                message: '注销成功'
+            });
+        }
+        catch (_b) {
+            message = _b.message;
+            res.send({
+                status: 'error',
+                message: message
+            });
+        }
+        return [2 /*return*/];
     });
 }); };
 /**

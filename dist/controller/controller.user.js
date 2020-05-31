@@ -63,14 +63,14 @@ var userService = __importStar(require("../service/service.user"));
  * @param req
  * @param res
  */
-function getUserInfo(req, res) {
+exports.getUserInfo = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function () {
         var uid, user, _a, message;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _b.trys.push([0, 2, , 3]);
-                    uid = req.auth.uid;
+                    uid = req.session.uid;
                     return [4 /*yield*/, userService.getUserById(uid)];
                 case 1:
                     user = _b.sent();
@@ -79,7 +79,7 @@ function getUserInfo(req, res) {
                     }
                     res.send({
                         status: 'success',
-                        user: user
+                        data: user
                     });
                     return [3 /*break*/, 3];
                 case 2:
@@ -94,43 +94,39 @@ function getUserInfo(req, res) {
             }
         });
     });
-}
-exports.getUserInfo = getUserInfo;
+};
 /**
  * 更新当前登录用户信息
  * @param req
  * @param res
  */
-function updateUserInfo(req, res) {
+exports.updateUserInfo = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function () {
         var uid, data, _a, message;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    uid = req.auth.uid;
-                    _b.label = 1;
-                case 1:
-                    _b.trys.push([1, 3, , 4]);
+                    _b.trys.push([0, 2, , 3]);
+                    uid = req.session.uid;
                     data = utils_1.copyValueFromObj(['nickname', 'avatar'], req.body);
                     if (!data.nickname) {
                         throw new Error('昵称不能为空');
                     }
                     return [4 /*yield*/, userService.updateUserInfo(uid, data)];
-                case 2:
+                case 1:
                     _b.sent();
-                    getUserInfo(req, res);
-                    return [3 /*break*/, 4];
-                case 3:
+                    exports.getUserInfo(req, res, next);
+                    return [3 /*break*/, 3];
+                case 2:
                     _a = _b.sent();
                     message = _a.message;
                     res.send({
                         status: 'error',
                         message: message
                     });
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
         });
     });
-}
-exports.updateUserInfo = updateUserInfo;
+};

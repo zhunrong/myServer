@@ -8,6 +8,7 @@ var controller_authorize_1 = require("../controller/controller.authorize");
 var router = express_1.default.Router();
 // 登录
 router.post('/login', controller_authorize_1.login);
+router.post('/logout', controller_authorize_1.logout);
 // 注册
 router.post('/register', controller_authorize_1.register);
 // 邮箱验证码

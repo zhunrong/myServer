@@ -1,21 +1,22 @@
 import { copyValueFromObj } from '../modules/utils'
 import * as userService from '../service/service.user'
+import { RequestHandler } from 'express'
 
 /**
  * 获取当前登录用户信息
  * @param req
  * @param res
  */
-export async function getUserInfo(req: any, res: any) {
+export const getUserInfo: RequestHandler = async function (req, res, next) {
   try {
-    const { uid } = req.auth
+    const uid = req.session!.uid
     const user = await userService.getUserById(uid)
     if (!user) {
       throw new Error('用户不存在')
     }
     res.send({
       status: 'success',
-      user
+      data: user
     })
   } catch ({ message }) {
     res.send({
@@ -30,15 +31,15 @@ export async function getUserInfo(req: any, res: any) {
  * @param req
  * @param res
  */
-export async function updateUserInfo(req: any, res: any) {
-  const { uid } = req.auth
+export const updateUserInfo: RequestHandler = async function (req, res, next) {
   try {
+    const uid = req.session!.uid
     const data: any = copyValueFromObj(['nickname', 'avatar'], req.body)
     if (!data.nickname) {
       throw new Error('昵称不能为空')
     }
     await userService.updateUserInfo(uid, data)
-    getUserInfo(req, res)
+    getUserInfo(req, res, next)
   } catch ({ message }) {
     res.send({
       status: 'error',
