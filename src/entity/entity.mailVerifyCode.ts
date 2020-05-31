@@ -1,37 +1,41 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+} from 'typeorm';
 
 @Entity({
   name: 'mail_verify_code',
   database: 'website',
-  engine: 'InnoDB'
+  engine: 'InnoDB',
 })
 class MailVerifyCode {
-
   @PrimaryGeneratedColumn({
-    name: 'id'
+    name: 'id',
   })
-  id!: number
+  id!: number;
 
   @Column({
     name: 'email',
     type: 'varchar',
     length: 20,
-    nullable: false
+    nullable: false,
   })
-  email!: string
+  email!: string;
 
   @Column({
     name: 'verify_code',
     type: 'varchar',
     length: 20,
-    nullable: false
+    nullable: false,
   })
-  code!: string
+  code!: string;
 
   @CreateDateColumn({
-    name: 'create_time'
+    name: 'create_time',
   })
-  createAt!: Date
+  createAt!: Date;
 }
 
-export default MailVerifyCode
+export default MailVerifyCode;

@@ -1,50 +1,50 @@
-import * as config from '../config/index'
-import * as userPictureService from '../service/service.userPicture'
+import * as config from '../config/index';
+import * as userPictureService from '../service/service.userPicture';
 
 export async function save(req: any, res: any) {
   try {
-    const { uid } = req.auth
-    const { directory, filename } = req.body
+    const { uid } = req.auth;
+    const { directory, filename } = req.body;
     if (!directory) {
-      throw new Error('directory不能为空')
+      throw new Error('directory不能为空');
     }
     if (!filename) {
-      throw new Error('filename不能为空')
+      throw new Error('filename不能为空');
     }
     await userPictureService.save({
       uid,
       directory,
-      filename
-    })
+      filename,
+    });
     res.send({
       status: 'success',
-      message: '保存成功'
-    })
+      message: '保存成功',
+    });
   } catch ({ message }) {
     res.send({
       status: 'error',
-      message
-    })
+      message,
+    });
   }
 }
 
 export async function getPictures(req: any, res: any) {
   try {
-    const { uid } = req.auth
-    const pictures = await userPictureService.getPicturesByUserId(uid)
+    const { uid } = req.auth;
+    const pictures = await userPictureService.getPicturesByUserId(uid);
     res.send({
       status: 'success',
-      data: pictures.map(item => {
+      data: pictures.map((item) => {
         return {
           ...item,
-          url: `${config.COS_DOMAIN_USER}/${item.directory}/${item.filename}`
-        }
-      })
-    })
+          url: `${config.COS_DOMAIN_USER}/${item.directory}/${item.filename}`,
+        };
+      }),
+    });
   } catch ({ message }) {
     res.send({
       status: 'error',
-      message
-    })
+      message,
+    });
   }
 }

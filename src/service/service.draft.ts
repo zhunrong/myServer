@@ -1,45 +1,48 @@
-import Draft from "../entity/entity.draft"
-import { getRepository } from 'typeorm'
+import Draft from '../entity/entity.draft';
+import { getRepository } from 'typeorm';
 
 interface CreateDraftParams {
-  uid: string
-  title: string
-  html: string
-  raw: string
+  uid: string;
+  title: string;
+  html: string;
+  raw: string;
 }
 /**
  * 创建一篇草稿
  * @param params
  */
 export function createDraft(params: CreateDraftParams) {
-  const repository = getRepository(Draft)
-  const draft = new Draft()
-  const { uid, html, raw, title } = params
-  draft.uid = uid
-  draft.html = html
-  draft.raw = raw
-  draft.title = title
-  return repository.save(draft)
+  const repository = getRepository(Draft);
+  const draft = new Draft();
+  const { uid, html, raw, title } = params;
+  draft.uid = uid;
+  draft.html = html;
+  draft.raw = raw;
+  draft.title = title;
+  return repository.save(draft);
 }
 
 interface UpdateDraftParams extends CreateDraftParams {
-  id: string
+  id: string;
 }
 /**
  * 更新草稿
  * @param params
  */
 export function updateDraft(params: UpdateDraftParams) {
-  const { uid, id, html, title, raw } = params
-  const repository = getRepository(Draft)
-  return repository.update({
-    uid,
-    id
-  }, {
-    title,
-    html,
-    raw
-  })
+  const { uid, id, html, title, raw } = params;
+  const repository = getRepository(Draft);
+  return repository.update(
+    {
+      uid,
+      id,
+    },
+    {
+      title,
+      html,
+      raw,
+    }
+  );
 }
 
 /**
@@ -48,8 +51,8 @@ export function updateDraft(params: UpdateDraftParams) {
  * @param uid
  */
 export function getDraftById(id: string, uid?: string) {
-  const repository = getRepository(Draft)
-  return repository.findOne({ id, uid })
+  const repository = getRepository(Draft);
+  return repository.findOne({ id, uid });
 }
 
 /**
@@ -57,10 +60,10 @@ export function getDraftById(id: string, uid?: string) {
  * @param uid
  */
 export function getDraftsByUid(uid: string) {
-  const repository = getRepository(Draft)
+  const repository = getRepository(Draft);
   return repository.find({
-    uid
-  })
+    uid,
+  });
 }
 
 /**
@@ -68,6 +71,6 @@ export function getDraftsByUid(uid: string) {
  * @param id
  */
 export function deleteDraftById(id: string) {
-  const repository = getRepository(Draft)
-  return repository.delete(id)
+  const repository = getRepository(Draft);
+  return repository.delete(id);
 }

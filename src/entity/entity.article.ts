@@ -1,57 +1,60 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, JoinColumn } from 'typeorm'
-import ArticleVisit from './entity.articleVisit'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({
   name: 'article',
   database: 'website',
-  engine: 'InnoDB'
+  engine: 'InnoDB',
 })
 class Article {
-
   @PrimaryGeneratedColumn('uuid', {
     name: 'id',
   })
-  id!: string
+  id!: string;
 
   @Column({
     name: 'uid',
     type: 'varchar',
-    nullable: false
+    nullable: false,
   })
-  uid!: string
+  uid!: string;
 
   @Column({
     name: 'title',
     type: 'varchar',
-    length: 255
+    length: 255,
   })
-  title!: string
+  title!: string;
 
   @Column({
     name: 'markdown',
-    type: 'text'
+    type: 'text',
   })
-  markdown!: string
+  markdown!: string;
 
   @Column({
     name: 'public',
     type: 'int',
     nullable: false,
     default: 1,
-    comment: '文章是否公开'
+    comment: '文章是否公开',
   })
-  public!: number
+  public!: number;
 
   @CreateDateColumn({
-    name: 'create_at'
+    name: 'create_at',
   })
-  createAt!: Date
+  createAt!: Date;
 
   @UpdateDateColumn({
-    name: 'update_at'
+    name: 'update_at',
   })
-  updateAt!: Date
-
+  updateAt!: Date;
 }
 
-export default Article
+export default Article;

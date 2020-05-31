@@ -1,48 +1,53 @@
-import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn } from 'typeorm'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  UpdateDateColumn,
+  CreateDateColumn,
+} from 'typeorm';
 
 @Entity({
   name: 'user',
   engine: 'InnoDB',
-  database: 'website'
+  database: 'website',
 })
 export class User {
-
   @PrimaryGeneratedColumn('uuid', {
-    name: 'id'
+    name: 'id',
   })
-  id!: string
+  id!: string;
 
   @Column({
     name: 'password',
     nullable: false,
     type: 'varchar',
-    length: 40
+    length: 40,
   })
-  password!: string
+  password!: string;
 
   @Column({
     name: 'nickname',
     type: 'varchar',
     nullable: true,
-    length: 20
+    length: 20,
   })
-  nickname!: string
+  nickname!: string;
 
   @Column({
     name: 'avatar',
     type: 'varchar',
     nullable: true,
-    length: 100
+    length: 100,
   })
-  avatar!: string
+  avatar!: string;
 
   @Column({
     name: 'email',
     type: 'varchar',
     nullable: false,
-    length: 20
+    length: 20,
   })
-  email!: string
+  email!: string;
 
   /**
    * 用户角色
@@ -54,19 +59,19 @@ export class User {
     type: 'int',
     comment: '用户角色',
     nullable: false,
-    default: 1
+    default: 1,
   })
-  role: number = 1
+  role = 1;
 
   @CreateDateColumn({
-    name: 'create_at'
+    name: 'create_at',
   })
-  createAt!: Date
+  createAt!: Date;
 
   @UpdateDateColumn({
-    name: 'update_at'
+    name: 'update_at',
   })
-  updateAt!: Date
+  updateAt!: Date;
 }
 
-export default User
+export default User;

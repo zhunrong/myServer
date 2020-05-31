@@ -1,19 +1,17 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
-  name: 'test'
+  name: 'test',
 })
 export class Test {
-
   @PrimaryGeneratedColumn()
-  id!: number
+  id!: number;
 
   @Column()
-  name: string = ''
+  name = '';
 
   @Column('int')
-  age:number = 0
-
+  age = 0;
 }
 
-export default Test
+export default Test;

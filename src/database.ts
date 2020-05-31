@@ -1,13 +1,8 @@
-import "reflect-metadata"
-import { createConnection } from 'typeorm'
+import 'reflect-metadata';
+import { createConnection } from 'typeorm';
 
 export default async function () {
-  try {
-    console.log('Connecting to MYSQL...')
-    const connection = await createConnection()
-    console.log('MYSQL connected successfully!')
-  } catch (error) {
-    throw error
-  }
+  console.log('Connecting to MYSQL...');
+  await createConnection();
+  console.log('MYSQL connected successfully!');
 }
-

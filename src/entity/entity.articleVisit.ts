@@ -1,36 +1,39 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+} from 'typeorm';
 
 @Entity({
   name: 'article_visit',
   database: 'website',
-  engine: 'InnoDB'
+  engine: 'InnoDB',
 })
 class ArticleVisit {
-
   @PrimaryGeneratedColumn('increment', {
-    name: 'id'
+    name: 'id',
   })
-  id!: number
+  id!: number;
 
   @Column({
     name: 'article_id',
     type: 'varchar',
-    nullable: false
+    nullable: false,
   })
-  articleId!: string
+  articleId!: string;
 
   @Column({
     name: 'user_id',
     type: 'varchar',
-    nullable: true
+    nullable: true,
   })
-  userId!: string
+  userId!: string;
 
   @CreateDateColumn({
-    name: 'visit_time'
+    name: 'visit_time',
   })
-  visitTime!: Date
-
+  visitTime!: Date;
 }
 
-export default ArticleVisit
+export default ArticleVisit;

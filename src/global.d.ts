@@ -5,6 +5,6 @@ declare namespace Express {
 
 declare namespace CookieSessionInterfaces {
   interface CookieSessionObject {
-    uid: string
+    uid: string;
   }
 }

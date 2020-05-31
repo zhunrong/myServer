@@ -1,44 +1,47 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+} from 'typeorm';
 
 @Entity({
   name: 'user_pictures',
   engine: 'InnoDB',
-  database: 'website'
+  database: 'website',
 })
 class UserPicture {
-
   @PrimaryGeneratedColumn('increment', {
-    name: 'id'
+    name: 'id',
   })
-  id!: number
+  id!: number;
 
   @Column({
     name: 'uid',
     type: 'varchar',
     length: 50,
-    nullable: false
+    nullable: false,
   })
-  uid!: string
+  uid!: string;
 
   @Column({
     name: 'directory',
     type: 'varchar',
-    nullable: false
+    nullable: false,
   })
-  directory!: string
+  directory!: string;
 
   @Column({
     name: 'filename',
     type: 'varchar',
-    nullable: false
+    nullable: false,
   })
-  filename!: string
+  filename!: string;
 
   @CreateDateColumn({
-    name: 'create_at'
+    name: 'create_at',
   })
-  createAt!: Date
-
+  createAt!: Date;
 }
 
-export default UserPicture
+export default UserPicture;

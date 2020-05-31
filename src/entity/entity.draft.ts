@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 /**
  * 草稿箱
@@ -6,7 +12,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 @Entity({
   name: 'draft',
   database: 'website',
-  engine: 'InnoDB'
+  engine: 'InnoDB',
 })
 export default class Draft {
   /**
@@ -15,7 +21,7 @@ export default class Draft {
   @PrimaryGeneratedColumn('uuid', {
     name: 'id',
   })
-  id!: string
+  id!: string;
 
   /**
    * 用户id
@@ -23,48 +29,48 @@ export default class Draft {
   @Column({
     name: 'uid',
     type: 'varchar',
-    nullable: false
+    nullable: false,
   })
-  uid!: string
+  uid!: string;
 
   @Column({
     name: 'title',
     type: 'varchar',
-    length: 255
+    length: 255,
   })
-  title!: string
+  title!: string;
 
   /**
    * html
    */
   @Column({
     name: 'html',
-    type: 'text'
+    type: 'text',
   })
-  html!: string
+  html!: string;
 
   /**
    * editorState raw
    */
   @Column({
     name: 'raw',
-    type: 'text'
+    type: 'text',
   })
-  raw!: string
+  raw!: string;
 
   /**
    * 创建时间
    */
   @CreateDateColumn({
-    name: 'create_at'
+    name: 'create_at',
   })
-  createAt!: Date
+  createAt!: Date;
 
   /**
    * 更新时间
    */
   @UpdateDateColumn({
-    name: 'update_at'
+    name: 'update_at',
   })
-  updateAt!: Date
+  updateAt!: Date;
 }

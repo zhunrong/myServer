@@ -1,5 +1,5 @@
-import moment from 'moment'
-import mysql from 'mysql'
+import moment from 'moment';
+import mysql from 'mysql';
 /**
  * 将一个对象转化成key=value形式，并且通过seperator分隔,value使用mysql.excape转义
  * @param obj
@@ -7,12 +7,12 @@ import mysql from 'mysql'
  */
 export function objectToKeyValue(
   obj: {
-    [key: string]: string | number
+    [key: string]: string | number;
   },
-  seperator: string = '&'
+  seperator = '&'
 ): string {
-  const keys = Object.keys(obj)
-  return keys.map(key => `${key}=${mysql.escape(obj[key])}`).join(seperator)
+  const keys = Object.keys(obj);
+  return keys.map((key) => `${key}=${mysql.escape(obj[key])}`).join(seperator);
 }
 
 /**
@@ -21,17 +21,17 @@ export function objectToKeyValue(
  * @param obj 要复制对象
  */
 export function copyValueFromObj(keys: string[], obj: any) {
-  const newObj: any = {}
-  keys.forEach(key => {
+  const newObj: any = {};
+  keys.forEach((key) => {
     if (key in obj && obj[key] !== null && obj[key] !== undefined) {
-      newObj[key] = obj[key]
+      newObj[key] = obj[key];
     }
-  })
-  return newObj
+  });
+  return newObj;
 }
 
 export function timeFormat(time: string) {
-  return moment(time).format('YYYY/MM/DD HH:mm:ss')
+  return moment(time).format('YYYY/MM/DD HH:mm:ss');
 }
 
 /**
@@ -39,12 +39,12 @@ export function timeFormat(time: string) {
  * @param length 字符长度
  */
 export function randomCharacter(length: number): string {
-  const list = '0123456789abcdefghijklmnopqrstuvwxyz'
-  let str: string = ''
+  const list = '0123456789abcdefghijklmnopqrstuvwxyz';
+  let str = '';
   while (length > 0) {
-    const randomIndex: number = Math.floor(Math.random() * 35)
-    str += list[randomIndex]
-    length--
+    const randomIndex: number = Math.floor(Math.random() * 35);
+    str += list[randomIndex];
+    length--;
   }
-  return str
+  return str;
 }
