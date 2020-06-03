@@ -33,6 +33,9 @@ export default class Draft {
   })
   uid!: string;
 
+  /**
+   * 标题
+   */
   @Column({
     name: 'title',
     type: 'varchar',
@@ -57,6 +60,15 @@ export default class Draft {
     type: 'text',
   })
   raw!: string;
+
+  /**
+   * 是否已同步
+   */
+  @Column({
+    name: 'sync',
+    type: 'int',
+  })
+  sync = 0;
 
   /**
    * 创建时间

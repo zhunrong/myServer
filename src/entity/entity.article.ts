@@ -6,17 +6,26 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+/**
+ * 草稿箱
+ */
 @Entity({
   name: 'article',
   database: 'website',
   engine: 'InnoDB',
 })
-class Article {
+export default class Draft {
+  /**
+   * 文章id
+   */
   @PrimaryGeneratedColumn('uuid', {
     name: 'id',
   })
   id!: string;
 
+  /**
+   * 用户id
+   */
   @Column({
     name: 'uid',
     type: 'varchar',
@@ -24,6 +33,20 @@ class Article {
   })
   uid!: string;
 
+  /**
+   * 关联的草稿id
+   */
+  @Column({
+    name: 'draft_id',
+    type: 'varchar',
+    nullable: false,
+    unique: true,
+  })
+  draftId!: string;
+
+  /**
+   * 标题
+   */
   @Column({
     name: 'title',
     type: 'varchar',
@@ -31,30 +54,37 @@ class Article {
   })
   title!: string;
 
+  /**
+   * html
+   */
   @Column({
-    name: 'markdown',
+    name: 'html',
     type: 'text',
   })
-  markdown!: string;
+  html!: string;
 
+  /**
+   * editorState raw
+   */
   @Column({
-    name: 'public',
-    type: 'int',
-    nullable: false,
-    default: 1,
-    comment: '文章是否公开',
+    name: 'raw',
+    type: 'text',
   })
-  public!: number;
+  raw!: string;
 
+  /**
+   * 创建时间
+   */
   @CreateDateColumn({
     name: 'create_at',
   })
   createAt!: Date;
 
+  /**
+   * 更新时间
+   */
   @UpdateDateColumn({
     name: 'update_at',
   })
   updateAt!: Date;
 }
-
-export default Article;

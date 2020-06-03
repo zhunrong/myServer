@@ -41,6 +41,7 @@ export function updateDraft(params: UpdateDraftParams) {
       title,
       html,
       raw,
+      sync: 0,
     }
   );
 }

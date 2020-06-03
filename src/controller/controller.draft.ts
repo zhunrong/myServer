@@ -1,4 +1,5 @@
 import * as draftService from '../service/service.draft';
+import * as articleService from '../service/service.article';
 import { RequestHandler } from 'express';
 
 /**
@@ -121,6 +122,47 @@ export const getDraftList: RequestHandler = async (req, res) => {
     res.send({
       status: 'success',
       data: drafts,
+    });
+  } catch ({ message }) {
+    res.send({
+      status: 'error',
+      message,
+    });
+  }
+};
+
+/**
+ * 同步草稿到文章
+ * @param req
+ * @param res
+ */
+export const syncArticle: RequestHandler = async (req, res) => {
+  try {
+    const uid = req.session?.uid || '';
+    const { id } = req.body;
+    const draft = await draftService.getDraftById(id, uid);
+    if (!draft) throw new Error('文章不存在或者没有权限');
+    const article = await articleService.getArticleByDraftId(draft.id);
+    if (article) {
+      await articleService.syncArticle({
+        uid,
+        draftId: draft.id,
+        title: draft.title,
+        html: draft.html,
+        raw: draft.raw,
+      });
+    } else {
+      await articleService.createArticle({
+        uid,
+        draftId: draft.id,
+        title: draft.title,
+        html: draft.html,
+        raw: draft.raw,
+      });
+    }
+    await draftService.updateDraft(draft);
+    res.send({
+      status: 'success',
     });
   } catch ({ message }) {
     res.send({

@@ -34,3 +34,16 @@ services:
     restart: always
     ports:
       - 8888:80
+  next-website:
+    image: next-website
+    container_name: next-website
+    networks:
+      - node-server
+    depends_on:
+      - server
+    environment:
+      PORT: 80
+      PROXY_TARGET: 'http://server'
+    restart: always
+    ports:
+      - 80:80

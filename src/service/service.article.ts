@@ -70,8 +70,62 @@ export function addArticle(params: IAddArticle) {
   const { uid, title, markdown } = params;
   article.uid = uid;
   article.title = title;
-  article.markdown = markdown;
+  // article.markdown = markdown;
   return repository.save(article);
+}
+
+interface CreateArticleParams {
+  uid: string;
+  title: string;
+  html: string;
+  raw: string;
+  draftId: string;
+}
+/**
+ * 创建文章
+ * @param params
+ */
+export function createArticle(params: CreateArticleParams) {
+  const repository = getRepository(Article);
+  return repository.create(params);
+}
+
+/**
+ * 根据草稿id查找文章
+ * @param draftId
+ */
+export function getArticleByDraftId(draftId: string) {
+  const repository = getRepository(Article);
+  return repository.findOne({
+    draftId,
+  });
+}
+
+interface SyncArticleParams {
+  uid: string;
+  title: string;
+  html: string;
+  raw: string;
+  draftId: string;
+}
+/**
+ * 同步文章
+ * @param params
+ */
+export function syncArticle(params: SyncArticleParams) {
+  const repository = getRepository(Article);
+  const { uid, title, html, raw, draftId } = params;
+  return repository.update(
+    {
+      uid,
+      draftId,
+    },
+    {
+      title,
+      html,
+      raw,
+    }
+  );
 }
 
 /**
