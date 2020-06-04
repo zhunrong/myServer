@@ -7,14 +7,14 @@ import {
 } from 'typeorm';
 
 /**
- * 草稿箱
+ * 文章
  */
 @Entity({
   name: 'article',
   database: 'website',
   engine: 'InnoDB',
 })
-export default class Draft {
+export default class Article {
   /**
    * 文章id
    */

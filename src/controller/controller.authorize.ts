@@ -89,7 +89,7 @@ export const register: RequestHandler = async (req, res, next) => {
       code: verifyCode,
     });
     if (!codes.length) {
-      throw new Error('邮箱验证失败');
+      throw new Error('验证码校验失败');
     }
     const user = await userService.getUserByEmail(email);
     if (user) {

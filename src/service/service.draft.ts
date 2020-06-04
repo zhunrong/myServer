@@ -24,13 +24,14 @@ export function createDraft(params: CreateDraftParams) {
 
 interface UpdateDraftParams extends CreateDraftParams {
   id: string;
+  sync?: number;
 }
 /**
  * 更新草稿
  * @param params
  */
 export function updateDraft(params: UpdateDraftParams) {
-  const { uid, id, html, title, raw } = params;
+  const { uid, id, html, title, raw, sync = 0 } = params;
   const repository = getRepository(Draft);
   return repository.update(
     {
@@ -41,7 +42,7 @@ export function updateDraft(params: UpdateDraftParams) {
       title,
       html,
       raw,
-      sync: 0,
+      sync,
     }
   );
 }
@@ -59,10 +60,33 @@ export function getDraftById(id: string, uid?: string) {
 /**
  * 获取用户的草稿列表
  * @param uid
+ * @param page 页码
+ * @param pageSize 每页数量
  */
-export function getDraftsByUid(uid: string) {
+export function getDraftsByUid(uid: string, page = 1, pageSize = 20) {
   const repository = getRepository(Draft);
-  return repository.find({
+  const queryBuilder = repository.createQueryBuilder();
+  return queryBuilder
+    .select('id')
+    .addSelect('uid')
+    .addSelect('title')
+    .addSelect('DATE_FORMAT(update_at,"%Y-%m-%d %H:%i:%s")', 'updateAt')
+    .where('uid=:uid', {
+      uid,
+    })
+    .orderBy('update_at', 'DESC')
+    .offset((page - 1) * pageSize)
+    .limit(pageSize)
+    .getRawMany();
+}
+
+/**
+ * 获取用户的草稿总数
+ * @param uid
+ */
+export function getUserDraftCount(uid: string) {
+  const repository = getRepository(Draft);
+  return repository.count({
     uid,
   });
 }

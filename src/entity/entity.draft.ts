@@ -63,6 +63,9 @@ export default class Draft {
 
   /**
    * 是否已同步
+   *
+   * 0 -- 未同步
+   * 1 -- 已同步
    */
   @Column({
     name: 'sync',

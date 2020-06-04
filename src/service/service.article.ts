@@ -3,18 +3,17 @@ import Article from '../entity/entity.article';
 import User from '../entity/entity.user';
 import ArticleVisit from '../entity/entity.articleVisit';
 
-interface IGetArticles {
+interface GetArticlesParams {
   uid?: string;
   pageSize?: number;
   page?: number;
-  public?: number;
 }
 /**
  * 获取文章
  * @param params
  */
-export function getArticles(params: IGetArticles = {}) {
-  const { pageSize = 2, page = 1, uid, public: publicStatus } = params;
+export function getArticles(params: GetArticlesParams = {}) {
+  const { pageSize = 2, page = 1, uid } = params;
   const repository = getRepository(Article);
   const queryBuilder = repository
     .createQueryBuilder('article')
@@ -22,7 +21,7 @@ export function getArticles(params: IGetArticles = {}) {
     .select('article.id', 'id')
     .addSelect('article.title', 'title')
     .addSelect('article.uid', 'uid')
-    .addSelect('article.public', 'public')
+    .addSelect('article.draft_id', 'draftId')
     .addSelect(
       'DATE_FORMAT(article.update_at,"%Y-%m-%d %H:%i:%s")',
       'updateTime'
@@ -31,11 +30,6 @@ export function getArticles(params: IGetArticles = {}) {
   if (uid !== undefined) {
     queryBuilder.where('article.uid = :uid', {
       uid,
-    });
-  }
-  if (publicStatus !== undefined) {
-    queryBuilder.andWhere('article.public = :public', {
-      public: publicStatus,
     });
   }
   return queryBuilder
@@ -55,25 +49,6 @@ export function getArticleCount(uid?: string) {
   });
 }
 
-interface IAddArticle {
-  uid: string;
-  title: string;
-  markdown: string;
-}
-/**
- * 新增文章
- * @param params
- */
-export function addArticle(params: IAddArticle) {
-  const repository = getRepository(Article);
-  const article = new Article();
-  const { uid, title, markdown } = params;
-  article.uid = uid;
-  article.title = title;
-  // article.markdown = markdown;
-  return repository.save(article);
-}
-
 interface CreateArticleParams {
   uid: string;
   title: string;
@@ -87,7 +62,14 @@ interface CreateArticleParams {
  */
 export function createArticle(params: CreateArticleParams) {
   const repository = getRepository(Article);
-  return repository.create(params);
+  const { uid, title, html, raw, draftId } = params;
+  const article = new Article();
+  article.uid = uid;
+  article.title = title;
+  article.html = html;
+  article.raw = raw;
+  article.draftId = draftId;
+  return repository.save(article);
 }
 
 /**
@@ -138,13 +120,14 @@ export async function getArticleById(id: string) {
     select uid,
            article.id as id,
            title,
-           markdown,
+           html,
+           raw,
+           draft_id as draftId,
            DATE_FORMAT(article.create_at,'%Y-%m-%d %h:%i:%s') as createTime,
            DATE_FORMAT(article.update_at,'%Y-%m-%d %h:%i:%s') as updateTime,
            nickname,
            email,
            avatar,
-           public,
            COUNT(article_visit.id) as visitCount
     from article
     left join article_visit on article.id = article_visit.article_id

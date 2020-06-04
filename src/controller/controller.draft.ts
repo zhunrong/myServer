@@ -115,13 +115,27 @@ export const getDraft: RequestHandler = async (req, res) => {
  * @param req
  * @param res
  */
-export const getDraftList: RequestHandler = async (req, res) => {
+export const getDraftList: RequestHandler<
+  any,
+  any,
+  any,
+  { page?: string; pageSize?: string }
+> = async (req, res) => {
   try {
+    const page = parseInt(req.query.page || '1');
+    const pageSize = parseInt(req.query.pageSize || '20');
     const uid = req.session?.uid || '';
-    const drafts = await draftService.getDraftsByUid(uid);
+    const drafts = await draftService.getDraftsByUid(uid, page, pageSize);
+    const total = await draftService.getUserDraftCount(uid);
     res.send({
       status: 'success',
       data: drafts,
+      meta: {
+        page,
+        pageSize,
+        total,
+        pageCount: Math.ceil(total / pageSize),
+      },
     });
   } catch ({ message }) {
     res.send({
@@ -140,6 +154,7 @@ export const syncArticle: RequestHandler = async (req, res) => {
   try {
     const uid = req.session?.uid || '';
     const { id } = req.body;
+    if (!id) throw new Error('id不能为空');
     const draft = await draftService.getDraftById(id, uid);
     if (!draft) throw new Error('文章不存在或者没有权限');
     const article = await articleService.getArticleByDraftId(draft.id);
@@ -160,6 +175,7 @@ export const syncArticle: RequestHandler = async (req, res) => {
         raw: draft.raw,
       });
     }
+    draft.sync = 1;
     await draftService.updateDraft(draft);
     res.send({
       status: 'success',
