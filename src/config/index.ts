@@ -11,10 +11,12 @@ dotenv.config({
 export const DO_NOT_CHECK_REQUEST_PATH: pathFilter[] = [
   '/login',
   '/register',
-  '/yeba/visit',
-  '/yeba/rechargeOrder',
   '/mailVerifyCode',
-  '/allArticle',
+  '/article/all',
+  {
+    url: /article\/[a-z0-9-]{10,}/,
+    methods: ['GET'],
+  },
   {
     url: '/articleVisit',
     methods: ['POST', 'OPTIONS'],

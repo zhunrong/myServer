@@ -70,6 +70,7 @@ export function getDraftsByUid(uid: string, page = 1, pageSize = 20) {
     .select('id')
     .addSelect('uid')
     .addSelect('title')
+    .addSelect('sync')
     .addSelect('DATE_FORMAT(update_at,"%Y-%m-%d %H:%i:%s")', 'updateAt')
     .where('uid=:uid', {
       uid,

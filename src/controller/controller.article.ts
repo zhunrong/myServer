@@ -141,10 +141,11 @@ export const getArticleDetail: RequestHandler = async function (req, res) {
  * @param req
  * @param res
  */
-export async function deleteArticle(req: any, res: any) {
-  const { uid } = req.auth;
-  const ids: string[] = req.body.ids;
+export const deleteArticle: RequestHandler = async function (req, res) {
   try {
+    const uid = req.session?.uid || '';
+    const ids: string[] = req.body.ids || [];
+    if (ids.length === 0) throw new Error('请传入ids');
     // 判断是否有文章不属于该用户
     let index = 0;
     let flag = false;
@@ -169,7 +170,7 @@ export async function deleteArticle(req: any, res: any) {
       status: 'error',
     });
   }
-}
+};
 
 /**
  * 增加一条文章访问记录
