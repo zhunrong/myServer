@@ -41,6 +41,8 @@ export const deleteDraft: RequestHandler = async (req, res) => {
     if (!uid) throw new Error('未登录');
     const { id } = req.body;
     if (!id) throw new Error('id不能为空');
+    const article = await articleService.getArticleByDraftId(id);
+    if (article) throw new Error('请先删除对应文章');
     const draft = await draftService.getDraftById(id, uid);
     if (!draft) throw new Error('草稿不存在');
     await draftService.deleteDraftById(id);
@@ -66,13 +68,13 @@ export const updateDraft: RequestHandler = async (req, res) => {
     const uid = req.session?.uid;
     if (!uid) throw new Error('未登录');
     const { id = '', html, raw, title } = req.body;
-    const result = await draftService.updateDraft({
-      uid,
-      id,
-      title,
-      html,
-      raw,
-    });
+    const draft = await draftService.getDraftById(id, uid);
+    if (!draft) throw new Error('草稿不存在或没有权限');
+    draft.html = html;
+    draft.raw = raw;
+    draft.title = title;
+    draft.sync = draft.sync === 1 ? 2 : draft.sync;
+    const result = await draftService.updateDraft(draft);
     if (!result.affected) throw new Error(result.raw.message);
     res.send({
       status: 'success',

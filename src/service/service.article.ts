@@ -113,8 +113,9 @@ export function syncArticle(params: SyncArticleParams) {
 /**
  * 根据id获取文章详情
  * @param id
+ * @param uid
  */
-export async function getArticleById(id: string) {
+export async function getArticleById(id: string, uid?: string) {
   const repository = getRepository(Article);
   const [article] = await repository.query(`
     select uid,
@@ -133,6 +134,7 @@ export async function getArticleById(id: string) {
     left join article_visit on article.id = article_visit.article_id
     left join user on user.id = article.uid
     where article.id = '${id}'
+    ${uid ? `and uid = '${uid}'` : ''}
     group by article.id`);
   return article
     ? {

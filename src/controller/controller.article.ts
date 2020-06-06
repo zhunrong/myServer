@@ -1,5 +1,5 @@
-import { copyValueFromObj } from '../modules/utils';
 import * as articleService from '../service/service.article';
+import * as draftService from '../service/service.draft';
 import { RequestHandler } from 'express';
 
 /**
@@ -146,21 +146,18 @@ export const deleteArticle: RequestHandler = async function (req, res) {
     const uid = req.session?.uid || '';
     const ids: string[] = req.body.ids || [];
     if (ids.length === 0) throw new Error('请传入ids');
-    // 判断是否有文章不属于该用户
-    let index = 0;
-    let flag = false;
-    while (index < ids.length) {
-      const article = await articleService.getArticleById(ids[index]);
-      if (article.uid !== uid) {
-        flag = true;
-        break;
+    while (ids.length) {
+      const id = ids.shift() as string;
+      const article = await articleService.getArticleById(id, uid);
+      if (article) {
+        const draft = await draftService.getDraftById(article.draftId, uid);
+        if (draft) {
+          draft.sync = 0;
+          await draftService.updateDraft(draft);
+        }
+        await articleService.deleteArticle([id]);
       }
-      index++;
     }
-    if (flag) {
-      throw new Error('文章不属于该用户');
-    }
-    await articleService.deleteArticle(ids);
     res.send({
       status: 'success',
     });

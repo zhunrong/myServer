@@ -71,10 +71,11 @@ export function getDraftsByUid(uid: string, page = 1, pageSize = 20) {
     .addSelect('uid')
     .addSelect('title')
     .addSelect('sync')
-    .addSelect('DATE_FORMAT(update_at,"%Y-%m-%d %H:%i:%s")', 'updateAt')
+    .addSelect('DATE_FORMAT(update_at,"%Y-%m-%d %H:%i:%s")', 'updateTime')
     .where('uid=:uid', {
       uid,
     })
+    .andWhere('sync!=1')
     .orderBy('update_at', 'DESC')
     .offset((page - 1) * pageSize)
     .limit(pageSize)
@@ -85,11 +86,18 @@ export function getDraftsByUid(uid: string, page = 1, pageSize = 20) {
  * 获取用户的草稿总数
  * @param uid
  */
-export function getUserDraftCount(uid: string) {
+export async function getUserDraftCount(uid: string) {
   const repository = getRepository(Draft);
-  return repository.count({
-    uid,
-  });
+  const [num1, num2] = await Promise.all([
+    repository.count({
+      uid,
+    }),
+    repository.count({
+      uid,
+      sync: 1,
+    }),
+  ]);
+  return num1 - num2;
 }
 
 /**
