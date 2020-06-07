@@ -37,8 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var child_process_1 = require("child_process");
-var version = require('../package.json').version;
-var imageName = "image:" + version;
+var imageName = 'server';
 (function () {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -58,7 +57,7 @@ var imageName = "image:" + version;
     });
 })();
 function buildImage() {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve) {
         var buildProcess = child_process_1.spawn('docker', ['build', '-t', imageName, '.']);
         buildProcess.stdout.pipe(process.stdout);
         buildProcess.on('close', function (code, signal) {
@@ -68,8 +67,13 @@ function buildImage() {
     });
 }
 function saveImage() {
-    return new Promise(function (resolve, reject) {
-        var saveProcess = child_process_1.spawn('docker', ['save', '-o', "./image_" + version + ".tar", imageName]);
+    return new Promise(function (resolve) {
+        var saveProcess = child_process_1.spawn('docker', [
+            'save',
+            '-o',
+            "./" + imageName + ".tar",
+            imageName,
+        ]);
         saveProcess.stdout.pipe(process.stdout);
         saveProcess.stderr.pipe(process.stderr);
         saveProcess.on('close', function (code, signal) {
@@ -79,7 +83,7 @@ function saveImage() {
     });
 }
 function removeOldImage() {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve) {
         var removeProcess = child_process_1.spawn('docker', ['rmi', imageName]);
         removeProcess.stdout.pipe(process.stdout);
         removeProcess.stderr.pipe(process.stderr);

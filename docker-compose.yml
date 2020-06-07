@@ -19,7 +19,7 @@ services:
     ports:
       - 3306:3306
   server:
-    image: image:1.0.6
+    image: server
     container_name: server
     networks:
       - node-server

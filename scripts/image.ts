@@ -1,6 +1,5 @@
 import { spawn } from 'child_process';
-const version = require('../package.json').version;
-const imageName = `image:${version}`;
+const imageName = 'server';
 
 (async function () {
   await removeOldImage();
@@ -24,7 +23,7 @@ function saveImage() {
     const saveProcess = spawn('docker', [
       'save',
       '-o',
-      `./image_${version}.tar`,
+      `./${imageName}.tar`,
       imageName,
     ]);
     saveProcess.stdout.pipe(process.stdout);
