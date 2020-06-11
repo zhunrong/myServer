@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var child_process_1 = require("child_process");
-var imageName = 'server';
+var imageName = 'backend';
 (function () {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

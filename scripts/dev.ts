@@ -3,7 +3,7 @@ import { ChildProcess, spawn } from 'child_process';
 let app: ChildProcess | null = null;
 function restart() {
   if (app) {
-    app.once('close', (code, signal) => {
+    app.once('close', () => {
       runServer();
     });
     app.kill('SIGTERM');

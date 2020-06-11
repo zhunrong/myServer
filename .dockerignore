@@ -1,12 +1,9 @@
 .vscode
 .gitignore
 .dockerignore
-src/
-typings/
-mysql/
 *.ts
 package-lock.json
-tsconfig.json
 LICENSE
 Dockerfile
+node_modules
 *.tar

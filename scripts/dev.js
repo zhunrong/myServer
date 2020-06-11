@@ -4,7 +4,7 @@ var child_process_1 = require("child_process");
 var app = null;
 function restart() {
     if (app) {
-        app.once('close', function (code, signal) {
+        app.once('close', function () {
             runServer();
         });
         app.kill('SIGTERM');
@@ -28,7 +28,7 @@ var compileProcess = child_process_1.spawn('tsc', [], {
 compileProcess.stdout.on('data', function (chunk) {
     var feedback = chunk.toString();
     process.stdout.write(feedback);
-    if /* 编译完成 */ (feedback.includes('Watching for file changes')) {
+    if ( /* 编译完成 */feedback.includes('Watching for file changes')) {
         restart();
     }
 });

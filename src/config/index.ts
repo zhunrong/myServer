@@ -63,3 +63,11 @@ export const COOKIE_SECRET = process.env.COOKIE_SECRET || '';
  * cookie有效期 12h
  */
 export const COOKIE_MAX_AGE = 12 * 60 * 60 * 1000;
+/**
+ * root用户
+ */
+export const ROOT = process.env.ROOT || '';
+/**
+ * root密码
+ */
+export const PASSWORD = process.env.PASSWORD || '';

@@ -1,5 +1,5 @@
 import { spawn } from 'child_process';
-const imageName = 'server';
+const imageName = 'backend';
 
 (async function () {
   await removeOldImage();

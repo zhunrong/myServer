@@ -1,5 +1,7 @@
 import { getRepository } from 'typeorm';
 import { User } from '../entity/entity.user';
+import md5 from 'blueimp-md5';
+import * as config from '../config';
 
 export async function getUsers() {
   const repository = getRepository(User);
@@ -60,4 +62,19 @@ export function addUser(info: IUserInfo2) {
   user.avatar = avatar || '';
   user.nickname = nickname || email;
   return repository.save(user);
+}
+
+/**
+ * 初始化ROOT用户
+ */
+export async function initRootUser() {
+  const { ROOT, PASSWORD } = config;
+  if (!ROOT || !PASSWORD) return;
+  const user = await getUserByEmail(ROOT);
+  if (user) return;
+  await addUser({
+    email: ROOT,
+    password: md5(PASSWORD),
+  });
+  console.log(`${ROOT}已添加为ROOT用户`);
 }
