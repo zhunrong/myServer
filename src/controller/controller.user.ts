@@ -35,9 +35,6 @@ export const updateUserInfo: RequestHandler = async function (req, res, next) {
   try {
     const uid = req.session?.uid || '';
     const data: any = copyValueFromObj(['nickname', 'avatar'], req.body);
-    if (!data.nickname) {
-      throw new Error('昵称不能为空');
-    }
     await userService.updateUserInfo(uid, data);
     getUserInfo(req, res, next);
   } catch ({ message }) {

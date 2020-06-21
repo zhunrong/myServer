@@ -21,7 +21,7 @@ export class User {
     name: 'password',
     nullable: false,
     type: 'varchar',
-    length: 40,
+    // length: 40,
   })
   password!: string;
 
@@ -29,7 +29,7 @@ export class User {
     name: 'nickname',
     type: 'varchar',
     nullable: true,
-    length: 20,
+    // length: 20,
   })
   nickname!: string;
 
@@ -37,7 +37,7 @@ export class User {
     name: 'avatar',
     type: 'varchar',
     nullable: true,
-    length: 100,
+    // length: 100,
   })
   avatar!: string;
 
@@ -45,13 +45,15 @@ export class User {
     name: 'email',
     type: 'varchar',
     nullable: false,
-    length: 20,
+    // length: 20,
   })
   email!: string;
 
   /**
    * 用户角色
+   *
    * 0 -> 管理员
+   *
    * 1 -> 普通用户
    */
   @Column({

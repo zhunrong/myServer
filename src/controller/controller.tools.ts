@@ -1,20 +1,22 @@
 import STS from 'qcloud-cos-sts';
 import * as config from '../config/index';
 import * as userService from '../service/service.user';
+import { RequestHandler } from 'express';
 
 /**
  * 获取腾讯云对象存储上传令牌
  * @param req
  * @param res
  */
-export async function getUploadToken(req: any, res: any) {
+export const getUploadToken: RequestHandler = async (req, res) => {
   try {
-    const { uid } = req.auth;
+    const uid = req.session?.uid || '';
     const { type } = req.query;
     let directory: string | undefined;
     let bucket = config.COS_BUCKET;
     let region = config.COS_REGION;
     let domain = config.COS_DOMAIN;
+    // 用户专属目录
     if (type === 'user') {
       bucket = config.COS_BUCKET_USER;
       region = config.COS_REGION_USER;
@@ -58,4 +60,4 @@ export async function getUploadToken(req: any, res: any) {
       message,
     });
   }
-}
+};
