@@ -10,6 +10,7 @@ import mailRouter from './router.mail';
 import toolsRouter from './router.tools';
 import pictureRouter from './router.picture';
 import draftRouter from './router.draft';
+import articleTagRouter from './router.articleTag';
 
 // CORS
 const corsHandler: RequestHandler = (req, res, next) => {
@@ -58,4 +59,5 @@ export default (app: Express) => {
   app.use(toolsRouter);
   app.use(pictureRouter);
   app.use(draftRouter);
+  app.use(articleTagRouter);
 };
