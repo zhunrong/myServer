@@ -1,5 +1,6 @@
 import * as articleService from '../service/service.article';
 import * as draftService from '../service/service.draft';
+import * as tagService from '../service/service.articleTag';
 import { RequestHandler } from 'express';
 
 /**
@@ -124,9 +125,13 @@ export const getArticleDetail: RequestHandler = async function (req, res) {
     if (!article) {
       throw new Error('文章不存在');
     }
+    const tags = await articleService.getArticleTags(id);
     res.send({
       status: 'success',
-      data: article,
+      data: {
+        ...article,
+        tags,
+      },
     });
   } catch ({ message }) {
     res.send({
@@ -191,3 +196,62 @@ export async function addVisitRecord(req: any, res: any) {
     });
   }
 }
+
+/**
+ * 给文章贴一个标签
+ * @param req
+ * @param res
+ */
+export const addTag: RequestHandler = async (req, res) => {
+  try {
+    const uid = req.session.uid;
+    const articleId = req.body.articleId as string;
+    const tagId = req.body.tagId as string;
+    if (!articleId) throw new Error('articleId不能为空');
+    if (!tagId) throw new Error('tagId不能为空');
+    const [article, tag] = await Promise.all([
+      articleService.getArticleById(articleId, uid),
+      tagService.findTagById(tagId),
+    ]);
+    if (!article) throw new Error('文章不存在');
+    if (!tag) throw new Error('标签不存在');
+    const tags = await articleService.getArticleTags(articleId);
+    if (!tags.find((item) => item.tagId === tagId)) {
+      await articleService.addTag(articleId, tagId);
+    }
+    res.send({
+      status: 'success',
+    });
+  } catch ({ message }) {
+    res.send({
+      message,
+      status: 'error',
+    });
+  }
+};
+
+/**
+ * 移除标签
+ * @param req
+ * @param res
+ */
+export const removeTag: RequestHandler = async (req, res) => {
+  try {
+    const uid = req.session.uid;
+    const articleId = req.body.articleId as string;
+    const tagId = req.body.tagId as string;
+    if (!articleId) throw new Error('articleId不能为空');
+    if (!tagId) throw new Error('tagId不能为空');
+    const article = await articleService.getArticleById(articleId, uid);
+    if (!article) throw new Error('文章不存在');
+    await articleService.removeTag(articleId, tagId);
+    res.send({
+      status: 'success',
+    });
+  } catch ({ message }) {
+    res.send({
+      message,
+      status: 'error',
+    });
+  }
+};

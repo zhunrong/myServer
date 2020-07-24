@@ -2,6 +2,7 @@ import { getRepository } from 'typeorm';
 import Article from '../entity/entity.article';
 import User from '../entity/entity.user';
 import ArticleVisit from '../entity/entity.articleVisit';
+import Article2Tag from '../entity/entity.article_tag';
 
 interface GetArticlesParams {
   uid?: string;
@@ -200,4 +201,48 @@ export function query(id: string) {
            COUNT(article_visit.id) as visitCount
     from article,article_visit,user
     where article_visit.article_id = article.id and article.id = '${id}' and user.id = article.uid`);
+}
+
+/**
+ * 给文章添加一个标签（关联一个标签）
+ * @param articleId
+ * @param tagId
+ */
+export function addTag(articleId: string, tagId: string) {
+  const repository = getRepository(Article2Tag);
+  const record = repository.create({
+    articleId,
+    tagId,
+  });
+  return repository.save(record);
+}
+
+/**
+ * 删除文章的一个标签
+ * @param articleId
+ * @param tagId
+ */
+export function removeTag(articleId: string, tagId: string) {
+  const repository = getRepository(Article2Tag);
+  return repository.delete({
+    articleId,
+    tagId,
+  });
+}
+
+/**
+ * 获取文章的标签
+ * @param id
+ */
+export function getArticleTags(
+  id: string
+): Promise<{ tagId: string; articleId: string; tagName: string }[]> {
+  const repository = getRepository(Article2Tag);
+  return repository.query(`
+    select article_to_tag.tag_id as tagId,
+           article_to_tag.article_id as articleId,
+           article_tag.name as tagName
+    from article_to_tag join article_tag on article_to_tag.tag_id = article_tag.id
+    where article_to_tag.article_id = '${id}';
+  `);
 }

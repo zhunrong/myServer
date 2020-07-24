@@ -38,7 +38,7 @@ export function updateArticleTag(id: string, name: string) {
 }
 
 /**
- * 查找标签
+ * 通过名字查找标签
  * @param params
  */
 export function findTagByName(name: string) {
@@ -51,6 +51,15 @@ export function findTagByName(name: string) {
       name,
     })
     .getRawOne();
+}
+
+/**
+ * 通过id查找标签
+ * @param id
+ */
+export function findTagById(id: string) {
+  const repository = getRepository(ArticleTag);
+  return repository.findOne(id);
 }
 
 /**
