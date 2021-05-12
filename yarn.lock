@@ -1640,10 +1640,10 @@ negotiator@0.6.2:
   resolved "https://registry.npm.taobao.org/negotiator/download/negotiator-0.6.2.tgz#feacf7ccf525a77ae9634436a64883ffeca346fb"
   integrity sha1-/qz3zPUlp3rpY0Q2pkiD/+yjRvs=
 
-nodemailer@^5.1.1:
-  version "5.1.1"
-  resolved "https://registry.npm.taobao.org/nodemailer/download/nodemailer-5.1.1.tgz?cache=0&sync_timestamp=1590668679920&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fnodemailer%2Fdownload%2Fnodemailer-5.1.1.tgz#0c48d1ecab02e86d9ff6c620ee75ed944b763505"
-  integrity sha1-DEjR7KsC6G2f9sYg7nXtlEt2NQU=
+nodemailer@^6.4.16:
+  version "6.4.16"
+  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-6.4.16.tgz#5cb6391b1d79ab7eff32d6f9f48366b5a7117293"
+  integrity sha512-68K0LgZ6hmZ7PVmwL78gzNdjpj5viqBdFqKrTtr9bZbJYj6BRj5W6WGkxXrEnUl3Co3CBXi3CZBUlpV/foGnOQ==
 
 oauth-sign@~0.9.0:
   version "0.9.0"
